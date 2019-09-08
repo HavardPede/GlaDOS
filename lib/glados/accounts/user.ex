@@ -7,7 +7,7 @@ defmodule Glados.Accounts.User do
     field(:name, :string)
     field(:email, :string)
     field(:username, :string)
-    field(:password_hash, :string)
+    field(:encrypted_password, :string)
     field(:dob, :date)
     field(:address, :string)
     field(:password, :string, virtual: true)
@@ -19,9 +19,24 @@ defmodule Glados.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :username, :password_hash, :dob, :email, :address])
-    |> validate_required([:name, :username, :password_hash, :dob, :email, :address])
-    |> cast(attrs, [:username, :password])
+    |> cast(attrs, [
+      :name,
+      :username,
+      :encrypted_password,
+      :dob,
+      :email,
+      :address,
+      :password,
+      :password_confirmation
+    ])
+    |> validate_required([
+      :name,
+      :username,
+      :dob,
+      :email,
+      :address
+    ])
+    |> cast(attrs, [:name, :username, :dob, :email, :address])
     |> validate_length(:password, min: 6)
     |> validate_confirmation(:password)
     |> validate_format(:username, ~r/^[a-z0-9][a-z0-9]+[a-z0-9]$/i)
@@ -30,6 +45,7 @@ defmodule Glados.Accounts.User do
     |> unique_constraint(:email)
     |> downcase_username()
     |> encrypt_password()
+    |> validate_required(:encrypted_password)
   end
 
   defp encrypt_password(changeset) do

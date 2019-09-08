@@ -1,15 +1,23 @@
 defmodule Glados.Accounts.Auth do
   alias Glados.Accounts.{Encryption, User}
 
+  @doc """
+  Function to login a user.
+  Fetches user from db then validates if the given password matches with the hash stored.
+  Returns ok tuple on valid password
+  """
   def login(params, repo) do
     user = repo.get_by(User, username: String.downcase(params["username"]))
 
     case authenticate(user, params["password"]) do
       true -> {:ok, user}
-      _ -> :error
+      _ -> {:error, "Invalid password"}
     end
   end
 
+  @doc """
+  Checks the password against the hash in the db.
+  """
   defp authenticate(user, password) do
     if user do
       {:ok, authenticated_user} = Encryption.validate_password(user, password)
@@ -19,6 +27,9 @@ defmodule Glados.Accounts.Auth do
     end
   end
 
+  @doc """
+  Checks to see if there is a current user stored in the connection
+  """
   def signed_in?(conn) do
     conn.assigns[:current_user]
   end

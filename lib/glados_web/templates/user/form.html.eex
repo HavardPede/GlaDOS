@@ -28,6 +28,10 @@
   <%= text_input f, :email, placeholder: "Epost@eksempel.com" %>
   <%= error_tag f, :email %>
 
+  <%= label f, :Adresse %>
+  <%= text_input f, :address, placeholder: "Kong haralds vei 13" %>
+  <%= error_tag f, :address %>
+
   <div>
     <%= submit "Lag profil" %>
   </div>

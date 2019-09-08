@@ -1,16 +1,20 @@
 defmodule Glados.Repo.Migrations.CreateUsers do
   use Ecto.Migration
 
-  def change do
+  def up do
     create table(:users) do
       add :name, :string
       add :username, :string
-      add :password_hash, :string
+      add :encrypted_password, :string
       add :dob, :date
       add :email, :string
+      add :address, :string
 
       timestamps()
     end
+  end
 
+  def down do
+    drop table(:users)
   end
 end

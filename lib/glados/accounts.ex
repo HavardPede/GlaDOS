@@ -52,6 +52,8 @@ defmodule Glados.Accounts do
   def create_user(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
+    |> IO.inspect()
+    |> IO.inspect()
     |> Repo.insert()
   end
 

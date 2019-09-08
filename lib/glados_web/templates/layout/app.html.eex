@@ -18,6 +18,7 @@
         <a href="http://ESLG.no/" class="phx-logo">
           <img src="<%= Routes.static_path(@conn, "/images/logo_70x.png") %>" alt="ESLG logo"/>
         </a>
+        
       </section>
     </header>
     <main role="main" class="container">

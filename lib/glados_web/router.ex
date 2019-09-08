@@ -14,14 +14,23 @@ defmodule GladosWeb.Router do
   end
 
   scope "/", GladosWeb do
-    pipe_through(:browser)
+    pipe_through [:browser, GladosWeb.Plugs.Guest]
+
+    resources "/nybruker", UserController, only: [:create, :new]
+    get("/", PageController, :index)
+    get "/login", SessionController, :new
+    post "/login", SessionController, :create
+  end
+
+  scope "/", GladosWeb do
+    pipe_through [:browser, GladosWeb.Plugs.Auth]
 
     get("/", PageController, :index)
 
-    resources "/users", UserController
-
-    get "/login", SessionController, :new
-    post "/login", SessionController, :create
+    resources "/bruker", UserController, only: [:show, :edit, :update, :delete]
+    get("brukere", UserController, :index)
     delete "/logout", SessionController, :delete
+    get "/", PostController, :index
+    get "/show", PageController, :show
   end
 end
