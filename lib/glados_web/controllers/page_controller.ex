@@ -2,6 +2,6 @@ defmodule GladosWeb.PageController do
   use GladosWeb, :controller
 
   def index(conn, _params) do
-    render(conn, "index.html")
+    render(conn, "login.html")
   end
 end

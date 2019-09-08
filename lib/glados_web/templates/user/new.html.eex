@@ -1,0 +1,5 @@
+<h1>Ny bruker</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.user_path(@conn, :create)) %>
+
+<span><%= link "Returner", to: Routes.user_path(@conn, :index) %></span>

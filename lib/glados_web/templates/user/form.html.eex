@@ -1,0 +1,34 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= label f, :Navn %>
+  <%= text_input f, :name, placeholder: "Fornavn Etternavn" %>
+  <%= error_tag f, :name %>
+
+  <%= label f, "Brukernavn" %>
+  <%= text_input f, :username, placeholder: "GamerTag" %>
+  <%= error_tag f, :username %>
+
+  <%= label f, "Passord" %>
+  <%= password_input f, :password, placeholder: "Passord" %>
+  <%= error_tag f, :password %>
+
+  <%= password_input f, :password_confirmation, placeholder: "Bekreft passord" %>
+  <%= error_tag f, :password_confirmation %>
+
+  <%= label f, :Fødselsdato %>
+  <%= date_select f, :dob %>
+  <%= error_tag f, :dob %>
+
+  <%= label f, :Email_adresse %>
+  <%= text_input f, :email, placeholder: "Epost@eksempel.com" %>
+  <%= error_tag f, :email %>
+
+  <div>
+    <%= submit "Lag profil" %>
+  </div>
+<% end %>
