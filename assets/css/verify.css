@@ -9,3 +9,13 @@
     margin: auto;
     text-align: center;
 }
+
+.back_button_verify {
+    position: absolute;
+    left: 30px;
+    bottom: 10px;
+}
+
+.verify_box {
+    position: relative;
+}

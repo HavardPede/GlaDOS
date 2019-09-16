@@ -5,8 +5,10 @@
     border: 1px solid #dddddd;
     background-color: #ffffff;
     margin: auto;
-    overflow: scroll;
+    overflow: auto;
 }
+
+.new_user_box::-webkit-scrollbar {}
 
 .top_new_user {
     width: 100%;
