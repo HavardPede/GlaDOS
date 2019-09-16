@@ -1,42 +1,118 @@
 defmodule GladosWeb.UserController do
   use GladosWeb, :controller
 
+  @moduledoc """
+  Controller for handling actions related to a unique user.
+  """
+
   alias Glados.Accounts
   alias Glados.Accounts.User
 
+  @doc """
+  Path to dispay all users
+  """
   def index(conn, _params) do
     users = Accounts.list_users()
     render(conn, "index.html", users: users)
   end
 
+  @doc """
+  Path to display form for creating a new user
+  """
   def new(conn, _params) do
     changeset = Accounts.change_user(%User{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, layout: {GladosWeb.LayoutView, "no_nav.html"})
   end
 
+  @doc """
+  Path to create a new user, given a set of params
+  """
   def create(conn, %{"user" => user_params}) do
     case Accounts.create_user(user_params) do
       {:ok, user} ->
+        token = Glados.Token.generate_new_account_token(user)
+        verification_url = Routes.user_url(conn, :verify_email, token: token)
+        Glados.Email.send_account_verification_email(user, verification_url)
+
         conn
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: Routes.user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html",
+          changeset: changeset,
+          layout: {GladosWeb.LayoutView, "no_nav.html"}
+        )
     end
   end
 
+  def send_email_verification(%{assigns: assigns} = conn, _params) do
+    case Map.has_key?(assigns, "should_verify") do
+      _ ->
+        conn
+        |> IO.inspect()
+        |> render("sent_verify.html",
+          layout: {GladosWeb.LayoutView, "no_nav.html"}
+        )
+
+      _ ->
+        conn
+        |> put_status(:not_found)
+        |> put_view(GladosWeb.ErrorView)
+        |> render("404.html", layout: {GladosWeb.LayoutView, "no_nav.html"})
+    end
+  end
+
+  @doc """
+  Path to verify user when a token is passed in
+  """
+  def verify_email(conn, %{"token" => token}) do
+    with {:ok, user_id} <- Glados.Token.verify_new_account_token(token),
+         {:ok, %User{verified: false} = user} <- Glados.Accounts.get_user!(user_id) do
+      Glados.Accounts.mark_as_verified(user)
+
+      conn
+      |> put_flash(:info, "Account verified.")
+      |> redirect(to: "/")
+    else
+      _ ->
+        conn
+        |> put_flash(:error, "The verification link is invalid.")
+        |> redirect(to: "/")
+    end
+  end
+
+  @doc """
+  Path to verify user when there is no token passed in
+  """
+  def verify_email(conn, _) do
+    # If there is no token in our params, tell the user they've provided
+    # an invalid token or expired token
+    conn
+    |> put_flash(:error, "The verification link is invalid.")
+    |> redirect(to: "/")
+  end
+
+  @doc """
+  Path to verify show a single user
+  """
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     render(conn, "show.html", user: user)
   end
 
+  @doc """
+  Path to display form for editing a user
+  """
   def edit(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     changeset = Accounts.change_user(user)
     render(conn, "edit.html", user: user, changeset: changeset)
   end
 
+  @doc """
+  Path to update a user, given a set of parameters
+  """
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Accounts.get_user!(id)
 
@@ -51,6 +127,9 @@ defmodule GladosWeb.UserController do
     end
   end
 
+  @doc """
+  Path to delete an account
+  """
   def delete(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     {:ok, _user} = Accounts.delete_user(user)

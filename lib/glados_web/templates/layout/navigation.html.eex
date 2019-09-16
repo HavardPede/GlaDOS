@@ -1,0 +1,20 @@
+<html>
+  <body>
+    <div>
+      <nav class='navbar'>        
+      <ul class="float-right">
+          <li class="logout">
+            <%= link "Logg ut", to: Routes.session_path(@conn, :delete), method: "delete" %>
+          </li>
+        </ul>
+        <ul>
+          <li class="logo_box"><img src="<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %>" class="logo"></li>
+          <li><a class="active" href="/"></a></li>
+          <li><a href="/">Om meg</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+      </nav>
+    </div>
+  </body>
+</html>

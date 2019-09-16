@@ -1,3 +1,12 @@
 /* This file is for your main application css. */
 
 @import "./phoenix.css";
+@import "navbar.css";
+@import "./login.css";
+@import "./new_user.css";
+@import "./verify.css";
+
+:root {
+    --main-orange: #eba134;
+    --dark-blue: #606c76;
+}

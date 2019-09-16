@@ -1,0 +1,11 @@
+.verify_top {
+    height: 100px;
+    width: 100px;
+    margin: 20px;
+    position: absolute;
+}
+
+.verify_mail_center {
+    margin: auto;
+    text-align: center;
+}

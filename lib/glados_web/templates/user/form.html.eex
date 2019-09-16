@@ -26,12 +26,19 @@
 
   <%= label f, :Email_adresse %>
   <%= text_input f, :email, placeholder: "Epost@eksempel.com" %>
-  <%= error_tag f, :email %>
+  <%= error_tag f, :email %>  
+  
+  <%= label f, :Telefon_nummer %>
+  <%= text_input f, :phone_number, placeholder: "12345678" %>
+  <%= error_tag f, :phone_number %>
 
   <%= label f, :Adresse %>
   <%= text_input f, :address, placeholder: "Kong haralds vei 13" %>
   <%= error_tag f, :address %>
 
+  <%= label f, :Post_nummer %>
+  <%= text_input f, :postcode, placeholder: "0000" %>
+  <%= error_tag f, :postcode %>
   <div>
     <%= submit "Lag profil" %>
   </div>

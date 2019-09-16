@@ -9,6 +9,8 @@ defmodule Glados.Repo.Migrations.CreateUsers do
       add :dob, :date
       add :email, :string
       add :address, :string
+      add :postcode, :integer
+      add :phone_number, :integer
 
       timestamps()
     end

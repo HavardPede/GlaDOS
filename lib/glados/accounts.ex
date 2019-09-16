@@ -50,10 +50,8 @@ defmodule Glados.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
-    %User{}
+    %User{auth_level: 1}
     |> User.changeset(attrs)
-    |> IO.inspect()
-    |> IO.inspect()
     |> Repo.insert()
   end
 
@@ -102,5 +100,9 @@ defmodule Glados.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  def mark_as_verified(%User{} = user) do
+    update_user(user, %{"verified" => true})
   end
 end

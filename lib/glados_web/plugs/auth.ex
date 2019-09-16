@@ -3,6 +3,7 @@ defmodule GladosWeb.Plugs.Auth do
   import Phoenix.Controller
 
   alias Glados.Accounts
+  alias GladosWeb.Router.Helpers, as: Routes
 
   def init(opts), do: opts
 
@@ -14,7 +15,7 @@ defmodule GladosWeb.Plugs.Auth do
       |> assign(:current_user, current_user)
     else
       conn
-      |> redirect(to: "/login")
+      |> redirect(to: Routes.user_path(conn, :index))
       |> halt()
     end
   end

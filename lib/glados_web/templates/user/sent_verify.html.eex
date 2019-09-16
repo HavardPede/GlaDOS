@@ -1,0 +1,17 @@
+<div class="login_box">
+    <div class="verify_top">
+        <img src="<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %>">
+    </div>
+    <div class="verify_mail_center">
+        <img src="<%= Routes.static_path(@conn, "/images/mail.png" ) %>">
+        <br>
+        Vi har sent en email til din email-adresse.
+        <br>
+        Har du ikke fått den? 
+        <br>
+        <%= link("Klikk her for å sende en ny email.",
+                to: Routes.user_path(@conn, :send_email_verification),
+                class: "orange") %>
+    </div>
+</div>
+

@@ -13,24 +13,31 @@ defmodule GladosWeb.Router do
     plug(:accepts, ["json"])
   end
 
+  # Scope for login page
   scope "/", GladosWeb do
     pipe_through [:browser, GladosWeb.Plugs.Guest]
 
-    resources "/nybruker", UserController, only: [:create, :new]
-    get("/", PageController, :index)
-    get "/login", SessionController, :new
-    post "/login", SessionController, :create
+    get("/", SessionController, :new)
+    post("/", SessionController, :create)
+
+    get("/registrer", UserController, :new)
+    post("/registrer", UserController, :create)
+
+    get("/verifikasjonsendt", UserController, :send_email_verification)
+    get("/verifiser", UserController, :verify_email)
   end
 
+  # Member Scope
   scope "/", GladosWeb do
     pipe_through [:browser, GladosWeb.Plugs.Auth]
 
-    get("/", PageController, :index)
-
-    resources "/bruker", UserController, only: [:show, :edit, :update, :delete]
-    get("brukere", UserController, :index)
-    delete "/logout", SessionController, :delete
-    get "/", PostController, :index
-    get "/show", PageController, :show
+    resources "/bruker", UserController, only: [:index, :show, :edit, :update, :delete]
+    get("/logout", SessionController, :delete)
   end
+
+  # Crew Scope
+
+  # Chief Scope
+
+  # Admin Scope
 end

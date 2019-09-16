@@ -10,6 +10,20 @@ use Mix.Config
 config :glados,
   ecto_repos: [Glados.Repo]
 
+config :glados, Glados.Mailer,
+  adapter: Bamboo.SMTPAapter,
+  server: "smtp.domeneshop.no",
+  port: 587,
+  username: System.get_env("USERNAME"),
+  password: System.get_env("PASSWORD"),
+  # can be `:always` or `:never`
+  tls: :if_available,
+  # or {":system", ALLOWED_TLS_VERSIONS"} w/ comma seprated values (e.g. "tlsv1.1,tlsv1.2")
+  allowed_tls_versions: [:tlsv1, :"tlsv1.1", :"tlsv1.2"],
+  # can be `true`
+  ssl: false,
+  retries: 1
+
 # Configures the endpoint
 config :glados, GladosWeb.Endpoint,
   url: [host: "localhost"],

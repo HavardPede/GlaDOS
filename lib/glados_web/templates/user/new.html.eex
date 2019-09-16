@@ -1,5 +1,108 @@
-<h1>Ny bruker</h1>
+<div class="new_user_box">
+    <%= form_for @changeset, Routes.user_path(@conn, :create), fn f -> %>
+    <%= if @changeset.action do %>
+        <% end %>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.user_path(@conn, :create)) %>
+        <div class="top_new_user"> 
+            <img src="<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %>" class="new_user_logo">
+            <div>
+                <h2 class="orange_h2">GladOs</h2>
+                <h5>Lag en ny bruker for å søke crew!</h5>
+            </div>
+        </div>
+        <div class="new_user_column top_column">
+            <div class="new_user_field">
+                <%= label f, "Brukernavn" %>
+                <%= text_input f, :username %>
+            </div>
 
-<span><%= link "Returner", to: Routes.user_path(@conn, :index) %></span>
+            <div class="new_user_field">
+                <%= label f, "Passord" %>
+                <%= password_input f, :password %>
+            </div>
+
+            <div class="new_user_field">
+                <%= label f, "Bekreft passord" %>
+                <%= password_input f, :password_confirmation %>
+            </div>
+        </div>
+        <div class="new_user_column">
+            <div class="new_user_field">
+                <%= error_tag f, :username %>
+            </div>
+            <div class="new_user_field">
+                <%= error_tag f, :password %>
+            </div>
+            <div class="new_user_field">
+                <%= error_tag f, :password_confirmation %>
+            </div>
+        </div>
+        <div class="new_user_column">
+            <div class="new_user_field">
+            <%= label f, :Navn %>
+            <%= text_input f, :name %>
+            </div>
+
+            <div class="new_user_field">
+            <%= label f, :Email_adresse %>
+            <%= text_input f, :email %>
+            </div>        
+
+            <div class="new_user_field">
+                <%= label f, :Fødselsdato %>
+                <%= date_input f, :dob %>
+            </div>
+        </div>
+
+        <div class="new_user_column">
+            <div class="new_user_field">
+                <%= error_tag f, :name %>
+            </div>
+            <div class="new_user_field">
+                <%= error_tag f, :email %>  
+            </div>
+            <div class="new_user_field">
+                <%= error_tag f, :dob %>
+            </div>
+        </div>
+
+        <div class="new_user_column">
+        
+            <div class="new_user_field">
+            <%= label f, :Telefon_nummer %>
+            <%= text_input f, :phone_number %>
+            </div>
+
+            <div class="new_user_field">
+            <%= label f, :Adresse %>
+            <%= text_input f, :address %>
+            </div>
+
+            <div class="new_user_field">
+            <%= label f, :Post_nummer %>
+            <%= text_input f, :postcode %>
+            </div>
+        </div>
+
+        <div class="new_user_column">
+            <div class="new_user_field">
+                <%= error_tag f, :phone_number %>
+            </div>
+            <div class="new_user_field">
+                <%= error_tag f, :address %>  
+            </div>
+            <div class="new_user_field">
+                <%= error_tag f, :postcode %>
+            </div>
+        </div>
+
+        <div class="bottom_new_user">
+            <%= submit "Lag profil", class: "btn_orange new_user_btn new_user_to_login" %>
+            <h5 class="new_user_to_login">
+                Har du allerede en bruker?
+                <%= link "Logg inn!", to: Routes.session_path(@conn, :new) %> 
+            </h5>
+        </div>
+    <% end%>
+</div>
+
