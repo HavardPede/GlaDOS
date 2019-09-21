@@ -1,21 +1,27 @@
 defmodule Glados.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  import Kernel
   alias Glados.Accounts.Encryption
 
   schema "users" do
-    field(:name, :string)
-    field(:email, :string)
-    field(:username, :string)
-    field(:encrypted_password, :string)
-    field(:dob, :date)
+    field(:name, :string, null: false)
+    field(:email, :string, null: false)
+    field(:username, :string, null: false)
     field(:address, :string)
     field(:postcode, :integer)
-    field(:phone_number, :integer)
-    field(:password, :string, virtual: true)
-    field(:password_confirmation, :string, virtual: true)
+    field(:phone_number, :string)
     field(:auth_level, :integer)
     field(:verified, :boolean)
+
+    field(:password, :string, virtual: true)
+    field(:password_confirmation, :string, virtual: true)
+    field(:encrypted_password, :string)
+
+    field(:day, :integer, virtual: true)
+    field(:month, :integer, virtual: true)
+    field(:year, :integer, virtual: true)
+    field(:dob, :date)
 
     timestamps()
   end
@@ -27,7 +33,9 @@ defmodule Glados.Accounts.User do
       :name,
       :username,
       :encrypted_password,
-      :dob,
+      :day,
+      :month,
+      :year,
       :email,
       :address,
       :postcode,
@@ -37,39 +45,149 @@ defmodule Glados.Accounts.User do
       :auth_level,
       :verified
     ])
-    |> validate_required([
-      :name,
-      :username,
-      :postcode,
-      :phone_number,
-      :dob,
-      :email,
-      :address,
-      :auth_level,
-      :verified
-    ])
-    |> cast(attrs, [
-      :name,
-      :username,
-      :dob,
-      :email,
-      :address,
-      :phone_number,
-      :postcode,
-      :auth_level
-    ])
-    |> validate_length(:password, min: 6)
-    |> validate_confirmation(:password)
-    |> validate_format(:username, ~r/^[a-z0-9][a-z0-9]+[a-z0-9]$/i)
-    |> validate_format(:email, ~r/@/)
-    |> validate_length(:username, min: 5)
-    |> validate_number(:postcode, greater_than: 999, less_than: 10000)
+    |> validate_required(
+      [
+        :name,
+        :username,
+        :postcode,
+        :phone_number,
+        :day,
+        :month,
+        :year,
+        :email,
+        :address,
+        :auth_level,
+        :verified,
+        :password,
+        :password_confirmation
+      ],
+      message: "Du må fylle inn dette feltet."
+    )
+    |> validate_username()
+    |> validate_password()
+    |> validate_name()
+    |> validate_email()
+    |> set_dob()
+    |> validate_phone_number()
+    |> validate_postcode()
     |> validate_number(:auth_level, less_than: 5)
-    |> unique_constraint(:username)
-    |> unique_constraint(:email)
-    |> downcase_username()
     |> encrypt_password()
     |> validate_required(:encrypted_password)
+  end
+
+  # Password validation
+  defp validate_password(%{changes: %{password: password}} = changeset) do
+    # Check length and content and return only 1 error even if both fails. If all is fine, return changeset
+    length = String.length(password) > 7
+    content = String.match?(password, ~r/(?=.*[a-å])(?=.*[A-Å])(?=.*[0-9])/)
+
+    case {length, content} do
+      {false, _} ->
+        add_error(changeset, :password, "Passordet må være minst 8 karakterer langt.")
+
+      {_, false} ->
+        add_error(
+          changeset,
+          :password,
+          "Passordet må inneholde minst 1 liten og stor bokstav, og ett tall."
+        )
+
+      {true, true} ->
+        validate_confirmation(changeset, :password, message: "Passordet stemmer ikke.")
+    end
+  end
+
+  # If password is not in changeset, simply return changeset
+  defp validate_password(changeset), do: changeset
+
+  # Validate that email format is correct
+  defp validate_email(%{changes: %{email: email}} = changeset) do
+    changeset
+    |> validate_format(:email, ~r/[^@]+@[^\.]+\..+/,
+      message: "Du må oppgi en gyldig epost adresse."
+    )
+    |> unique_constraint(:email, message: "Epost-adressen er allerede i bruk.")
+  end
+
+  defp validate_email(changeset), do: changeset
+
+  # validate that username format is correct
+  defp validate_username(%{changes: %{username: username}} = changeset) do
+    changeset = downcase_username(changeset)
+    username = String.downcase(username)
+
+    length = String.length(username)
+    format = String.match?(username, ~r/^[a-zæøå[:alnum:]]+$/)
+
+    case {length >= 5 && length <= 20, format} do
+      {false, _} ->
+        add_error(changeset, :username, "Brukernavnet må være mellom 5 og 20 karakterer.")
+
+      {_, false} ->
+        add_error(changeset, :username, "Brukernavnet kan kun inneholde bokstaver og tall.")
+
+      {true, true} ->
+        unique_constraint(changeset, :username, message: "Brukernavnet er allerede i bruk.")
+    end
+  end
+
+  # Only called if username is not in changeset
+  defp validate_username(changeset), do: changeset
+
+  # Name validation
+  defp validate_name(%{changes: %{name: name}} = changeset) do
+    changeset
+    |> validate_format(
+      :name,
+      ~r/^([a-zæøåA-ZÆØÅ]+[[:space:]]{1}[a-zæøåA-ZÆØÅ]+)+$/,
+      message: "Du må oppgi både fornavn og etternavn, kun som bokstaver."
+    )
+  end
+
+  defp validate_name(changeset), do: changeset
+
+  defp validate_phone_number(%{changes: %{phone_number: phone_number}} = changeset) do
+    changeset
+    |> remove_whitespace(:phone_number)
+    |> validate_format(
+      :phone_number,
+      ~r/([+]([0-9]{1,3})[[:space:]]?)?([0-9]{3})[[:space:]]?([0-9]{2})[[:space:]]?([0-9]{3,5})/,
+      message: "Telefonnummer må være gyldig"
+    )
+  end
+
+  defp validate_phone_number(changeset), do: changeset
+
+  defp validate_postcode(%{changes: %{postcode: postcode}} = changeset) do
+    changeset
+    |> validate_number(:postcode,
+      less_than: 10000,
+      message: "Postnummer må være en 4-sifret kode."
+    )
+  end
+
+  # Only called if changeset dont have postcode
+  defp validate_postcode(changeset), do: changeset
+
+  # Validation for date of birth
+  defp set_dob(%{changes: %{day: day, month: month, year: year}} = changeset) do
+    date_list = [year, month, day]
+
+    {:ok, dob} = Timex.parse(Enum.join(date_list, "-"), "%Y-%m-%d", :strftime)
+
+    if valid_age?(dob) do
+      put_change(changeset, :dob, dob)
+    else
+      add_error(changeset, :dob, "Dato er ikke gyldig.")
+    end
+  end
+
+  defp set_dob(changeset), do: changeset
+
+  def valid_age?(date_of_birth) do
+    today = Date.utc_today()
+    age = Timex.diff(today, date_of_birth, :years)
+    age < 120 && age > 10
   end
 
   defp encrypt_password(changeset) do
@@ -85,5 +203,9 @@ defmodule Glados.Accounts.User do
 
   defp downcase_username(changeset) do
     update_change(changeset, :username, &String.downcase/1)
+  end
+
+  defp remove_whitespace(changeset, value) do
+    update_change(changeset, value, &String.replace(&1, ~r/ +/, ""))
   end
 end

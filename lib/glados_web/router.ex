@@ -1,6 +1,8 @@
 defmodule GladosWeb.Router do
   use GladosWeb, :router
 
+  alias GladosWeb.Plugs.Guest
+
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
@@ -15,7 +17,7 @@ defmodule GladosWeb.Router do
 
   # Scope for login page
   scope "/", GladosWeb do
-    pipe_through [:browser, GladosWeb.Plugs.Guest]
+    pipe_through [:browser, Guest]
 
     get("/", SessionController, :new)
     post("/", SessionController, :create)

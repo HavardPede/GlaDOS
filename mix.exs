@@ -45,7 +45,8 @@ defmodule Glados.MixProject do
       {:plug_cowboy, "~> 1.0"},
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 1.0"},
-      {:bamboo, "~> 1.3"}
+      {:bamboo, "~> 1.3"},
+      {:timex, "~> 3.5"}
     ]
   end
 

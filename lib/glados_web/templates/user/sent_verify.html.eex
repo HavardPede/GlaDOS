@@ -1,4 +1,4 @@
-<div class="login_box">
+<div class="login_box verify_box">
     <div class="verify_top">
         <img src="<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %>">
     </div>
@@ -12,6 +12,10 @@
         <%= link("Klikk her for å sende en ny email.",
                 to: Routes.user_path(@conn, :send_email_verification),
                 class: "orange") %>
+    </div>
+    
+    <div class="back_button_verify">
+        <a href="/"><img src="<%= Routes.static_path(@conn, "/images/left-arrow.png" ) %>"></a>
     </div>
 </div>
 

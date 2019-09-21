@@ -1,6 +1,5 @@
 .new_user_box {
     width: 800px;
-    height: 500px;
     border-radius: 10px;
     border: 1px solid #dddddd;
     background-color: #ffffff;
@@ -53,4 +52,24 @@
 .new_user_to_login {
     margin-top: auto;
     margin-bottom: auto;
+}
+
+.new_user_error {
+    font-size: 13px;
+}
+
+.squish_fields {
+    display: flex;
+    flex-direction: row;
+}
+
+#user_day,
+#user_month {
+    width: 50px;
+    margin-right: 10px;
+}
+
+#user_year,
+#user_postcode {
+    width: 60px;
 }
