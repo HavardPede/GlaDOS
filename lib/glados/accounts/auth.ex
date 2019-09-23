@@ -16,9 +16,7 @@ defmodule Glados.Accounts.Auth do
     end
   end
 
-  @doc """
-  Checks the password against the hash in the db.
-  """
+  # Checks the password against the hash in the db.
   defp authenticate(nil, _password), do: nil
 
   defp authenticate(user, password) do

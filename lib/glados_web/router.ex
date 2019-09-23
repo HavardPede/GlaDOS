@@ -2,6 +2,8 @@ defmodule GladosWeb.Router do
   use GladosWeb, :router
 
   alias GladosWeb.Plugs.Guest
+  alias GladosWeb.Plugs.Auth
+  alias GladosWeb.Plugs.Verify
 
   pipeline :browser do
     plug(:accepts, ["html"])
@@ -24,6 +26,11 @@ defmodule GladosWeb.Router do
 
     get("/registrer", UserController, :new)
     post("/registrer", UserController, :create)
+  end
+
+  # Scope for verifying a new user
+  scope "/", GladosWeb do
+    pipe_through [:browser, Verify]
 
     get("/verifikasjonsendt", UserController, :send_email_verification)
     get("/verifiser", UserController, :verify_email)
@@ -31,7 +38,7 @@ defmodule GladosWeb.Router do
 
   # Member Scope
   scope "/", GladosWeb do
-    pipe_through [:browser, GladosWeb.Plugs.Auth]
+    pipe_through [:browser, Auth]
 
     resources "/bruker", UserController, only: [:index, :show, :edit, :update, :delete]
     get("/logout", SessionController, :delete)

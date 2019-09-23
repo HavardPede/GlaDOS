@@ -27,7 +27,7 @@ defmodule GladosWeb.SessionController do
           |> redirect(to: Routes.user_path(conn, :index))
         else
           conn
-          |> assign(:should_verify, true)
+          |> put_session(:unverified_user, user.id)
           |> put_flash(
             :error,
             [

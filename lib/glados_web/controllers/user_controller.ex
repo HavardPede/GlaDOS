@@ -5,6 +5,8 @@ defmodule GladosWeb.UserController do
   Controller for handling actions related to a unique user.
   """
 
+  alias Glados.Email
+  alias Glados.Mailer
   alias Glados.Accounts
   alias Glados.Accounts.User
 
@@ -30,13 +32,9 @@ defmodule GladosWeb.UserController do
   def create(conn, %{"user" => user_params}) do
     case Accounts.create_user(user_params) do
       {:ok, user} ->
-        token = Glados.Token.generate_new_account_token(user)
-        verification_url = Routes.user_url(conn, :verify_email, token: token)
-        Glados.Email.send_account_verification_email(user, verification_url)
-
         conn
-        |> put_flash(:info, "User created successfully.")
-        |> redirect(to: Routes.user_path(conn, :show, user))
+        |> put_session(:unverified_user, user.id)
+        |> redirect(Routes.user_path(Endpoint, :send_email_verification))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html",
@@ -46,21 +44,25 @@ defmodule GladosWeb.UserController do
     end
   end
 
-  def send_email_verification(%{assigns: assigns} = conn, _params) do
-    case Map.has_key?(assigns, "should_verify") do
-      _ ->
-        conn
-        |> IO.inspect()
-        |> render("sent_verify.html",
-          layout: {GladosWeb.LayoutView, "no_nav.html"}
-        )
+  def send_email_verification(conn, _params) do
+    user =
+      conn
+      |> get_session(:unverified_user)
+      |> Accounts.get_user!()
 
-      _ ->
-        conn
-        |> put_status(:not_found)
-        |> put_view(GladosWeb.ErrorView)
-        |> render("404.html", layout: {GladosWeb.LayoutView, "no_nav.html"})
-    end
+    token = Glados.Token.generate_new_account_token(user)
+
+    IO.inspect(token, label: "token")
+
+    verification_url = Routes.user_url(conn, :verify_email, token: token)
+
+    Email.verification_email(user.name, user.email, verification_url)
+    |> Mailer.deliver_now()
+    # Send email
+
+    |> render("sent_verify.html",
+      layout: {GladosWeb.LayoutView, "no_nav.html"}
+    )
   end
 
   @doc """

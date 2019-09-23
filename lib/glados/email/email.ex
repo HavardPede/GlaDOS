@@ -5,14 +5,14 @@ defmodule Glados.Email do
   Email templates for sending email.
   """
 
-  def send_account_verification_email(user, verification_url) do
+  def verification_email(name, email, verification_url) do
     new_email(
-      to: user,
+      to: email,
       from: "noreply@eslgcrew.no",
-      subject: "Account verification",
-      html_body: "<strong>Thanks for joining GLaDOS.</strong>",
+      subject: "Bruker verifisering",
+      html_body: "<strong>Takk for at du tar interesse for ESLG, #{name}</strong>",
       text_body:
-        "Follow this link to verify your account: <a href=<%= verification_url %>>glados.eslgcrew.no</a>"
+        "Følg denne lenken for å verifisere din profil: <a href=<%= verification_url %>>glados.eslgcrew.no</a>"
     )
   end
 

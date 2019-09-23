@@ -11,7 +11,7 @@ config :glados,
   ecto_repos: [Glados.Repo]
 
 config :glados, Glados.Mailer,
-  adapter: Bamboo.SMTPAapter,
+  adapter: Bamboo.SMTPAdapter,
   server: "smtp.domeneshop.no",
   port: 587,
   username: System.get_env("USERNAME"),

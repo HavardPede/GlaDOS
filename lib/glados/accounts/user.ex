@@ -2,8 +2,10 @@ defmodule Glados.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
   import Kernel
+  import Ecto
   alias Glados.Accounts.Encryption
 
+  @primary_key {:id, :binary_id, auto_generate: false}
   schema "users" do
     field(:name, :string, null: false)
     field(:email, :string, null: false)
@@ -18,9 +20,9 @@ defmodule Glados.Accounts.User do
     field(:password_confirmation, :string, virtual: true)
     field(:encrypted_password, :string)
 
-    field(:day, :integer, virtual: true)
-    field(:month, :integer, virtual: true)
-    field(:year, :integer, virtual: true)
+    field(:day, :string, virtual: true)
+    field(:month, :string, virtual: true)
+    field(:year, :string, virtual: true)
     field(:dob, :date)
 
     timestamps()
@@ -101,7 +103,7 @@ defmodule Glados.Accounts.User do
   defp validate_password(changeset), do: changeset
 
   # Validate that email format is correct
-  defp validate_email(%{changes: %{email: email}} = changeset) do
+  defp validate_email(%{changes: %{email: _}} = changeset) do
     changeset
     |> validate_format(:email, ~r/[^@]+@[^\.]+\..+/,
       message: "Du må oppgi en gyldig epost adresse."
@@ -135,7 +137,7 @@ defmodule Glados.Accounts.User do
   defp validate_username(changeset), do: changeset
 
   # Name validation
-  defp validate_name(%{changes: %{name: name}} = changeset) do
+  defp validate_name(%{changes: %{name: _}} = changeset) do
     changeset
     |> validate_format(
       :name,
@@ -146,7 +148,7 @@ defmodule Glados.Accounts.User do
 
   defp validate_name(changeset), do: changeset
 
-  defp validate_phone_number(%{changes: %{phone_number: phone_number}} = changeset) do
+  defp validate_phone_number(%{changes: %{phone_number: _}} = changeset) do
     changeset
     |> remove_whitespace(:phone_number)
     |> validate_format(
@@ -158,7 +160,7 @@ defmodule Glados.Accounts.User do
 
   defp validate_phone_number(changeset), do: changeset
 
-  defp validate_postcode(%{changes: %{postcode: postcode}} = changeset) do
+  defp validate_postcode(%{changes: %{postcode: _}} = changeset) do
     changeset
     |> validate_number(:postcode,
       less_than: 10000,
@@ -171,12 +173,14 @@ defmodule Glados.Accounts.User do
 
   # Validation for date of birth
   defp set_dob(%{changes: %{day: day, month: month, year: year}} = changeset) do
-    date_list = [year, month, day]
+    date =
+      [year, month, day]
+      |> Enum.join("-")
 
-    {:ok, dob} = Timex.parse(Enum.join(date_list, "-"), "%Y-%m-%d", :strftime)
+    {:ok, dob} = Timex.parse(date, "%Y-%m-%d", :strftime)
 
     if valid_age?(dob) do
-      put_change(changeset, :dob, dob)
+      put_change(changeset, :dob, Timex.to_date(dob))
     else
       add_error(changeset, :dob, "Dato er ikke gyldig.")
     end
