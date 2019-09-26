@@ -12,6 +12,6 @@ defmodule Glados.Token do
   def verify_new_account_token(token) do
     # tokens that are older than a day should be invalid
     max_age = 86_400
-    Phoenix.Token.verify(Glados.Endpoint, @account_verification_salt, token, max_age: max_age)
+    Phoenix.Token.verify(GladosWeb.Endpoint, @account_verification_salt, token, max_age: max_age)
   end
 end

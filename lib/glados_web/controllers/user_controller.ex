@@ -52,9 +52,8 @@ defmodule GladosWeb.UserController do
 
     token = Glados.Token.generate_new_account_token(user)
 
-    IO.inspect(token, label: "token")
-
     verification_url = Routes.user_url(conn, :verify_email, token: token)
+    IO.inspect(verification_url)
 
     Email.verification_email(user.name, user.email, verification_url)
     |> Mailer.deliver_now()
@@ -72,6 +71,8 @@ defmodule GladosWeb.UserController do
     with {:ok, user_id} <- Glados.Token.verify_new_account_token(token),
          {:ok, %User{verified: false} = user} <- Glados.Accounts.get_user!(user_id) do
       Glados.Accounts.mark_as_verified(user)
+
+      IO.inspect("MADE IT!")
 
       conn
       |> put_flash(:info, "Account verified.")

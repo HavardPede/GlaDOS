@@ -28,6 +28,13 @@ defmodule GladosWeb.Router do
     post("/registrer", UserController, :create)
   end
 
+  scope "/logger", GladosWeb do
+    pipe_through [:browser]
+
+    get("/", loggerController, :index)
+    post("/", loggerController, :add_purchase)
+  end
+
   # Scope for verifying a new user
   scope "/", GladosWeb do
     pipe_through [:browser, Verify]
@@ -49,4 +56,10 @@ defmodule GladosWeb.Router do
   # Chief Scope
 
   # Admin Scope
+  scope "/admin", GladosWeb do
+    pipe_through[:browser]
+
+    get("/logger/crew", loggerController, :logger_crew)
+    post("/logger/crew", loggerController, :add_logger_crew)
+  end
 end

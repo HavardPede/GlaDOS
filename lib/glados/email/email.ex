@@ -11,8 +11,7 @@ defmodule Glados.Email do
       from: "noreply@eslgcrew.no",
       subject: "Bruker verifisering",
       html_body: "<strong>Takk for at du tar interesse for ESLG, #{name}</strong>",
-      text_body:
-        "Følg denne lenken for å verifisere din profil: <a href=<%= verification_url %>>glados.eslgcrew.no</a>"
+      html_body: "Følg denne lenken for å verifisere din profil: #{verification_url}"
     )
   end
 
