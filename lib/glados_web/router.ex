@@ -26,7 +26,6 @@ defmodule GladosWeb.Router do
   end
 
   pipeline :logger do
-    plug(GladosWeb.Plugs.Auth)
     plug(GladosWeb.Plugs.LoggerAuth)
   end
 
@@ -64,9 +63,8 @@ defmodule GladosWeb.Router do
 
   # Member Scope
   scope "/", GladosWeb do
-    pipe_through [:browser, Auth]
-
-    resources "/bruker", UserController, only: [:index, :show, :edit, :update, :delete]
+    pipe_through [:browser, :auth]
+    resources "/bruker", UserController, only: [:index]
     get("/logout", SessionController, :delete)
   end
 

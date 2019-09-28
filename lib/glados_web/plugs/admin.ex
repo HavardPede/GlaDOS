@@ -16,9 +16,7 @@ defmodule GladosWeb.Plugs.Admin do
     if(current_user.auth_level > 4) do
       conn
     else
-      conn
-      |> redirect(to: Routes.user_path(conn, :index))
-      |> halt()
+      plug(Glados.Plugs.Redirector)
     end
   end
 end

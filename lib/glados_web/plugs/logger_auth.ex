@@ -16,9 +16,8 @@ defmodule GladosWeb.Plugs.LoggerAuth do
     if(current_user.auth_level == 2) do
       conn
     else
-      conn
-      |> redirect(to: Routes.user_path(conn, :index))
-      |> halt()
+
+      plug(Glados.Plugs.Redirector)
     end
   end
 end
