@@ -9,27 +9,7 @@
         </div>
         <div class="newCrewColumn">
             <div class="newCrewField">
-                <%= label f, "ID" %>
                 <%= text_input f, :id, autofocus: true %>
-                </div>
-
-                <div class="newCrewField">
-                <%= label f, "Navn" %>
-                <%= text_input f, :name %>
-                </div>
-
-                <div class="newCrewField">
-                <%= label f, "Etternavn" %>
-                <%= text_input f, :last_name %>
-                </div>
-
-                <div class="newCrewField">
-                <%= label f, "Crew" %>
-                <%= text_input f, :crew %>
-                </div>
-
-                <div class="newCrewField">
-                    <%= submit "Add crew", class: "btn_orange newUserBtn " %>
                 </div>
         </div>
 

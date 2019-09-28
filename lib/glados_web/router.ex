@@ -61,5 +61,9 @@ defmodule GladosWeb.Router do
 
     get("/logger/crew", LoggerController, :logger_crew)
     post("/logger/crew", LoggerController, :add_logger_crew)
+    get("/logger/crew/delete/:id", LoggerController, :delete_logger_crew)
+
+    get("/logger/transactions", LoggerController, :logger_transactions)
+    post("/logger/transactions", LoggerController, :add_logger_transaction)
   end
 end

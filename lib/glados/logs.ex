@@ -40,4 +40,10 @@ defmodule Glados.Logs do
     LoggerCrew.changeset(new_user, attrs)
     |> Repo.insert()
   end
+
+  def get_crew!(id), do: Repo.get!(LoggerCrew, id)
+
+  def delete_logger_crew(crew) do
+    Repo.delete(crew)
+  end
 end

@@ -21,10 +21,12 @@ defmodule GladosWeb.LoggerController do
   """
   def logger_crew(conn, _params) do
     changeset = LoggerCrew.changeset(%LoggerCrew{}, %{})
+    users = Glados.Logs.list_users() |> Enum.reverse()
 
     render(conn, "logger_crew.html",
       conn: conn,
       changeset: changeset,
+      users: users,
       layout: {GladosWeb.LayoutView, "no_nav.html"}
     )
   end
@@ -33,18 +35,32 @@ defmodule GladosWeb.LoggerController do
   Adds crew member to list of crew
   """
   def add_logger_crew(conn, %{"logger_crew" => crew_params}) do
-    IO.inspect(crew_params)
-
     case Glados.Logs.create_user(crew_params) do
       {:ok, user} ->
         conn
-        |> redirect(Routes.logger_path(conn, :logger_crew))
+        |> redirect(to: Routes.logger_path(conn, :logger_crew))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html",
-          changeset: changeset,
-          layout: {GladosWeb.LayoutView, "no_nav.html"}
-        )
+        conn
+        |> put_flash(:error, "This user already exists")
+        |> redirect(to: Routes.logger_path(conn, :logger_crew))
+    end
+  end
+
+  def delete_logger_crew(conn, %{"id" => crew_id}) do
+    crew_member = Glados.Logs.get_crew!(crew_id)
+    IO.inspect(crew_member)
+
+    case Glados.Logs.delete_logger_crew(crew_member) do
+      {:ok, struct} ->
+        conn
+        |> put_flash(:info, "User deleted successfully")
+        |> redirect(to: Routes.logger_path(conn, :logger_crew))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        conn
+        |> put_flash(:error, "User couldn't be deleted")
+        |> redirect(to: Routes.logger_path(conn, :logger_crew))
     end
   end
 end
