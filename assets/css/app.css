@@ -5,8 +5,13 @@
 @import "./login.css";
 @import "./new_user.css";
 @import "./verify.css";
+@import "./logger.css";
 
 :root {
     --main-orange: #eba134;
     --dark-blue: #606c76;
+}
+
+.danger {
+    background-color: #dc3545!important;
 }
