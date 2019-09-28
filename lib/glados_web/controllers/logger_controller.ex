@@ -16,6 +16,13 @@ defmodule GladosWeb.LoggerController do
   end
 
   @doc """
+  Adds purchase to the logger page
+  """
+  def view_all_purchases(conn, _params) do
+    render(conn, "index.html")
+  end
+
+  @doc """
   Displays all crew members that are linked with the logger
   """
   def crew_members(conn, _params) do

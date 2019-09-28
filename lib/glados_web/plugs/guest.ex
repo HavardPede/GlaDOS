@@ -10,8 +10,8 @@ defmodule GladosWeb.Plugs.Guest do
       conn
       |> redirect(to: user_path(conn, :index))
       |> halt()
+    else
+      conn
     end
-
-    conn
   end
 end

@@ -1,10 +1,6 @@
 defmodule GladosWeb.Router do
   use GladosWeb, :router
 
-  alias GladosWeb.Plugs.Guest
-  alias GladosWeb.Plugs.Auth
-  alias GladosWeb.Plugs.Verify
-
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
@@ -17,9 +13,31 @@ defmodule GladosWeb.Router do
     plug(:accepts, ["json"])
   end
 
+  pipeline :auth do
+    plug(GladosWeb.Plugs.Auth)
+  end
+
+  pipeline :verify do
+    plug(GladosWeb.Plugs.Verify)
+  end
+
+  pipeline :guest do
+    plug(GladosWeb.Plugs.Guest)
+  end
+
+  pipeline :logger do
+    plug(GladosWeb.Plugs.Auth)
+    plug(GladosWeb.Plugs.LoggerAuth)
+  end
+
+  pipeline :admin do
+    plug(GladosWeb.Plugs.Auth)
+    plug(GladosWeb.Plugs.Admin)
+  end
+
   # Scope for login page
   scope "/", GladosWeb do
-    pipe_through [:browser, Guest]
+    pipe_through [:browser, :guest]
 
     get("/", SessionController, :new)
     post("/", SessionController, :create)
@@ -28,16 +46,17 @@ defmodule GladosWeb.Router do
     post("/registrer", UserController, :create)
   end
 
+  # Scope for transaction logger account
   scope "/logger", GladosWeb do
-    pipe_through [:browser]
+    pipe_through [:browser, :logger]
 
-    get("/", loggerController, :index)
-    post("/", loggerController, :add_purchase)
+    get("/", LoggerController, :index)
+    post("/", LoggerController, :add_purchase)
   end
 
   # Scope for verifying a new user
   scope "/", GladosWeb do
-    pipe_through [:browser, Verify]
+    pipe_through [:browser, :verify]
 
     get("/verifikasjonsendt", UserController, :send_email_verification)
     get("/verifiser", UserController, :verify_email)
@@ -57,9 +76,10 @@ defmodule GladosWeb.Router do
 
   # Admin Scope
   scope "/admin", GladosWeb do
-    pipe_through[:browser]
+    pipe_through [:browser, :admin]
 
-    get("/logger/crew", loggerController, :logger_crew)
-    post("/logger/crew", loggerController, :add_logger_crew)
+    get("/logger/crew", LoggerController, :logger_crew)
+    post("/logger/crew", LoggerController, :add_logger_crew)
+    get("/purchases", LoggerController, :view_all_purchases)
   end
 end
