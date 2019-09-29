@@ -1,0 +1,46 @@
+<div class="newCrewRegister">
+    <%= form_for @changeset, Routes.logger_path(@conn, :create_transaction), fn f -> %>
+
+        <div class="top_new_user"> 
+            <img src="<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %>" class="new_user_logo">
+            <div>
+                <h2 class="orange_h2">GLaDOS</h2>
+            </div>
+        </div> 
+        <div class="newCrewColumn">
+            <div class="newCrewField">
+                <%= if @logger, do: text_input f, :logger_crew_id, autofocus: true %>
+                </div>
+        </div>
+
+        <div>
+            <table class="crewTable">
+                <tr class="tableHeadCrew">
+                    <th>Navn</th>
+                    <th>Etternavn</th>
+                    <th>Crew</th>
+                    <th>Dato</th>
+                    <th>Klokkeslett</th>
+                    <th></th>
+                </tr>
+                <%= for transaction <- @transactions do %>
+                    <tr>
+                        <td><%= transaction.logger_crew_id %></td>
+                        <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].name %></td>
+                        <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].last_name %></td>
+                        <td><%= transaction.inserted_at.day %> / <%= transaction.inserted_at.month %></td>
+                        <td><%= transaction.inserted_at.hour %>.<%= if (transaction.inserted_at.minute < 10), do: 0 %><%=transaction.inserted_at.minute %></td>
+                        <td>
+                            <%= link "Slett", to: Routes.logger_path(@conn, :delete_transaction, transaction.id) %>
+                        </td>
+                        
+                        
+                        <td>
+                        </td>
+                    </tr>
+                <% end %>
+            </table>
+        </div> 
+    <% end%>
+</div>
+

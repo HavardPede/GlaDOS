@@ -3,14 +3,21 @@ defmodule Glados.Logger.CrewTransactions do
   import Ecto.Changeset
   import Glados.Logger.LoggerCrew
 
-  @primary_key {:id, :integer, auto_generate: true}
   schema "crew_transactions" do
-    field(:crew_id, :string, null: false)
-
-    belongs_to(:logger_crew, LoggerCrew)
+    field(:logger_crew_id, :string, null: false)
+    belongs_to(:logger_crew, LoggerCrew, define_field: false)
 
     timestamps()
   end
 
   # Need to implement a changeset
+  def changeset(crew, attrs) do
+    crew
+    |> cast(attrs, [
+      :logger_crew_id
+    ])
+    |> validate_required([
+      :logger_crew_id
+    ])
+  end
 end

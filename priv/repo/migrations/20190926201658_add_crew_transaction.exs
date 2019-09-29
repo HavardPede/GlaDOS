@@ -3,7 +3,7 @@ defmodule Glados.Repo.Migrations.AddCrewTransaction do
 
   def up do
     create table(:crew_transactions) do
-      add :crew_id, references("logger_crew", type: :string, on_delete: :nilify_all)
+      add :logger_crew_id, references("logger_crew", type: :string, on_delete: :nilify_all)
       timestamps()
     end
   end

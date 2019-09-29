@@ -1,9 +1,5 @@
 defmodule GladosWeb.Plugs.LoggerAuth do
-  import Plug.Conn
-  import Phoenix.Controller
-
   alias Glados.Accounts
-  alias GladosWeb.Router.Helpers, as: Routes
 
   def init(opts), do: opts
 
@@ -16,8 +12,8 @@ defmodule GladosWeb.Plugs.LoggerAuth do
     if(current_user.auth_level == 2) do
       conn
     else
-
-      plug(Glados.Plugs.Redirector)
+      conn
+      |> GladosWeb.Plugs.PlugHelper.redirect()
     end
   end
 end

@@ -2,7 +2,6 @@ defmodule Glados.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
   import Kernel
-  import Ecto
   alias Glados.Accounts.Encryption
 
   @primary_key {:id, :binary_id, auto_generate: false}

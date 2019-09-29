@@ -17,8 +17,9 @@
       <%= submit "Logg inn", class: " btn_orange" %>
     <% end %>
     <br>
-    Mangler du bruker?
-    <%= link "Register deg her!", to: Routes.user_path(@conn, :new), class: "btn orange" %>
+    <!--Mangler du bruker?
+    <%= # link "Register deg her!", to: Routes.user_path(@conn, :new), class: "btn orange" %>
+    -->
   </div>
   <div class="right_login_column">
     <img src="<%= Routes.static_path(@conn, "/images/logo.png" ) %>" class="login_logo">

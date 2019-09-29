@@ -9,9 +9,8 @@
         </ul>
         <ul>
           <li class="logo_box"><img src="<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %>" class="logo"></li>
-          <li><a class="active" href="/"></a></li>
-          <li><a href="/">Om meg</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><%= link("Crew", to: Routes.logger_path(@conn, :logger_crew)) %></li>
+          <li><%= link("Transactions", to: Routes.logger_path(@conn, :logger_transactions)) %></li>
         </ul>
 
       </nav>

@@ -25,7 +25,13 @@ defmodule GladosWeb.Router do
     plug(GladosWeb.Plugs.Guest)
   end
 
+  pipeline :member do
+    plug(GladosWeb.Plugs.Auth)
+    plug(GladosWeb.Plugs.Member)
+  end
+
   pipeline :logger do
+    plug(GladosWeb.Plugs.Auth)
     plug(GladosWeb.Plugs.LoggerAuth)
   end
 
@@ -41,31 +47,41 @@ defmodule GladosWeb.Router do
     get("/", SessionController, :new)
     post("/", SessionController, :create)
 
-    get("/registrer", UserController, :new)
-    post("/registrer", UserController, :create)
+    # get("/registrer", UserController, :new)
+    # post("/registrer", UserController, :create)
   end
 
   # Scope for transaction logger account
   scope "/logger", GladosWeb do
     pipe_through [:browser, :logger]
 
-    get("/", LoggerController, :index)
-    post("/", LoggerController, :add_purchase)
+    get("/transactions", LoggerController, :logger_transactions)
+    post("/transactions", LoggerController, :create_transaction)
+    get("/delete/:id", LoggerController, :delete_transaction)
   end
 
   # Scope for verifying a new user
   scope "/", GladosWeb do
     pipe_through [:browser, :verify]
 
-    get("/verifikasjonsendt", UserController, :send_email_verification)
-    get("/verifiser", UserController, :verify_email)
+    # get("/verifikasjonsendt", UserController, :send_email_verification)
+    # get("/verifiser", UserController, :verify_email)
+  end
+
+  # Log out scope
+  scope "/", GladosWeb do
+    pipe_through [:browser, :auth]
+    get("/logout", SessionController, :delete)
   end
 
   # Member Scope
   scope "/", GladosWeb do
-    pipe_through [:browser, :auth]
-    resources "/bruker", UserController, only: [:index]
-    get("/logout", SessionController, :delete)
+    pipe_through [:browser, :member]
+    resources "/profil", UserController, only: [:index]
+  end
+
+  scope "/", GladosWeb do
+    pipe_through [:browser, :redirect]
   end
 
   # Crew Scope
@@ -75,9 +91,12 @@ defmodule GladosWeb.Router do
   # Admin Scope
   scope "/admin", GladosWeb do
     pipe_through [:browser, :admin]
+    get("/crew", LoggerController, :logger_crew)
+    post("/crew", LoggerController, :add_logger_crew)
+    get("/crew/delete/:id", LoggerController, :delete_logger_crew)
 
-    get("/logger/crew", LoggerController, :logger_crew)
-    post("/logger/crew", LoggerController, :add_logger_crew)
-    get("/purchases", LoggerController, :view_all_purchases)
+    get("/transactions", LoggerController, :logger_transactions)
+    post("/transactions", LoggerController, :create_transaction)
+    get("/delete/:id", LoggerController, :delete_transaction)
   end
 end

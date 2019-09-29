@@ -5,7 +5,6 @@
             <img src="<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %>" class="new_user_logo">
             <div>
                 <h2 class="orange_h2">GLaDOS</h2>
-                <h5>Lag en ny bruker for å søke crew!</h5>
             </div>
         </div>
         <div class="newCrewColumn">
@@ -16,17 +15,17 @@
 
                 <div class="newCrewField">
                 <%= label f, "Navn" %>
-                <%= text_input f, :name, autofocus: true %>
+                <%= text_input f, :name %>
                 </div>
 
                 <div class="newCrewField">
                 <%= label f, "Etternavn" %>
-                <%= text_input f, :last_name, autofocus: true %>
+                <%= text_input f, :last_name %>
                 </div>
 
                 <div class="newCrewField">
                 <%= label f, "Crew" %>
-                <%= text_input f, :crew, autofocus: true %>
+                <%= text_input f, :crew %>
                 </div>
 
                 <div class="newCrewField">
@@ -43,14 +42,19 @@
                     <th>Crew</th>
                     <th></th>
                 </tr>
-                <tr>
-                    <td>1657698909877</td>
-                    <td>Maria</td>
-                    <td>Anders</td>
-                    <td>Cafeteria</td>
-                    <td><%= button("DELETE", to: "deletepath", class: "danger") %></td>
-                </tr>
+                <%= for user <- @users do %>
+                    <tr>
+                        <td><%= user.id %></td>
+                        <td><%= user.name %></td>
+                        <td><%= user.last_name %></td>
+                        <td><%= user.crew %></td>
+                        
+                        <td>
+                            <%= link "Slett", to: Routes.logger_path(@conn, :delete_logger_crew, user.id) %>
+                        </td>
+                    </tr>
+                <% end %>
+            </table>
         </div> 
     <% end%>
 </div>
-

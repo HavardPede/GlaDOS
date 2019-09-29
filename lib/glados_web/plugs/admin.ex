@@ -1,9 +1,5 @@
 defmodule GladosWeb.Plugs.Admin do
-  import Plug.Conn
-  import Phoenix.Controller
-
   alias Glados.Accounts
-  alias GladosWeb.Router.Helpers, as: Routes
 
   def init(opts), do: opts
 
@@ -16,7 +12,8 @@ defmodule GladosWeb.Plugs.Admin do
     if(current_user.auth_level > 4) do
       conn
     else
-      plug(Glados.Plugs.Redirector)
+      conn
+      |> GladosWeb.Plugs.PlugHelper.redirect()
     end
   end
 end
