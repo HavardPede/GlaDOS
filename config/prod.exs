@@ -1,6 +1,5 @@
-
 config :glados, GladosWeb.Endpoint,
-  url: [host: "eslgcrew.mo", port: 80],,
+  url: [host: "eslgcrew.mo", port: 80],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
