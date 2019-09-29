@@ -1,3 +1,5 @@
+use Mix.Config
+
 config :glados, GladosWeb.Endpoint,
   url: [host: "eslgcrew.mo", port: 80],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
