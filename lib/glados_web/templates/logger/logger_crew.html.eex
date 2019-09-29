@@ -42,7 +42,6 @@
                     <th>Crew</th>
                     <th></th>
                 </tr>
-                <% IO.inspect @users %>
                 <%= for user <- @users do %>
                     <tr>
                         <td><%= user.id %></td>
@@ -51,7 +50,7 @@
                         <td><%= user.crew %></td>
                         
                         <td>
-                            <%= link "Delete", to: Routes.logger_path(@conn, :delete_logger_crew, user.id) %>
+                            <%= link "Slett", to: Routes.logger_path(@conn, :delete_logger_crew, user.id) %>
                         </td>
                     </tr>
                 <% end %>

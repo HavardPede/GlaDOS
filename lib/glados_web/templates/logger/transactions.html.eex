@@ -1,5 +1,5 @@
 <div class="newCrewRegister">
-    <%= form_for @changeset, Routes.logger_path(@conn, :add_logger_crew), fn f -> %>
+    <%= form_for @changeset, Routes.logger_path(@conn, :create_transaction), fn f -> %>
 
         <div class="top_new_user"> 
             <img src="<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %>" class="new_user_logo">
@@ -9,29 +9,33 @@
         </div>
         <div class="newCrewColumn">
             <div class="newCrewField">
-                <%= text_input f, :id, autofocus: true %>
+                <%= text_input f, :logger_crew_id, autofocus: true %>
                 </div>
         </div>
 
         <div>
             <table class="crewTable">
                 <tr class="tableHeadCrew">
-                    <th>ID</th>
                     <th>Navn</th>
                     <th>Etternavn</th>
                     <th>Crew</th>
+                    <th>Dato</th>
+                    <th>Klokkeslett</th>
                     <th></th>
                 </tr>
-                <% IO.inspect @users %>
-                <%= for user <- @users do %>
+                <%= for transaction <- @transactions do %>
                     <tr>
-                        <td><%= user.id %></td>
-                        <td><%= user.name %></td>
-                        <td><%= user.last_name %></td>
-                        <td><%= user.crew %></td>
+                        <td><%= transaction.logger_crew_id %></td>
+                        <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].name %></td>
+                        <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].last_name %></td>
+                        <td><%= transaction.inserted_at.day %> / <%= transaction.inserted_at.month %></td>
+                        <td><%= transaction.inserted_at.hour %>.<%= if (transaction.inserted_at.minute < 10), do: 0 %><%=transaction.inserted_at.minute %></td>
+                        <td>
+                            <%= link "Slett", to: Routes.logger_path(@conn, :delete_transaction, transaction.id) %>
+                        </td>
+                        
                         
                         <td>
-                            <%= link "Delete", to: Routes.logger_path(@conn, :delete_logger_crew, user.id) %>
                         </td>
                     </tr>
                 <% end %>
