@@ -32,9 +32,9 @@
                         <td><%= transaction.inserted_at.hour %>:<%= if (transaction.inserted_at.minute < 10), do: 0 %><%=transaction.inserted_at.minute %></td>
                         <td>
                             <%= if @logger do %>
-                            <%= link "Slett", to: Routes.logger_path(@conn, :delete_transaction, transaction.id) %>
-                            <%= else %>
-                            <%= link "Slett", to: "/admin/delete/#{transaction.id}" %>
+                                <%= link "Slett", to: Routes.logger_path(@conn, :delete_transaction, transaction.id) %>
+                            <% else %>
+                                <%= link "Slett", to: "/admin/delete/#{transaction.id}" %>
                             <% end %>
                         </td>
                         
