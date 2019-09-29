@@ -87,12 +87,12 @@ defmodule GladosWeb.LoggerController do
       {:ok, _struct} ->
         conn
         |> put_flash(:info, "Kjøp ble fjernet.")
-        |> redirect(to: Routes.logger_path(conn, :logger_transactions))
+        |> redirect(to: "/admin/transactions")
 
       {:error, _} ->
         conn
         |> put_flash(:error, "Kjøp kunne ikke fjernes.")
-        |> redirect(to: Routes.logger_path(conn, :logger_transactions))
+        |> redirect(to: "/admin/transactions")
     end
   end
 

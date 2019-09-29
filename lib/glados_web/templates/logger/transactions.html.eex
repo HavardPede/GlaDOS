@@ -25,13 +25,17 @@
                 </tr>
                 <%= for transaction <- @transactions do %>
                     <tr>
-                        <td><%= transaction.logger_crew_id %></td>
                         <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].name %></td>
                         <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].last_name %></td>
+                        <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].crew %></td>
                         <td><%= transaction.inserted_at.day %> / <%= transaction.inserted_at.month %></td>
-                        <td><%= transaction.inserted_at.hour %>.<%= if (transaction.inserted_at.minute < 10), do: 0 %><%=transaction.inserted_at.minute %></td>
+                        <td><%= transaction.inserted_at.hour %>:<%= if (transaction.inserted_at.minute < 10), do: 0 %><%=transaction.inserted_at.minute %></td>
                         <td>
+                            <%= if @logger do %>
                             <%= link "Slett", to: Routes.logger_path(@conn, :delete_transaction, transaction.id) %>
+                            <%= else %>
+                            <%= link "Slett", to: "/admin/delete/#{transaction.id}" %>
+                            <% end %>
                         </td>
                         
                         
