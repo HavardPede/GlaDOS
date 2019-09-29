@@ -59,7 +59,6 @@ config :glados, GladosWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
-      ~r"priv/gettext/.*(po)$",
       ~r"lib/glados_web/{live,views}/.*(ex)$",
       ~r"lib/glados_web/templates/.*(eex)$"
     ]

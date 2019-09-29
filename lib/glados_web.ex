@@ -22,7 +22,6 @@ defmodule GladosWeb do
       use Phoenix.Controller, namespace: GladosWeb
 
       import Plug.Conn
-      import GladosWeb.Gettext
       alias GladosWeb.Router.Helpers, as: Routes
     end
   end
@@ -41,7 +40,6 @@ defmodule GladosWeb do
       use Phoenix.HTML
 
       import GladosWeb.ErrorHelpers
-      import GladosWeb.Gettext
       alias GladosWeb.Router.Helpers, as: Routes
     end
   end
@@ -57,7 +55,6 @@ defmodule GladosWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import GladosWeb.Gettext
     end
   end
 
