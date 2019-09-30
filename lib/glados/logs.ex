@@ -43,6 +43,8 @@ defmodule Glados.Logs do
 
   def get_logger_crew!(id), do: Repo.get!(LoggerCrew, id)
 
+  def logger_crew_exists?(id), do: Repo.exists?(from crew in LoggerCrew, where: crew.id == ^id)
+
   def delete_logger_crew(crew) do
     Repo.delete(crew)
   end

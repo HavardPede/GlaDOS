@@ -68,3 +68,13 @@ loggerContainer {
 .logoutBox:hover {
     color: white;
 }
+
+.logggerError {
+    width: 800px;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.deleteTransaction {
+    padding-right: 15px !important;
+}

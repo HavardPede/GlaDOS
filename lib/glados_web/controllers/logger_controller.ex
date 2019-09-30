@@ -52,15 +52,21 @@ defmodule GladosWeb.LoggerController do
   end
 
   def create_transaction(conn, %{"crew_transactions" => transaction}) do
-    case Glados.Logs.create_logger_transaction(transaction) do
-      {:ok, _transaction} ->
-        conn
-        |> redirect(to: Routes.logger_path(conn, :logger_transactions))
+    if(Glados.Logs.logger_crew_exists?(transaction["logger_crew_id"])) do
+      case Glados.Logs.create_logger_transaction(transaction) do
+        {:ok, _transaction} ->
+          conn
+          |> redirect(to: Routes.logger_path(conn, :logger_transactions))
 
-      {:error, _} ->
-        conn
-        |> put_flash(:error, "Transaksjon ble ikke lagt til")
-        |> redirect(to: Routes.logger_path(conn, :logger_transactions))
+        {:error, _} ->
+          conn
+          |> put_flash(:error, "Transaksjon ble ikke lagt til")
+          |> redirect(to: Routes.logger_path(conn, :logger_transactions))
+      end
+    else
+      conn
+      |> put_flash(:error, "Transaksjon ble ikke lagt til")
+      |> redirect(to: Routes.logger_path(conn, :logger_transactions))
     end
   end
 
