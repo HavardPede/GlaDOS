@@ -1,28 +1,32 @@
-<div class="login_box">
-  <div class="left_login_column">
+<div class="max-w-3xl rounded-lg bg-white m-auto lg:mt-56">
+
+  <div class="pt-8 lg:pl-8 text-center lg:text-left lg:w-2/5 lg:float-left">
     <h2 class="black_h2">Velkommen til</h2>
     <h2 class="orange_h2">GLaDOS</h2>
     <br>
-
-    <%= form_for @conn, Routes.session_path(@conn, :new), [as: :session], fn f -> %>
-      <br> 
-      <label>
-        Brukernavn
-        <%= text_input f, :username, class: "login_field" %>
-      </label>
-      <label>
-        Passord
-        <%= password_input f, :password %>
-      </label>
-      <%= submit "Logg inn", class: " btn_orange" %>
-    <% end %>
+  </div>
+  
+    <div class="w-2/5 lg:w-1/2 mx-auto lg:mx-0 lg:h-full lg:mt-32 lg:float-right h-full">
+      <img src="<%= Routes.static_path(@conn, "/images/logo.png" ) %>" class="flex-0 loginLogo lg:pl-20">
+    </div>
+    <div class="w-4/5 m-auto lg:m-3 lg:w-2/5 lg:ml-8">
+      <%= form_for @conn, Routes.session_path(@conn, :new), [as: :session], fn f -> %>
+        <br> 
+        <label>
+          Brukernavn
+          <%= text_input f, :username, class: "w-48" %>
+        </label>
+        <label>
+          Passord
+          <%= password_input f, :password %>
+        </label>
+        <%= submit "Logg inn", class: " btn_orange" %>
+      <% end %>
+    </div>
     <br>
     <!--Mangler du bruker?
-    <%= # link "Register deg her!", to: Routes.user_path(@conn, :new), class: "btn orange" %>
+    <%= link "Register deg her!", to: Routes.user_path(@conn, :new), class: "btn orange" %>
     -->
-  </div>
-  <div class="right_login_column">
-    <img src="<%= Routes.static_path(@conn, "/images/logo.png" ) %>" class="login_logo">
-  </div>
+
 </div>
 
