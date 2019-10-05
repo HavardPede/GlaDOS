@@ -22,3 +22,13 @@
 .danger {
     background-color: #dc3545 !important;
 }
+
+.help-block {
+    color: #dc3545 !important;
+}
+
+form,
+label,
+h5 {
+    margin-bottom: 0px !important;
+}

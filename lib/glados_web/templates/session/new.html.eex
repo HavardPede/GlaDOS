@@ -1,4 +1,4 @@
-<div class="max-w-3xl rounded-lg bg-white m-auto lg:mt-56">
+<div class="max-w-3xl rounded-lg bg-white m-auto lg:mt-56 pb-4">
 
   <div class="pt-8 lg:pl-8 text-center lg:text-left lg:w-2/5 lg:float-left">
     <h2 class="black_h2">Velkommen til</h2>
@@ -23,10 +23,9 @@
         <%= submit "Logg inn", class: " btn_orange" %>
       <% end %>
     </div>
-    <br>
-    <!--Mangler du bruker?
+    <div class="w-4/5 m-auto lg:ml-8">
+    Mangler du bruker?
     <%= link "Register deg her!", to: Routes.user_path(@conn, :new), class: "btn orange" %>
-    -->
-
+    </div>
 </div>
 

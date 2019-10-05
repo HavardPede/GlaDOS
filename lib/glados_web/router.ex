@@ -47,8 +47,8 @@ defmodule GladosWeb.Router do
     get("/", SessionController, :new)
     post("/", SessionController, :create)
 
-    # get("/registrer", UserController, :new)
-    # post("/registrer", UserController, :create)
+    get("/registrer", UserController, :new)
+    post("/registrer", UserController, :create)
   end
 
   # Scope for transaction logger account
@@ -64,8 +64,8 @@ defmodule GladosWeb.Router do
   scope "/", GladosWeb do
     pipe_through [:browser, :verify]
 
-    # get("/verifikasjonsendt", UserController, :send_email_verification)
-    # get("/verifiser", UserController, :verify_email)
+    get("/verifikasjonsendt", UserController, :send_email_verification)
+    get("/verifiser", UserController, :verify_email)
   end
 
   # Log out scope
