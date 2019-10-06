@@ -12,7 +12,7 @@ defmodule GladosWeb.SessionController do
   Route to display login page
   """
   def new(conn, _params) do
-    render(conn, "new.html", layout: {GladosWeb.LayoutView, "no_nav.html"})
+    render(conn, "new.html", layout: {GladosWeb.LayoutView, "dark_bg.html"})
   end
 
   @doc """
@@ -39,13 +39,13 @@ defmodule GladosWeb.SessionController do
               "."
             ]
           )
-          |> render("new.html", layout: {GladosWeb.LayoutView, "no_nav.html"})
+          |> render("new.html", layout: {GladosWeb.LayoutView, "dark_bg.html"})
         end
 
       {:error, _reason} ->
         conn
         |> put_flash(:error, "Et problem oppstod med ditt brukernavn/passord")
-        |> render("new.html", layout: {GladosWeb.LayoutView, "no_nav.html"})
+        |> render("new.html", layout: {GladosWeb.LayoutView, "dark_bg.html"})
     end
   end
 

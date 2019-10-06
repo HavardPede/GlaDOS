@@ -3,27 +3,30 @@ defmodule GladosWeb.UserControllerTest do
 
   alias Glados.Accounts
 
-  @create_attrs %{dob: ~D[2010-04-17], email: "some email", name: "some name", password_hash: "some password_hash", username: "some username"}
-  @update_attrs %{dob: ~D[2011-05-18], email: "some updated email", name: "some updated name", password_hash: "some updated password_hash", username: "some updated username"}
+  @user1_id Ecto.UUID.generate()
+
+  @create_attrs %{
+    id: @user1_id,
+    name: "Test Name",
+    username: "TestUsername",
+    postcode: 1234,
+    phone_number: "123 45 678",
+    day: "01",
+    month: "01",
+    year: "2001",
+    email: "test@email.com",
+    address: "Test address",
+    auth_level: 1,
+    verified: false,
+    password: "testPassword123",
+    password_confirmation: "testPassword123"
+  }
+
   @invalid_attrs %{dob: nil, email: nil, name: nil, password_hash: nil, username: nil}
 
   def fixture(:user) do
     {:ok, user} = Accounts.create_user(@create_attrs)
     user
-  end
-
-  describe "index" do
-    test "lists all users", %{conn: conn} do
-      conn = get(conn, Routes.user_path(conn, :index))
-      assert html_response(conn, 200) =~ "Listing Users"
-    end
-  end
-
-  describe "new user" do
-    test "renders form", %{conn: conn} do
-      conn = get(conn, Routes.user_path(conn, :new))
-      assert html_response(conn, 200) =~ "New User"
-    end
   end
 
   describe "create user" do
@@ -75,6 +78,7 @@ defmodule GladosWeb.UserControllerTest do
     test "deletes chosen user", %{conn: conn, user: user} do
       conn = delete(conn, Routes.user_path(conn, :delete, user))
       assert redirected_to(conn) == Routes.user_path(conn, :index)
+
       assert_error_sent 404, fn ->
         get(conn, Routes.user_path(conn, :show, user))
       end
