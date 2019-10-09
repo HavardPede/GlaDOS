@@ -52,7 +52,7 @@ defmodule GladosWeb.SessionController do
 
   def delete(conn, _params) do
     conn
-    |> delete_session(:current_user_id)
+    |> configure_session(drop: true)
     |> put_flash(:info, "Du har logget ut. Sees senere")
     |> redirect(to: Routes.session_path(conn, :new))
   end
