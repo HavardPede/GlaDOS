@@ -15,7 +15,7 @@ defmodule GladosWeb.LoggerController do
       conn: conn,
       changeset: changeset,
       users: users,
-      layout: {GladosWeb.LayoutView, "logger.html"}
+      layout: {GladosWeb.LayoutView, "dark_bg.html"}
     )
   end
 
@@ -47,7 +47,7 @@ defmodule GladosWeb.LoggerController do
       logger: logger?,
       changeset: changeset,
       transactions: transactions,
-      layout: {GladosWeb.LayoutView, "logger.html"}
+      layout: {GladosWeb.LayoutView, "dark_bg.html"}
     )
   end
 

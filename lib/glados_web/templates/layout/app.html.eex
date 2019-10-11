@@ -4,22 +4,19 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>GLaDOS · ESLG crew portal</title>
+    <title>Glados · ESLG crew portal</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
   </head>
 
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
   <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
-  <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
   <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   
   <body>
-      <%= render("navigation.html", conn: @conn) %>
-  
-    <main role="main" class="container">
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+    <main role="main">
       <%= render @view_module, @view_template, assigns %>
+      <p class="alert bg-blue-lightest border border-blue-light text-blue-dark px-4 py-3 rounded relative" role="alert"><%= get_flash(@conn, :info) %></p>
+      <p class="alert bg-red-lightest border border-red-light text-red-dark px-4 py-3 rounded relative" role="alert"><%= get_flash(@conn, :error) %></p>
     </main>
   </body>
 </html>

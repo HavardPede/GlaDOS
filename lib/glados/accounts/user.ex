@@ -44,10 +44,12 @@ defmodule Glados.Accounts.User do
       :password,
       :password_confirmation,
       :auth_level,
-      :verified
+      :verified,
+      :id
     ])
     |> validate_required(
       [
+        :id,
         :name,
         :username,
         :postcode,

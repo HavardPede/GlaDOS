@@ -23,7 +23,7 @@ defmodule GladosWeb.UserController do
   """
   def new(conn, _params) do
     changeset = Accounts.change_user(%User{})
-    render(conn, "new.html", changeset: changeset, layout: {GladosWeb.LayoutView, "no_nav.html"})
+    render(conn, "new.html", changeset: changeset, layout: {GladosWeb.LayoutView, "dark_bg.html"})
   end
 
   @doc """
@@ -39,7 +39,7 @@ defmodule GladosWeb.UserController do
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html",
           changeset: changeset,
-          layout: {GladosWeb.LayoutView, "no_nav.html"}
+          layout: {GladosWeb.LayoutView, "dark_bg.html"}
         )
     end
   end
@@ -59,7 +59,7 @@ defmodule GladosWeb.UserController do
     # Send email
 
     |> render("sent_verify.html",
-      layout: {GladosWeb.LayoutView, "no_nav.html"}
+      layout: {GladosWeb.LayoutView, "dark_bg.html"}
     )
   end
 

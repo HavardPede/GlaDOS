@@ -1,42 +1,27 @@
-.navbar {
-    margin-bottom: 100px;
-    font-size: 23px;
-}
-
-.navbar ul {
+#accountTabList {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #606c76;
+    padding: 0px;
 }
 
-.navbar li {
-    float: left;
-    margin-bottom: 0;
-}
-
-.navbar li a {
+#menu-toggle:checked+#menu {
     display: block;
-    color: white;
-    text-align: center;
-    padding: 17px 17px;
-    text-decoration: none;
 }
 
-.navbar li a:hover {
-    color: var(--main-orange);
+.hidden {
+    display: none;
 }
 
-.logout {
-    background-color: var(--main-orange);
-    height: 72px;
+.rotatedImage {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
-.logo_box {
-    padding: 10px 0px 2px 20px;
-}
+.slider {
+    overflow-y: hidden;
+    max-height: 500px;
+    /* approximate max height */
 
-.logo {
-    height: 50px;
+    transition-property: all;
+    transition-duration: .5s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }

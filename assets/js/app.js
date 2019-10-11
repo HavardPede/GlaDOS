@@ -1,14 +1,32 @@
-// We need to import the CSS so that webpack will load it.
-// The MiniCssExtractPlugin is used to separate it out into
-// its own CSS file.
 import css from "../css/app.css"
-// webpack automatically bundles all modules in your
-// entry points. Those entry points can be configured
-// in "webpack.config.js".
-//
+
+window.onload = function () {
+
+    const accountIcon = document.getElementById("accountIcon");
+    if (accountIcon) {
+
+        const accountTab = document.getElementById("accountTab");
+        const accountArrow = document.getElementById("accountArrow");
 
 
-// Import local files
-//
-// Local files can be imported directly using relative paths, for example:
-// import socket from "./socket"
+        accountIcon.addEventListener("click", function (_e) {
+            toggleAccountTab();
+        })
+        accountArrow.addEventListener("click", function (_e) {
+            toggleAccountTab();
+        })
+    }
+
+    function toggleAccountTab() {
+        console.log(accountTab.style.display)
+        if (accountTab.style.display === "none" || accountTab.style.display === "") {
+            accountTab.style.display = "block";
+        } else {
+            accountArrow.classList.add("rotatedImage")
+            setTimeout(function () {
+                accountTab.style.display = "none",
+                    accountArrow.classList.remove("rotatedImage")
+            }, 100)
+        }
+    }
+}

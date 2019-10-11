@@ -12,7 +12,7 @@ defmodule GladosWeb.SessionController do
   Route to display login page
   """
   def new(conn, _params) do
-    render(conn, "new.html", layout: {GladosWeb.LayoutView, "no_nav.html"})
+    render(conn, "new.html", layout: {GladosWeb.LayoutView, "dark_bg.html"})
   end
 
   @doc """
@@ -24,6 +24,7 @@ defmodule GladosWeb.SessionController do
         if(user.verified) do
           conn
           |> put_session(:current_user_id, user.id)
+          |> configure_session(renew: true)
           |> redirect(to: Routes.user_path(conn, :index))
         else
           conn
@@ -39,19 +40,19 @@ defmodule GladosWeb.SessionController do
               "."
             ]
           )
-          |> render("new.html", layout: {GladosWeb.LayoutView, "no_nav.html"})
+          |> render("new.html", layout: {GladosWeb.LayoutView, "dark_bg.html"})
         end
 
       {:error, _reason} ->
         conn
         |> put_flash(:error, "Et problem oppstod med ditt brukernavn/passord")
-        |> render("new.html", layout: {GladosWeb.LayoutView, "no_nav.html"})
+        |> render("new.html", layout: {GladosWeb.LayoutView, "dark_bg.html"})
     end
   end
 
   def delete(conn, _params) do
     conn
-    |> delete_session(:current_user_id)
+    |> configure_session(drop: true)
     |> put_flash(:info, "Du har logget ut. Sees senere")
     |> redirect(to: Routes.session_path(conn, :new))
   end
