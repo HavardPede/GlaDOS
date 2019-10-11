@@ -8,43 +8,43 @@
                 <h3>Lag en ny bruker for å søke crew!</h3>
             </div>    
         </div>
-        <div class="w-3/5 lg:w-4/5 mx-auto mb-20 lg:mb-10 lg:flex flex-row lg:flex flex-row">
-            <div class="mb-4 lg:mx-2">
-                <h4 class="text-center lg:text-left mb-1">Brukernavn</h4>
+        <div class="w-3/5 lg:w-4/5 mx-auto mb-16 lg:mb-6 lg:flex flex-row lg:flex flex-row">
+            <div class="mb-4 lg:mx-2 text-center lg:text-left">
+                <h4 class="mb-1">Brukernavn</h4>
                 <%= text_input f, :username, autofocus: true, class: "mb-0 h-8 bg-grey-light rounded w-full"%>
                 <%= error_tag f, :username %>
             </div>
 
-            <div class="mb-4 lg:mx-2">
-                <h4 class="text-center lg:text-left mb-1">Passord</h4>
+            <div class="mb-4 lg:mx-2 text-center lg:text-left">
+                <h4 class="mb-1">Passord</h4>
                 <%= password_input f, :password, class: "mb-0 h-8 bg-grey-light rounded w-full" %>
                 <%= error_tag f, :password %>
             </div>
 
-            <div class="mb-4 lg:mx-2">
-                <h4 class="text-center lg:text-left mb-1">Bekreft passord</h4>
+            <div class="mb-4 lg:mx-2 text-center lg:text-left">
+                <h4 class="mb-1">Bekreft passord</h4>
                 <%= password_input f, :password_confirmation, class: "mb-0 h-8 bg-grey-light rounded w-full" %>
                 <%= error_tag f, :password_confirmation %>
             </div>
         </div>
 
-        <div class="w-3/5 lg:w-4/5 mx-auto mb-20 lg:mb-10 lg:flex flex-row">
-            <div class="mb-4 lg:mx-2">
+        <div class="w-3/5 lg:w-4/5 mx-auto mb-16 lg:mb-6 lg:flex flex-row">
+            <div class="mb-4 lg:mx-2 text-center lg:text-left">
             <h4 class="text-center lg:text-left mb-1">Navn</h4>
             <%= text_input f, :name, class: "mb-0 h-8 bg-grey-light rounded w-full" %>
                 <%= error_tag f, :name %>
             </div>
 
-            <div class="mb-4 lg:mx-2">
-            <h4 class="text-center lg:text-left mb-1">Email adresse</h4>
+            <div class="mb-4 lg:mx-2 text-center lg:text-left">
+            <h4 class="mb-1">Email adresse</h4>
             <%= text_input f, :email, class: "mb-0 h-8 bg-grey-light rounded w-full" %>
                 <%= error_tag f, :email %>  
             </div>        
 
-            <div class="mb-4 lg:mx-2">
-                <h4 class="text-center lg:text-left mb-1">Fødselsdato</h4>
-                <div class=" flex flex-row">
-                    <div class="m-auto">
+            <div class="mb-4 lg:mx-2 text-center lg:text-left">
+                <h4 class="mb-1">Fødselsdato</h4>
+                <div class=" flex">
+                    <div class="m-auto flex flex-row">
                         <%= text_input f, :day, pattern: "[0-9]*", maxLength: 2, minLength: 2, placeholder: "DD", class: "mb-0 h-8 bg-grey-light rounded text-center" %>
                         <%= text_input f, :month, pattern: "[0-9]*", maxLength: 2, minLength: 2, placeholder: "MM", class: "mb-0 h-8 bg-grey-light rounded text-center" %>
                         <%= text_input f, :year, pattern: "[0-9]*", maxLength: 4, minLength: 4, placeholder: "YYYY", class: "mb-0 h-8 bg-grey-light rounded text-center" %>
@@ -56,33 +56,32 @@
             </div>
         </div>
 
-        <div class="w-3/5 lg:w-4/5 mx-auto mb-20 lg:mb-10 lg:flex flex-row">
+        <div class="w-3/5 lg:w-4/5 mx-auto mb-16 lg:mb-6 lg:flex flex-row">
         
-            <div class="mb-4 lg:mx-2">
-                <h4 class="text-center lg:text-left mb-1">Telefon nummer</h4>
+            <div class="mb-4 lg:mx-2 text-center lg:text-left">
+                <h4 class="mb-1">Telefon nummer</h4>
                 <%= text_input f, :phone_number, class: "mb-0 h-8 bg-grey-light rounded w-full" %>
                 <%= error_tag f, :phone_number %>
             </div>
 
-            <div class="mb-4 lg:mx-2">
-                <h4 class="text-center lg:text-left mb-1">Adresse</h4>
+            <div class="mb-4 lg:mx-2 text-center lg:text-left">
+                <h4 class="mb-1">Adresse</h4>
                 <%= text_input f, :address, class: "mb-0 h-8 bg-grey-light rounded w-full" %>
                 <%= error_tag f, :address %>  
             </div>
 
-            <div class="mb-4 lg:mx-2">
-                <h4 class="text-center lg:text-left mb-1">Post nummer</h4>
+            <div class="mb-4 lg:mx-2 text-center lg:text-left">
+                <h4 class="mb-1">Post nummer</h4>
                 <div>
                     <%= text_input f, :postcode, pattern: "[0-9]*", maxLength: 4, class: "mb-0 h-8 bg-grey-light rounded" %>
                 </div>
-                <br>
                 <%= error_tag f, :postcode %>
             </div>
         </div>
 
-        <div class="w-3/5 mx-auto lg:flex flex-row">
+        <div class="w-3/5 lg:w-4/5 mx-auto flex flex-col lg:flex-row">
             <%= submit "Lag profil", class: "btn_orange new_user_btn" %>
-            <span class="h-10 lg:m-3">
+            <span class="h-10 mt-4 mx-auto lg:m-3">
                 Har du allerede en bruker?
                 <%= link "Logg inn!", to: Routes.session_path(@conn, :new) %> 
             </span>
