@@ -32,9 +32,9 @@ defmodule GladosWeb.UserController do
   def create(conn, %{"user" => user_params}) do
     case Accounts.create_user(user_params) do
       {:ok, user} ->
-        conn
+        conn 
         |> put_session(:unverified_user, user.id)
-        |> redirect(Routes.user_path(Endpoint, :send_email_verification))
+        |> redirect(to: Routes.user_path(conn, :send_email_verification))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html",

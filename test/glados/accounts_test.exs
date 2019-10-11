@@ -2,71 +2,91 @@ defmodule Glados.AccountsTest do
   use Glados.DataCase
 
   alias Glados.Accounts
+  alias Glados.Accounts.User
 
-  describe "users" do
-    alias Glados.Accounts.User
+  @user1_id Ecto.UUID.generate()
 
-    @valid_attrs %{dob: ~D[2010-04-17], email: "some email", name: "some name", password_hash: "some password_hash", username: "some username"}
-    @update_attrs %{dob: ~D[2011-05-18], email: "some updated email", name: "some updated name", password_hash: "some updated password_hash", username: "some updated username"}
-    @invalid_attrs %{dob: nil, email: nil, name: nil, password_hash: nil, username: nil}
+  @valid_attrs %{
+    id: @user1_id,
+    name: "Test Name",
+    username: "TestUsername",
+    postcode: 1234,
+    phone_number: "123 45 678",
+    day: "01",
+    month: "01",
+    year: "2001",
+    email: "test@email.com",
+    address: "Test address",
+    auth_level: 1,
+    verified: false,
+    password: "testPassword123",
+    password_confirmation: "testPassword123"
+  }
 
-    def user_fixture(attrs \\ %{}) do
-      {:ok, user} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Accounts.create_user()
+  @update_attrs %{ 
+    email: "some@valid.email", 
+    name: "some updated name",
+    username: "updated"
+  }
+  @invalid_attrs %{email: nil, name: nil, username: nil}
 
-      user
-    end
+  def user_fixture(attrs \\ %{}) do
+    {:ok, user} =
+      attrs
+      |> Enum.into(@valid_attrs)
+      |> Accounts.create_user()
 
-    test "list_users/0 returns all users" do
-      user = user_fixture()
-      assert Accounts.list_users() == [user]
-    end
+    user
+  end
 
-    test "get_user!/1 returns the user with given id" do
-      user = user_fixture()
-      assert Accounts.get_user!(user.id) == user
-    end
+  def remove_virtual_fields(user) do
+    %{user | day: nil, month: nil, year: nil, password: nil, password_confirmation: nil}
+  end
 
-    test "create_user/1 with valid data creates a user" do
-      assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
-      assert user.dob == ~D[2010-04-17]
-      assert user.email == "some email"
-      assert user.name == "some name"
-      assert user.password_hash == "some password_hash"
-      assert user.username == "some username"
-    end
+  test "list_users/0 returns all users" do
+    user = 
+    user_fixture()
+    |> remove_virtual_fields()
+    assert Accounts.list_users() == [user]
+  end
 
-    test "create_user/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@invalid_attrs)
-    end
+  test "get_user!/1 returns the user with given id" do
+    user = 
+    user_fixture()
+    |> remove_virtual_fields()
 
-    test "update_user/2 with valid data updates the user" do
-      user = user_fixture()
-      assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
-      assert user.dob == ~D[2011-05-18]
-      assert user.email == "some updated email"
-      assert user.name == "some updated name"
-      assert user.password_hash == "some updated password_hash"
-      assert user.username == "some updated username"
-    end
+    assert Accounts.get_user!(user.id) == user
+  end
 
-    test "update_user/2 with invalid data returns error changeset" do
-      user = user_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-      assert user == Accounts.get_user!(user.id)
-    end
+  test "create_user/1 with invalid data returns error changeset" do
+    assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@invalid_attrs)
+  end
 
-    test "delete_user/1 deletes the user" do
-      user = user_fixture()
-      assert {:ok, %User{}} = Accounts.delete_user(user)
-      assert_raise Ecto.NoResultsError, fn -> Accounts.get_user!(user.id) end
-    end
+  test "update_user/2 with valid data updates the user" do
+    user = user_fixture()
+    assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
+    assert user.name == "some updated name"
+    assert user.email == "some@valid.email"
+    assert user.username == "updated"
+  end
 
-    test "change_user/1 returns a user changeset" do
-      user = user_fixture()
-      assert %Ecto.Changeset{} = Accounts.change_user(user)
-    end
+  test "update_user/2 with invalid data returns error changeset" do
+    user = 
+    user_fixture()
+    |> remove_virtual_fields()
+    
+    assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
+    assert user == Accounts.get_user!(user.id)
+  end
+
+  test "delete_user/1 deletes the user" do
+    user = user_fixture()
+    assert {:ok, %User{}} = Accounts.delete_user(user)
+    assert_raise Ecto.NoResultsError, fn -> Accounts.get_user!(user.id) end
+  end
+
+  test "change_user/1 returns a user changeset" do
+    user = user_fixture()
+    assert %Ecto.Changeset{} = Accounts.change_user(user)
   end
 end

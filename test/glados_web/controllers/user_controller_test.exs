@@ -1,7 +1,7 @@
 defmodule GladosWeb.UserControllerTest do
   use GladosWeb.ConnCase
 
-  alias Glados.Accounts
+  alias Glados.{Accounts, Repo}
 
   @user1_id Ecto.UUID.generate()
 
@@ -22,66 +22,58 @@ defmodule GladosWeb.UserControllerTest do
     password_confirmation: "testPassword123"
   }
 
-  @invalid_attrs %{dob: nil, email: nil, name: nil, password_hash: nil, username: nil}
+  @invalid_attrs %{email: nil, name: nil, username: nil}
 
   def fixture(:user) do
     {:ok, user} = Accounts.create_user(@create_attrs)
     user
   end
 
-  describe "create user" do
-    test "redirects to show when data is valid", %{conn: conn} do
+  describe "create user - " do
+    test "Adds user to database when using valid data", %{conn: conn} do
+      initial_user_count = 
+      Repo.all(Glados.Accounts.User)
+      |> Enum.count
+      
+      post(conn, Routes.user_path(conn, :create), user: @create_attrs)
+      
+      user_count = 
+      Repo.all(Glados.Accounts.User)
+      |> Enum.count
+
+      assert initial_user_count == user_count - 1
+    end
+
+    test "Does not add user to databaes when using invalid data", %{conn: conn} do
+      conn = build_conn()
+      
+      post(conn, Routes.user_path(conn, :create), user: %{@create_attrs | name: "invalid_name"})
+      post(conn, Routes.user_path(conn, :create), user: %{@create_attrs | name: "invalid username", username: "inv"})
+      post(conn, Routes.user_path(conn, :create), user: %{@create_attrs | name: "invalid postcode", postcode: 0})
+      post(conn, Routes.user_path(conn, :create), user: %{@create_attrs | name: "invalid phone", phone_number: "123"})
+      post(conn, Routes.user_path(conn, :create), user: %{@create_attrs | name: "invalid day", day: "32"})
+      post(conn, Routes.user_path(conn, :create), user: %{@create_attrs | name: "invalid month", month: "13"})
+      post(conn, Routes.user_path(conn, :create), user: %{@create_attrs | name: "invalid year", year: "100"})
+      post(conn, Routes.user_path(conn, :create), user: %{@create_attrs | name: "invalid email", email: "invalid"})
+      post(conn, Routes.user_path(conn, :create), user: %{@create_attrs | name: "invalid confirmation password", password_confirmation: "invalid"})
+      post(conn, Routes.user_path(conn, :create), user: %{@create_attrs | name: "invalid password", password: "123", password_confirmation: "123"})
+      
+      new_users = 
+      Repo.all(Glados.Accounts.User)
+      |> Enum.map(&(&1.name))
+      
+      assert length(new_users) == 0
+    end
+
+    test "renders email verification page when valid user is added" do
       conn = post(conn, Routes.user_path(conn, :create), user: @create_attrs)
-
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == Routes.user_path(conn, :show, id)
-
-      conn = get(conn, Routes.user_path(conn, :show, id))
-      assert html_response(conn, 200) =~ "Show User"
+      assert html_response(conn, 302)
+      assert redirected_to(conn) == Routes.user_path(conn, :send_email_verification)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.user_path(conn, :create), user: @invalid_attrs)
-      assert html_response(conn, 200) =~ "New User"
-    end
-  end
-
-  describe "edit user" do
-    setup [:create_user]
-
-    test "renders form for editing chosen user", %{conn: conn, user: user} do
-      conn = get(conn, Routes.user_path(conn, :edit, user))
-      assert html_response(conn, 200) =~ "Edit User"
-    end
-  end
-
-  describe "update user" do
-    setup [:create_user]
-
-    test "redirects when data is valid", %{conn: conn, user: user} do
-      conn = put(conn, Routes.user_path(conn, :update, user), user: @update_attrs)
-      assert redirected_to(conn) == Routes.user_path(conn, :show, user)
-
-      conn = get(conn, Routes.user_path(conn, :show, user))
-      assert html_response(conn, 200) =~ "some updated email"
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, user: user} do
-      conn = put(conn, Routes.user_path(conn, :update, user), user: @invalid_attrs)
-      assert html_response(conn, 200) =~ "Edit User"
-    end
-  end
-
-  describe "delete user" do
-    setup [:create_user]
-
-    test "deletes chosen user", %{conn: conn, user: user} do
-      conn = delete(conn, Routes.user_path(conn, :delete, user))
-      assert redirected_to(conn) == Routes.user_path(conn, :index)
-
-      assert_error_sent 404, fn ->
-        get(conn, Routes.user_path(conn, :show, user))
-      end
+      assert html_response(conn, 200) =~ "Lag en ny bruker for å søke crew!"
     end
   end
 

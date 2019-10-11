@@ -165,6 +165,7 @@ defmodule Glados.Accounts.User do
     changeset
     |> validate_number(:postcode,
       less_than: 10000,
+      greater_than: 999,
       message: "Postnummer må være en 4-sifret kode."
     )
   end
@@ -174,16 +175,16 @@ defmodule Glados.Accounts.User do
 
   # Validation for date of birth
   defp set_dob(%{changes: %{day: day, month: month, year: year}} = changeset) do
-    date =
-      [year, month, day]
-      |> Enum.join("-")
+    date = 
+    [year, month, day]
+    |> Enum.join("-")
 
-    {:ok, dob} = Timex.parse(date, "%Y-%m-%d", :strftime)
-
-    if valid_age?(dob) do
+    with {:ok, dob} <- Timex.parse(date, "%Y-%m-%d", :strftime),
+      true <- valid_age?(dob)
+    do
       put_change(changeset, :dob, Timex.to_date(dob))
     else
-      add_error(changeset, :dob, "Dato er ikke gyldig.")
+      _ -> add_error(changeset, :dob, "Dato er ikke gyldig.")
     end
   end
 
