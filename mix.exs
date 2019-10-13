@@ -20,7 +20,7 @@ defmodule Glados.MixProject do
   def application do
     [
       mod: {Glados.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :bamboo, :bamboo_smtp]
     ]
   end
 

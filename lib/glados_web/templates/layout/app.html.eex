@@ -15,8 +15,8 @@
   <body>
     <main role="main">
       <%= render @view_module, @view_template, assigns %>
-      <p class="alert bg-blue-lightest border border-blue-light text-blue-dark px-4 py-3 rounded relative" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert bg-red-lightest border border-red-light text-red-dark px-4 py-3 rounded relative" role="alert"><%= get_flash(@conn, :error) %></p>
+      <p class="alert bg-blue-400 text-blue-900 p-3 shadow-xl rounded relative max-w-2xl m-auto" role="alert"><%= get_flash(@conn, :info) %></p>
+        <p class="alert bg-red-400 text-red-900 p-3  shadow-xl rounded relative max-w-2xl m-auto" role="alert"><%= get_flash(@conn, :error) %></p>
     </main>
   </body>
 </html>

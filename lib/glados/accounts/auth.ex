@@ -33,6 +33,6 @@ defmodule Glados.Accounts.Auth do
   Checks to see if there is a current user stored in the connection
   """
   def signed_in?(conn) do
-    conn.assigns[:current_user]
+    !!Plug.Conn.get_session(conn, :current_user_id)
   end
 end

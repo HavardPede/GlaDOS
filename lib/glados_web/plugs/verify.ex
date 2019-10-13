@@ -14,16 +14,18 @@ defmodule GladosWeb.Plugs.Verify do
     if(not user.verified) do
       conn
     else
-      redirect(conn)
+      conn
+      |> put_flash(:error, "Din bruker er allerede verifisert.")
+      |> redirect(to: "/")
     end
   end
 
   # If no unverified session, redirect
-  def call(conn, _opts), do: redirect(conn)
-
-  defp redirect(conn) do
+  def call(conn, _opts) do
     conn
-    |> redirect(to: Routes.session_path(conn, :new))
+    |> put_status(:not_found)
+    |> put_view(GladosWeb.ErrorView)
+    |> render("404.html")
     |> halt()
   end
 end

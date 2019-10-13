@@ -1,8 +1,8 @@
-<div class="max-w-lg rounded-lg bg-white m-auto  lg:mt-56 pb-4">
+<div class="max-w-2xl rounded-lg bg-white m-auto lg:mt-24 pb-4 shadow-2xl">
 
   <div class="pt-8 lg:pl-8 text-center lg:text-left lg:w-2/5 lg:float-left">
     <h2 class="black_h2">Velkommen til</h2>
-    <h2 class="orange_h2">GLaDOS</h2>
+    <h2 class="orange_h2">Glados</h2>
     <br>
   </div>
   
@@ -13,15 +13,15 @@
       <%= form_for @conn, Routes.session_path(@conn, :new), [as: :session], fn f -> %>
         <br> 
         <div class="mb-4">
-          <h3>Brukernavn</h3>
-          <%= text_input f, :username, class: "w-full lg:w-3/5 h-8 bg-grey-light rounded" %>
+          <h3 class="mb-1">Brukernavn</h3>
+          <%= text_input f, :username, class: "standardInputField lg:w-3/5" %>
         </div>
         <div class="mb-4 mx-auto">
-          <h3>Password</h3>
-          <%= password_input f, :password, class: "w-full lg:w-3/5 h-8 bg-grey-light rounded" %>
+          <h3 class="mb-1">Password</h3>
+          <%= password_input f, :password, class: "standardInputField lg:w-3/5" %>
         </div>
         <div class="pb-4">
-          <%= submit "Logg inn", class: " btn_orange" %>
+          <%= submit "Logg inn", class: "shadow-md btn_orange" %>
         </div>
         <div>
           Mangler du bruker?

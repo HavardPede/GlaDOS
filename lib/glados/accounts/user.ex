@@ -78,6 +78,12 @@ defmodule Glados.Accounts.User do
     |> validate_required(:encrypted_password)
   end
 
+  def verified_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:verified])
+    |> validate_required([:verified])
+  end
+
   # Password validation
   defp validate_password(%{changes: %{password: password}} = changeset) do
     # Check length and content and return only 1 error even if both fails. If all is fine, return changeset

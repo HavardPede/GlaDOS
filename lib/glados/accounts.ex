@@ -73,6 +73,12 @@ defmodule Glados.Accounts do
     |> Repo.update()
   end
 
+  def validate_user(%User{} = user) do
+    user
+    |> User.verified_changeset(%{verified: true})
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a User.
 
@@ -100,9 +106,5 @@ defmodule Glados.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
-  end
-
-  def mark_as_verified(%User{} = user) do
-    update_user(user, %{"verified" => true})
   end
 end

@@ -56,8 +56,6 @@ defmodule GladosWeb.UserController do
 
     Email.verification_email(user.name, user.email, verification_url)
     |> Mailer.deliver_now()
-    # Send email
-
     |> render("sent_verify.html",
       layout: {GladosWeb.LayoutView, "dark_bg.html"}
     )
@@ -68,16 +66,21 @@ defmodule GladosWeb.UserController do
   """
   def verify_email(conn, %{"token" => token}) do
     with {:ok, user_id} <- Glados.Token.verify_new_account_token(token),
-         {:ok, %User{verified: false} = user} <- Glados.Accounts.get_user!(user_id) do
-      Glados.Accounts.mark_as_verified(user)
+         %User{verified: false} = user <- Glados.Accounts.get_user!(user_id) 
+    do
+      Glados.Accounts.validate_user(user)
 
       conn
-      |> put_flash(:info, "Account verified.")
+      |> put_flash(:info, "Din bruker er nå verifisert!")
       |> redirect(to: "/")
     else
+      %User{verified: true} ->
+        conn
+        |> put_flash(:error, "Din bruker er allerede verifisert.")
+        |> redirect(to: "/")
       _ ->
         conn
-        |> put_flash(:error, "The verification link is invalid.")
+        |> put_flash(:error, "Verifikasjons-lenken er ugyldig.")
         |> redirect(to: "/")
     end
   end
@@ -86,11 +89,10 @@ defmodule GladosWeb.UserController do
   Path to verify user when there is no token passed in
   """
   def verify_email(conn, _) do
-    # If there is no token in our params, tell the user they've provided
-    # an invalid token or expired token
-    conn
-    |> put_flash(:error, "The verification link is invalid.")
-    |> redirect(to: "/")
+  conn
+  |> put_status(:not_found)
+  |> put_view(GladosWeb.ErrorView)
+  |> render("404.html")
   end
 
   @doc """

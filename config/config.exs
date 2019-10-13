@@ -12,7 +12,7 @@ config :glados,
 
 config :glados, Glados.Mailer,
   adapter: Bamboo.SMTPAdapter,
-  server: "smtp.domeneshop.no",
+  server: "SMTP.domeneshop.no",
   port: 587,
   username: "eslgcrew1",
   password: "ESLG1337pass",
@@ -22,6 +22,7 @@ config :glados, Glados.Mailer,
   allowed_tls_versions: [:tlsv1, :"tlsv1.1", :"tlsv1.2"],
   # can be `true`
   ssl: false,
+  no_mx_lookups: true,
   retries: 1
 
 # Configures the endpoint

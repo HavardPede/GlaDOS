@@ -1,5 +1,6 @@
 .new_user_logo {
     height: 70px;
+    width: 70px;
 }
 
 .section {
@@ -15,4 +16,8 @@
 #user_year,
 #user_postcode {
     width: 60px;
+}
+
+.standardInputField {
+    outline-color: #fdad5c;
 }

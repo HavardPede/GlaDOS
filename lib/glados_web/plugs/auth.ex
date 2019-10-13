@@ -1,12 +1,14 @@
 defmodule GladosWeb.Plugs.Auth do
   import Plug.Conn
   import Phoenix.Controller
+  alias Glados.Accounts.Auth
   alias GladosWeb.Router.Helpers, as: Routes
 
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    if get_session(conn, :current_user_id) do
+    IO.inspect(Auth.signed_in?(conn), lablel: "signed in")
+    if Auth.signed_in?(conn) do
       conn
     else
       conn

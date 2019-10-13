@@ -39,7 +39,7 @@ defmodule Glados.AccountsTest do
     user
   end
 
-  def remove_virtual_fields(user) do
+  defp remove_virtual_fields(user) do
     %{user | day: nil, month: nil, year: nil, password: nil, password_confirmation: nil}
   end
 

@@ -1,4 +1,4 @@
-<nav class="flex items-center justify-between flex-wrap bg-grue">
+<nav class="flex items-center justify-between flex-wrap bg-grey-300">
     <div class="flex items-center flex-shrink-0 text-white">
         <img src=<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %> class="h-12  m-2 mr-4" />
         <span class="text-2xl">GLADOS</span>

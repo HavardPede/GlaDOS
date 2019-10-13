@@ -5,9 +5,15 @@
 @import "./new_user.css";
 @import "./verify.css";
 @import "./logger.css";
+@import "./error.css";
 
-@tailwind preflight;
+@tailwind base;
 @tailwind components;
+
+.standardInputField {
+    @apply .w-full .pl-2 .h-8 .bg-gray-300 .shadow-md .rounded 
+}
+
 @tailwind utilities;
 
 .alert:empty {
