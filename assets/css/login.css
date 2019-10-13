@@ -30,7 +30,17 @@ h5 {
     border: 1px solid #d6d6d6;
     background-color: #eba134;
     padding: 0px 15px 0px 15px;
-    font-size: 13px;
+    font-size: 14px;
+}
+.btn_orange:focus {
+    outline: 0px;
+    background-color: transparent;
+    color: orange;
+}
+.btn_orange:hover {
+    font-size: 14px;
+    background-color: transparent;
+    color: orange;
 }
 
 .orange {

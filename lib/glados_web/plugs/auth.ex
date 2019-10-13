@@ -7,7 +7,6 @@ defmodule GladosWeb.Plugs.Auth do
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    IO.inspect(Auth.signed_in?(conn), lablel: "signed in")
     if Auth.signed_in?(conn) do
       conn
     else

@@ -64,7 +64,7 @@ defmodule GladosWeb.Router do
 
   # Scope for verifying a new user
   scope "/", GladosWeb do
-    pipe_through [:browser, :verify]
+    pipe_through [:browser]
 
     get("/verifikasjonsendt", UserController, :send_email_verification)
   end

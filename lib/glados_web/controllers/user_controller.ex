@@ -52,10 +52,12 @@ defmodule GladosWeb.UserController do
 
     token = Glados.Token.generate_new_account_token(user)
 
-    verification_url = Routes.user_url(conn, :verify_email, token: token)
+    verification_url = Routes.user_url(GladosWeb.Endpoint, :verify_email, token: token)
 
     Email.verification_email(user.name, user.email, verification_url)
     |> Mailer.deliver_now()
+    
+    conn
     |> render("sent_verify.html",
       layout: {GladosWeb.LayoutView, "dark_bg.html"}
     )

@@ -1,21 +1,20 @@
-<div class="login_box verify_box">
-    <div class="verify_top">
+<div class="max-w-2xl rounded-lg bg-white m-auto h-screen md:h-auto md:mt-12 lg:mt-24 pb-4 shadow-2xl pt-2 md:pt-6">
+    <div class="ml-2 md:ml-6 md:absolute">
         <img src="<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %>">
     </div>
-    <div class="verify_mail_center">
-        <img src="<%= Routes.static_path(@conn, "/images/mail.png" ) %>">
+    <div class="flex flex-col text-center md:mt-8">
+        <img src="<%= Routes.static_path(@conn, "/images/mail.png" ) %>" class="w-48 m-auto">
         <br>
         Vi har sent en email til din email-adresse.
         <br>
         Har du ikke fått den? 
         <br>
-        <%= link("Klikk her for å sende en ny email.",
+        <span class="mt-4"><%= link("Klikk her for å sende en ny email.",
                 to: Routes.user_path(@conn, :send_email_verification),
-                class: "orange") %>
+                class: "orange") %></span>
     </div>
     
-    <div class="back_button_verify">
+    <div class="back_button_verify absolute md:relative">
         <a href="/"><img src="<%= Routes.static_path(@conn, "/images/left-arrow.png" ) %>"></a>
     </div>
 </div>
-
