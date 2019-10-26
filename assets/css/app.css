@@ -10,6 +10,13 @@
 @tailwind base;
 @tailwind components;
 
+.navElem {
+    @apply .text-black .py-5
+}
+.anavElem {
+    @apply .block .py-5 .border-2 .lg:border-0 .lg:border-b-4 .border-transparent .hover:border-orange .text-white .lg:inline-block .hover:text-white .lg:mt-0 .lg:mr-8 .no-underline
+}
+
 .standardInputField {
     @apply .w-full .pl-2 .h-8 .bg-gray-300 .shadow-md .rounded 
 }
@@ -31,6 +38,10 @@
 
 .help-block {
     color: #dc3545 !important;
+}
+
+.bg-grue {
+    background-color: var(--dark-blue);
 }
 
 form,

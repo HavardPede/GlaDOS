@@ -5,9 +5,7 @@ defmodule GladosWeb.UserController do
   Controller for handling actions related to a unique user.
   """
 
-  alias Glados.Email
-  alias Glados.Mailer
-  alias Glados.Accounts
+  alias Glados.{Accounts, Verify}
   alias Glados.Accounts.User
 
   @doc """
@@ -50,13 +48,8 @@ defmodule GladosWeb.UserController do
       |> get_session(:unverified_user)
       |> Accounts.get_user!()
 
-    token = Glados.Token.generate_new_account_token(user)
+    Verify.send_verification(user)
 
-    verification_url = Routes.user_url(GladosWeb.Endpoint, :verify_email, token: token)
-
-    Email.verification_email(user.name, user.email, verification_url)
-    |> Mailer.deliver_now()
-    
     conn
     |> render("sent_verify.html",
       layout: {GladosWeb.LayoutView, "dark_bg.html"}
@@ -74,16 +67,16 @@ defmodule GladosWeb.UserController do
 
       conn
       |> put_flash(:info, "Din bruker er nå verifisert!")
-      |> redirect(to: "/")
+      |> redirect(to: Routes.session_path(conn, :new))
     else
       %User{verified: true} ->
         conn
         |> put_flash(:error, "Din bruker er allerede verifisert.")
-        |> redirect(to: "/")
+        |> redirect(to: Routes.session_path(conn, :new))
       _ ->
         conn
         |> put_flash(:error, "Verifikasjons-lenken er ugyldig.")
-        |> redirect(to: "/")
+        |> redirect(to: Routes.session_path(conn, :new))
     end
   end
 
