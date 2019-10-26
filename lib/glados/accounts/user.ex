@@ -3,6 +3,7 @@ defmodule Glados.Accounts.User do
   import Ecto.Changeset
   import Kernel
   alias Glados.Accounts.Encryption
+  alias Glados.Events.{Event, EventCrew}
 
   @primary_key {:id, :binary_id, auto_generate: false}
   schema "users" do
@@ -23,6 +24,8 @@ defmodule Glados.Accounts.User do
     field(:month, :string, virtual: true)
     field(:year, :string, virtual: true)
     field(:dob, :date)
+
+    many_to_many(:event, Event, join_through: EventCrew, on_replace: :delete)
 
     timestamps()
   end

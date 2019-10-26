@@ -1,0 +1,31 @@
+version: 1
+description: Defines all questions for crew applications
+
+Q1:
+  type: string
+  default: ""
+  question: 
+Q2:
+  type: string
+  default: ""
+  question: 
+Q3:
+  type: string
+  default: ""
+  question: 
+Q4:
+  type: string
+  default: ""
+  question: 
+Q5:
+  type: string
+  default: ""
+  question: 
+Q6:
+  type: string
+  default: ""
+  question: 
+Q7:
+  type: string
+  default: ""
+  question: 

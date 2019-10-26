@@ -81,10 +81,6 @@ defmodule GladosWeb.Router do
     resources "/profil", UserController, only: [:index]
   end
 
-  scope "/", GladosWeb do
-    pipe_through [:browser, :redirect]
-  end
-
   # Crew Scope
 
   # Chief Scope
@@ -99,5 +95,7 @@ defmodule GladosWeb.Router do
     get("/transactions", LoggerController, :logger_transactions)
     post("/transactions", LoggerController, :create_transaction)
     get("/delete/:id", LoggerController, :delete_transaction)
+
+    get("/setup/event", AdminController, :events)
   end
 end
