@@ -5,6 +5,8 @@ defmodule Glados.Accounts.User do
   alias Glados.Accounts.Encryption
   alias Glados.Events.{Event, EventCrew}
 
+  @missing_field "Du må fylle inn dette feltet."
+
   @primary_key {:id, :binary_id, auto_generate: false}
   schema "users" do
     field(:name, :string, null: false)
@@ -28,6 +30,13 @@ defmodule Glados.Accounts.User do
     many_to_many(:event, Event, join_through: EventCrew, on_replace: :delete)
 
     timestamps()
+  end
+
+  def password_changeset(user, attrs) do
+    user 
+    |> cast(attrs, [:password, :password_confirmation])
+    |> validate_required([:password, :password_confirmation], message: @missing_field)
+    |> validate_password()
   end
 
   @doc false
@@ -67,7 +76,7 @@ defmodule Glados.Accounts.User do
         :password,
         :password_confirmation
       ],
-      message: "Du må fylle inn dette feltet."
+      message: @missing_field
     )
     |> validate_username()
     |> validate_password()

@@ -107,4 +107,8 @@ defmodule Glados.Accounts do
   def change_user(%User{} = user) do
     User.changeset(user, %{})
   end
+
+  def password_changeset(%User{} = user) do
+    User.password_changeset(user, %{})
+  end
 end

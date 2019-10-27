@@ -1,0 +1,19 @@
+<div class="w-full">
+    <nav class="flex flex-row justify-between items-end">
+    <a href="/" class="c-guest_nav_elem <%= if @current_path == :login, do: "c-guest_nav_elem--selected" %>">
+        <div> 
+            Login
+        </div>
+    </a>
+    <a href="/registrer" class="c-guest_nav_elem c-guest_nav_elem--middle <%= if @current_path == :new_user, do: "c-guest_nav_elem--selected" %>">
+        <div>
+            Ny Bruker
+        </div>
+    </a>
+    <a href="/glemtpassord" class="c-guest_nav_elem <%= if @current_path == :forgotten_password, do: "c-guest_nav_elem--selected" %>">
+        <div>
+            Glemt passord
+        </div>
+    </a>
+    </nav>
+</div>

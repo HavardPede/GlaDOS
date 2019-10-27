@@ -84,11 +84,38 @@ defmodule GladosWeb.UserController do
   Path to verify user when there is no token passed in
   """
   def verify_email(conn, _) do
-  conn
-  |> put_status(:not_found)
-  |> put_view(GladosWeb.ErrorView)
-  |> render("404.html")
+    conn
+    |> put_status(:not_found)
+    |> put_view(GladosWeb.ErrorView)
+    |> render("404.html")
   end
+
+  @doc """
+  Path to send email verification email
+  """
+  def forgotten_password(conn, _params) do
+    render(conn, "forgotten_password.html", layout: {GladosWeb.LayoutView, "dark_bg.html"})
+  end
+  
+  def send_email_for_new_password(conn, %{"email" => email} = params) do
+    with {:ok, user} = Glados.Accounts.get_user_by_email(email)
+    do 
+      Verify.send_password_reset(user)
+    end
+  end
+
+  @doc """
+  Path for a user to change their password
+  """
+  def change_password(conn, %{"token" => token} = params) do
+    with {:ok, user_id} <- Glados.Token.set_new_password_token(token),
+      %User{} = user <- Glados.Accounts.get_user!(user_id) 
+    do
+      changeset = Glados.Accounts.password_changeset(user)
+      render(conn, "new_password.html", changeset: changeset)
+    end
+  end
+
 
   @doc """
   Path to verify show a single user

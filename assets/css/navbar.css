@@ -25,3 +25,7 @@
     transition-duration: .5s;
     transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
+
+.c-guest_nav_elem--middle {
+    margin: 0px 2px 0px 2px;
+}

@@ -51,6 +51,9 @@ defmodule GladosWeb.Router do
     post("/registrer", UserController, :create)
 
     get("/verifiser", UserController, :verify_email)
+
+    get("/glemtpassord", UserController, :forgotten_password)
+    post("/glemtpassord", UserController, :send_email_for_new_password)
   end
 
   # Scope for transaction logger account
@@ -65,7 +68,7 @@ defmodule GladosWeb.Router do
   # Scope for verifying a new user
   scope "/", GladosWeb do
     pipe_through [:browser]
-
+    
     get("/verifikasjonsendt", UserController, :send_email_verification)
   end
 
