@@ -83,8 +83,7 @@ defmodule GladosWeb.Router do
     pipe_through [:browser, :member]
     resources "/profil", MemberController, only: [:index]
     get("/profil/informasjon", AccountController, :edit)
-    put("/profil/informasjon", AccountController, :update_user_info)
-    put("/profil/informasjon", AccountController, :update_user_password)
+    put("/profil/informasjon", AccountController, :update_user)
   end
 
   # Crew Scope

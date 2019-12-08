@@ -23,8 +23,8 @@ defmodule Glados.AccountsTest do
     password_confirmation: "testPassword123"
   }
 
-  @update_attrs %{ 
-    email: "some@valid.email", 
+  @update_attrs %{
+    email: "some@valid.email",
     name: "some updated name",
     username: "updated"
   }
@@ -44,16 +44,17 @@ defmodule Glados.AccountsTest do
   end
 
   test "list_users/0 returns all users" do
-    user = 
-    user_fixture()
-    |> remove_virtual_fields()
+    user =
+      user_fixture()
+      |> remove_virtual_fields()
+
     assert Accounts.list_users() == [user]
   end
 
   test "get_user!/1 returns the user with given id" do
-    user = 
-    user_fixture()
-    |> remove_virtual_fields()
+    user =
+      user_fixture()
+      |> remove_virtual_fields()
 
     assert Accounts.get_user!(user.id) == user
   end
@@ -64,18 +65,17 @@ defmodule Glados.AccountsTest do
 
   test "update_user/2 with valid data updates the user" do
     user = user_fixture()
-    assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
+    assert {:ok, %User{} = user} = Accounts.update_user_info(user, @update_attrs)
     assert user.name == "some updated name"
     assert user.email == "some@valid.email"
-    assert user.username == "updated"
   end
 
   test "update_user/2 with invalid data returns error changeset" do
-    user = 
-    user_fixture()
-    |> remove_virtual_fields()
-    
-    assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
+    user =
+      user_fixture()
+      |> remove_virtual_fields()
+
+    assert {:error, %Ecto.Changeset{}} = Accounts.update_user_info(user, @invalid_attrs)
     assert user == Accounts.get_user!(user.id)
   end
 

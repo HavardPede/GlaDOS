@@ -3,7 +3,6 @@ defmodule GladosWeb.Plugs.Verify do
   import Phoenix.Controller
 
   alias Glados.Accounts
-  alias GladosWeb.Router.Helpers, as: Routes
 
   def init(opts), do: opts
 

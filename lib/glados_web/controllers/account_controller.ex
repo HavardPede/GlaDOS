@@ -36,17 +36,19 @@ defmodule GladosWeb.AccountController do
   end
 
   def send_email_verification(conn, _params) do
-    user =
-      conn
-      |> get_session(:unverified_user)
-      |> Accounts.get_user!()
-
-    Verify.send_verification(user)
-
     conn
-    |> render("sent_verify.html",
-      layout: {GladosWeb.LayoutView, "dark_bg.html"}
-    )
+    |> get_session(:unverified_user)
+    |> case do
+      nil ->
+        render_404(conn)
+
+      user_id ->
+        user_id
+        |> Accounts.get_user!()
+        |> Verify.send_verification()
+
+        render(conn, "sent_verify.html", layout: {GladosWeb.LayoutView, "dark_bg.html"})
+    end
   end
 
   @doc """
@@ -77,10 +79,7 @@ defmodule GladosWeb.AccountController do
   Path to verify user when there is no token passed in
   """
   def verify_email(conn, _) do
-    conn
-    |> put_status(:not_found)
-    |> put_view(GladosWeb.ErrorView)
-    |> render("404.html")
+    render_404(conn)
   end
 
   @doc """
@@ -90,14 +89,15 @@ defmodule GladosWeb.AccountController do
     render(conn, "forgotten_password.html", layout: {GladosWeb.LayoutView, "dark_bg.html"})
   end
 
-  def send_email_for_new_password(conn, %{"email" => email} = params) do
-    with {:ok, user} = Glados.Accounts.get_user_by_email(email) do
-      Verify.send_password_reset(user)
+  def send_email_for_new_password(conn, %{"email" => email}) do
+    case Glados.Accounts.get_user_by_email(email) do
+      {:ok, user} ->
+        Verify.send_password_reset(user)
 
-      conn
-      |> put_flash(:info, "Email er sendt.")
-      |> redirect(to: Routes.account_path(Endpoint, :forgotten_password))
-    else
+        conn
+        |> put_flash(:info, "Email er sendt.")
+        |> redirect(to: Routes.account_path(Endpoint, :forgotten_password))
+
       {:error, :nil_value} ->
         conn
         |> put_flash(:error, "Fant ingen bruker med denne epost addressen.")
@@ -113,7 +113,7 @@ defmodule GladosWeb.AccountController do
   @doc """
   Path for a user to change their password
   """
-  def change_password(conn, %{"token" => token} = params) do
+  def change_password(conn, %{"token" => token}) do
     with {:ok, user_id} <- Glados.Token.set_new_password_token(token),
          %User{} = user <- Glados.Accounts.get_user!(user_id) do
       changeset = Glados.Accounts.change_password(user)
@@ -129,11 +129,12 @@ defmodule GladosWeb.AccountController do
   @doc """
   Post path for changing password
   """
-  def set_new_password(conn, %{"user" => user_params} = params) do
-    user = Accounts.get_user!(user_params["user_id"])
-
-    case Accounts.update_password(user, user_params) do
-      {:ok, user} ->
+  def set_new_password(conn, %{"user" => user_params}) do
+    user_params["user_id"]
+    |> Accounts.get_user!()
+    |> Accounts.update_password(user_params)
+    |> case do
+      {:ok, _user} ->
         conn
         |> put_flash(:info, "Passordet er endret!")
         |> redirect(to: Routes.session_path(Endpoint, :new))
@@ -143,7 +144,7 @@ defmodule GladosWeb.AccountController do
         |> render("new_password.html",
           layout: {GladosWeb.LayoutView, "dark_bg.html"},
           changeset: changeset,
-          user_id: user.id
+          user_id: changeset.data.id
         )
     end
   end
@@ -151,11 +152,8 @@ defmodule GladosWeb.AccountController do
   @doc """
   Path to display form for editing a user
   """
-  def edit(conn, params) do
-    user =
-      conn
-      |> get_session(:current_user_id)
-      |> Accounts.get_user!()
+  def edit(conn, _params) do
+    user = get_user(conn)
 
     info_changeset = Accounts.change_user_info(user)
     password_changeset = Accounts.change_user_info(user)
@@ -172,14 +170,12 @@ defmodule GladosWeb.AccountController do
   @doc """
   Path to update a user, given a set of parameters
   """
-  def update_user_info(conn, %{"user" => user_params}) do
-    user =
-      conn
-      |> get_session(:current_user_id)
-      |> Accounts.get_user!()
+  def update_user_info(conn, %{"user" => %{"name" => _} = user_params}) do
+    user = get_user(conn)
 
-    case Accounts.update_user_info(user, user_params) do
-      {:ok, user} ->
+    Accounts.update_user_info(user, user_params)
+    |> case do
+      {:ok, _user} ->
         conn
         |> put_flash(:info, "User updated successfully.")
         |> redirect(to: Routes.account_path(conn, :edit))
@@ -197,23 +193,21 @@ defmodule GladosWeb.AccountController do
     end
   end
 
-  def update_user_password(conn, %{"user" => user_params}) do
-    user =
-      conn
-      |> get_session(:current_user_id)
-      |> Accounts.get_user!()
+  def update_user_info(conn, %{"user" => %{"old_password" => _old_password} = user_params}) do
+    user = get_user(conn)
 
     case Accounts.update_password(user, user_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:password_updated, "User password updated successfully.")
+        |> put_flash(:password_updated, "Passordet ble oppdatert.")
         |> redirect(to: Routes.account_path(conn, :edit))
 
       {:error, %Ecto.Changeset{} = password_changeset} ->
         info_changeset = Accounts.change_user_info(user)
 
-        render(
-          conn,
+        conn
+        |> put_flash(:password_not_updated, "Passordet ble ikke oppdatert.")
+        |> render(
           "edit.html",
           user: user,
           info_changeset: info_changeset,
@@ -222,15 +216,16 @@ defmodule GladosWeb.AccountController do
     end
   end
 
-  @doc """
-  Path to delete an account
-  """
-  def delete(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
-    {:ok, _user} = Accounts.delete_user(user)
-
+  defp render_404(conn) do
     conn
-    |> put_flash(:info, "User deleted successfully.")
-    |> redirect(to: Routes.member_path(conn, :index))
+    |> put_status(:not_found)
+    |> put_view(GladosWeb.ErrorView)
+    |> render("404.html")
+  end
+
+  defp get_user(conn) do
+    conn
+    |> get_session(:current_user_id)
+    |> Accounts.get_user!()
   end
 end

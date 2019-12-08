@@ -1,7 +1,7 @@
 <div class="mt-12" id="info">
   <h1 class="text-xl mb-6">Bruker Info</h1>
 
-  <%= form_for @changeset, Routes.account_path(@conn, :update_user_info), fn f -> %>
+  <%= form_for @changeset, Routes.account_path(@conn, :update_user), fn f -> %>
     
     <div class="mb-4 text-center lg:text-left">
       <h4 class="text-center lg:text-left mb-1">Navn</h4>

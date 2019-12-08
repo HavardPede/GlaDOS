@@ -6,10 +6,8 @@ defmodule GladosWeb.Plugs.PlugHelper do
   alias Glados.Accounts
 
   def redirect(conn) do
-    user_id = get_session(conn, :current_user_id)
-    current_user = Accounts.get_user!(user_id)
-
-    user_id
+    conn
+    |> get_session(:current_user_id)
     |> Accounts.get_user!()
     |> Map.get(:auth_level)
     |> redir(conn)

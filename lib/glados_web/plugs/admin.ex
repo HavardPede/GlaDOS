@@ -1,5 +1,4 @@
 defmodule GladosWeb.Plugs.Admin do
-  alias Glados.Accounts
   alias GladosWeb.Plugs.PlugHelper
 
   def init(opts), do: opts

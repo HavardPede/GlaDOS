@@ -55,7 +55,7 @@
     <p class="mb-4">Er dette lanet aktivt?</p>
     <%= hidden_input(@form, :active, value: false) %>
     <p class="italic text-sm">Lanet kan ikke settes aktivt, siden <span class="text-red-500"><%= @active_event.name %></span> er aktiv.</p>
-  <%= else %>
+  <% else %>
     <p>Er dette lanet aktivt?</p>
     <div>
       <%= select(@form, :active, [ja: true, nei: false], [class: "c-dropdown"]) %>
