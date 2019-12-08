@@ -1,91 +1,146 @@
-/* This file is for your main application css. */
-
 @import "navbar.css";
 @import "./login.css";
 @import "./new_user.css";
 @import "./verify.css";
 @import "./logger.css";
+@import "./admin.css";
 @import "./error.css";
 
 @tailwind base;
 @tailwind components;
 
+/****** START OF TAILWIND COMPONENTS ******/
+
 /* .lg */
-@media only screen and (min-width: 1024px) { 
-    .c-nav_elem {
-        @apply .mr-4 .w-20
-    }
+@media only screen and (min-width: 1024px) {
+  .c-nav_elem {
+    @apply .mr-4;
+  }
 }
 
 .c-nav_elem:hover {
-    @apply .text-white border-orange-500
+  @apply .text-white border-orange-500;
 }
 
 .c-nav_elem {
-    @apply .flex .justify-center .items-center .h-12 .border-2 .border-transparent .text-white .no-underline
+  @apply .flex .justify-center .items-center .h-12 .border-2 .border-transparent .text-white .no-underline;
 }
 
 .c-user_dropdown_elem {
-    @apply .cursor-pointer .py-2 .px-4 my-1 .text-center .rounded-lg .shadow-md
+  @apply .cursor-pointer .py-2 .px-4 my-1 .text-center .rounded-lg .shadow-md;
+}
+
+.c-btn--hollow:hover {
+  @apply .text-orange-500 .border-orange-500;
+}
+
+.c-btn--hollow {
+  @apply .py-2 .px-3 .my-1 .text-center .rounded-lg .text-grue .border .border-grue .shadow-md .bg-transparent;
 }
 
 .c-guest_nav_elem {
-    @apply .w-1/3 .h-8 .p-2 .bg-white .rounded-t-lg .flex .justify-center
+  @apply .w-1/3 .h-8 .p-2 .bg-white .rounded-t-lg .flex .justify-center;
 }
 
 .c-guest_nav_elem:hover {
-    @apply text-orange-500
+  @apply text-orange-500;
 }
 
 .c-guest_nav_elem:active {
-    @apply text-sm
+  @apply text-sm;
 }
 
 .c-guest_nav_elem--selected {
-    @apply .border-none .h-12 .items-center text-orange-500
+  @apply .border-none .h-12 .items-center text-orange-500;
 }
 
 .c-standard_input {
-    @apply .w-full .pl-2 .h-8 .bg-gray-300 .shadow-md .rounded 
+  @apply .w-full .pl-2 .h-8 .bg-gray-300 .shadow-md .rounded mb-2;
 }
+
+.c-standard_table {
+  @apply table-auto;
+}
+
+.c-standard_table th {
+  @apply uppercase border border-gray-300 px-4 py-2 text-xs;
+}
+
+.c-standard_table td {
+  @apply border px-2 py-2 text-center text-sm;
+}
+
+.c-standard_table--green td {
+  @apply bg-green-200 font-semibold;
+}
+
+.c-field_container {
+  @apply .my-4 .w-full flex flex-col;
+}
+
+.c-field_container div {
+  @apply m-4;
+}
+
+.c-field_container p {
+  @apply font-bold;
+}
+
+.c-field_container input {
+  @apply text-center;
+}
+
+.c-dropdown {
+  @apply bg-gray-100 border text-gray-600;
+}
+
+.c-dropdown:focus {
+  outline-color: #fdad5c;
+}
+
+/****** END OF TAILWIND COMPONENTS ******/
 
 @tailwind utilities;
 
 .alert:empty {
-    display: none;
+  display: none;
 }
 
 :root {
-    --main-orange: #eba134;
-    --dark-blue: #606c76;
+  --main-orange: #eba134;
+  --dark-blue: #606c76;
 }
 
 .danger {
-    background-color: #dc3545 !important;
+  background-color: #dc3545 !important;
 }
 
 .help-block {
-    color: #dc3545 !important;
+  color: #dc3545 !important;
 }
 
 .bg-grue {
-    background-color: var(--dark-blue);
+  background-color: var(--dark-blue);
 }
 
 .bg-grue-hover:hover {
-    background-color: var(--dark-blue)!important;
+  background-color: var(--dark-blue) !important;
 }
 
 .text-grue {
-    color: var(--dark-blue);
+  color: var(--dark-blue);
 }
 
 .border-grue {
-    border-color: var(--dark-blue);
+  border-color: var(--dark-blue);
 }
 
 form,
 label,
 h5 {
-    margin-bottom: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+html {
+  font-family: "Fira Code", monospace;
 }

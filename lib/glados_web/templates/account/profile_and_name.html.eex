@@ -1,0 +1,10 @@
+<div class="flex flex-row items-center" id="profile_picture">
+  <div>
+    <img class="w-20" src="<%= Routes.static_path(@conn, "/images/panda.png" ) %>">
+  </div>
+  <div class="ml-4">
+    <p class="font-bold mb-1"><%= @user.name %></p>
+    <p class="text-sm text-gray-600"><%= @user.username %></p>
+  </div>
+
+</div>

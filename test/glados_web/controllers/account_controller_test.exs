@@ -1,4 +1,4 @@
-defmodule GladosWeb.UserControllerTest do
+defmodule GladosWeb.AccountControllerTest do
   use GladosWeb.ConnCase
 
   alias Glados.{Accounts, Repo, Token}
@@ -44,7 +44,7 @@ defmodule GladosWeb.UserControllerTest do
       Repo.all(Glados.Accounts.User)
       |> Enum.count
       
-      post(conn, Routes.user_path(conn, :create), user: @valid_user_attrs)
+      post(conn, Routes.account_path(conn, :create), user: @valid_user_attrs)
       
       user_count = 
       Repo.all(Glados.Accounts.User)
@@ -55,16 +55,16 @@ defmodule GladosWeb.UserControllerTest do
 
     test "Does not add user to databaes when using invalid data", %{conn: conn} do
       
-      post(conn, Routes.user_path(conn, :create), user: %{@valid_user_attrs | name: "invalid_name"})
-      post(conn, Routes.user_path(conn, :create), user: %{@valid_user_attrs | name: "invalid username", username: "inv"})
-      post(conn, Routes.user_path(conn, :create), user: %{@valid_user_attrs | name: "invalid postcode", postcode: 0})
-      post(conn, Routes.user_path(conn, :create), user: %{@valid_user_attrs | name: "invalid phone", phone_number: "123"})
-      post(conn, Routes.user_path(conn, :create), user: %{@valid_user_attrs | name: "invalid day", day: "32"})
-      post(conn, Routes.user_path(conn, :create), user: %{@valid_user_attrs | name: "invalid month", month: "13"})
-      post(conn, Routes.user_path(conn, :create), user: %{@valid_user_attrs | name: "invalid year", year: "100"})
-      post(conn, Routes.user_path(conn, :create), user: %{@valid_user_attrs | name: "invalid email", email: "invalid"})
-      post(conn, Routes.user_path(conn, :create), user: %{@valid_user_attrs | name: "invalid confirmation password", password_confirmation: "invalid"})
-      post(conn, Routes.user_path(conn, :create), user: %{@valid_user_attrs | name: "invalid password", password: "123", password_confirmation: "123"})
+      post(conn, Routes.account_path(conn, :create), user: %{@valid_user_attrs | name: "invalid_name"})
+      post(conn, Routes.account_path(conn, :create), user: %{@valid_user_attrs | name: "invalid username", username: "inv"})
+      post(conn, Routes.account_path(conn, :create), user: %{@valid_user_attrs | name: "invalid postcode", postcode: 0})
+      post(conn, Routes.account_path(conn, :create), user: %{@valid_user_attrs | name: "invalid phone", phone_number: "123"})
+      post(conn, Routes.account_path(conn, :create), user: %{@valid_user_attrs | name: "invalid day", day: "32"})
+      post(conn, Routes.account_path(conn, :create), user: %{@valid_user_attrs | name: "invalid month", month: "13"})
+      post(conn, Routes.account_path(conn, :create), user: %{@valid_user_attrs | name: "invalid year", year: "100"})
+      post(conn, Routes.account_path(conn, :create), user: %{@valid_user_attrs | name: "invalid email", email: "invalid"})
+      post(conn, Routes.account_path(conn, :create), user: %{@valid_user_attrs | name: "invalid confirmation password", password_confirmation: "invalid"})
+      post(conn, Routes.account_path(conn, :create), user: %{@valid_user_attrs | name: "invalid password", password: "123", password_confirmation: "123"})
       
       new_users = 
       Repo.all(Glados.Accounts.User)
@@ -74,13 +74,13 @@ defmodule GladosWeb.UserControllerTest do
     end
 
     test "renders email verification page when valid user is added", %{conn: conn} do
-      conn = post(conn, Routes.user_path(conn, :create), user: @valid_user_attrs)
+      conn = post(conn, Routes.account_path(conn, :create), user: @valid_user_attrs)
       assert html_response(conn, 302)
-      assert redirected_to(conn) == Routes.user_path(conn, :send_email_verification)
+      assert redirected_to(conn) == Routes.account_path(conn, :send_email_verification)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.user_path(conn, :create), user: @invalid_user_attrs)
+      conn = post(conn, Routes.account_path(conn, :create), user: @invalid_user_attrs)
       assert html_response(conn, 200) =~ "Lag en ny bruker for å søke crew!"
     end
   end
@@ -92,7 +92,7 @@ defmodule GladosWeb.UserControllerTest do
       conn = post(conn, Routes.session_path(conn, :create), 
         session: %{username: @valid_user_attrs.username, password: @valid_user_attrs.password})
         
-      assert redirected_to(conn) == Routes.user_path(conn, :index)
+      assert redirected_to(conn) == Routes.account_path(conn, :index)
     end
 
     test "Using invalid authentication does not log the user in", %{conn: conn, user: _user} do
@@ -124,7 +124,7 @@ defmodule GladosWeb.UserControllerTest do
     test "Verifying user works", %{conn: conn, user: user} do
       token = Token.generate_new_account_token(user)
       
-      conn = get(conn, Routes.user_path(conn, :verify_email, token: token))
+      conn = get(conn, Routes.account_path(conn, :verify_email, token: token))
 
       redirected_path = redirected_to(conn, 302)
       conn = get(recycle(conn), redirected_path)
@@ -141,13 +141,13 @@ defmodule GladosWeb.UserControllerTest do
     test "Using verification url multiple times shows that user is already verified", %{conn: conn, user: user} do
       token = Token.generate_new_account_token(user)
       
-      conn = get(conn, Routes.user_path(conn, :verify_email, token: token))
+      conn = get(conn, Routes.account_path(conn, :verify_email, token: token))
 
       redirected_path = redirected_to(conn, 302)
       conn = get(recycle(conn), redirected_path)
       assert html_response(conn, 200) =~ "Din bruker er nå verifisert!"
 
-      conn = get(conn, Routes.user_path(conn, :verify_email, token: token))
+      conn = get(conn, Routes.account_path(conn, :verify_email, token: token))
 
       redirected_path = redirected_to(conn, 302)
       conn = get(recycle(conn), redirected_path)
@@ -157,11 +157,11 @@ defmodule GladosWeb.UserControllerTest do
 
     test "Does not allow user to view /verifiser without valid token", %{conn: conn} do
       
-      conn = get(conn, Routes.user_path(conn, :verify_email))
+      conn = get(conn, Routes.account_path(conn, :verify_email))
 
       assert html_response(conn, 404)
 
-      conn = get(conn, Routes.user_path(conn, :verify_email, token: "invalid_token"))
+      conn = get(conn, Routes.account_path(conn, :verify_email, token: "invalid_token"))
 
       redirected_path = redirected_to(conn, 302)
       conn = get(recycle(conn), redirected_path)
@@ -169,7 +169,7 @@ defmodule GladosWeb.UserControllerTest do
     end
 
     test "Does not allow the user to view /verifikasjonsendt without an unverified user in session", %{conn: conn} do
-      conn = get(conn, Routes.user_path(conn, :send_email_verification))
+      conn = get(conn, Routes.account_path(conn, :send_email_verification))
       assert html_response(conn, 404)
     end
   end

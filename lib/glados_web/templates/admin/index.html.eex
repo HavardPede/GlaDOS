@@ -1,0 +1,43 @@
+<div class="width-full flex items-center md:items-start flex-col md:flex-row">
+  <div class="w-4/5 m-auto md:w-1/3 border rounded-sm text-center mx-2 p-2 mb-8">
+    <img src="https://img.icons8.com/office/60/000000/tear-off-calendar.png" class="mx-auto my-8">
+    <a href="<%= Routes.admin_path(@conn, :events) %>">
+      <div class="w-4/5 mx-auto bg-gray-300 text-black hover:bg-orange-500 mt-6 mb-8 rounded">
+        <span class="leading-loose text-md">Eventer</span>
+      </div>
+    </a>
+
+    <% active_event = Enum.find(@events, & &1.active) %>
+
+    <div class="p-2 mb-3">
+      <h3 class="mb-2">Aktivt event</h3>
+      <%= if active_event do %>
+          <a href="<%= Routes.admin_path(@conn, :edit_event, active_event.id) %>">
+            <div class="w-3/5 m-auto lg:w-full border py-2 px-4 text-sm bg-green-200 font-bold text-green-500 hover:text-green-700">
+              <%= active_event.name%>
+            </div>
+          </a>
+      <% else %>
+        <span class="italic text-xs">Det er ingen aktiv event for tiden.</span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="w-1/3  border rounded-sm text-center mx-4 p-2 mb-8">
+    <h2>Noe annet</h2>
+    <a href="#">
+      <div class="w-4/5 mx-auto bg-gray-300 hover:bg-orange-500 my-6">
+        <span class="leading-loose text-sm">Endre det</span>
+      </div>
+    </a>
+  </div>
+
+    <div class="w-1/3  border rounded-sm text-center mx-4 p-2 mb-8">
+    <h2>Noe annet enn det andre</h2>
+    <a href="#">
+      <div class="w-4/5 mx-auto bg-gray-300 hover:bg-orange-500 my-6">
+        <span class="leading-loose text-sm">Endre ting</span>
+      </div>
+    </a>
+  </div>
+</div>

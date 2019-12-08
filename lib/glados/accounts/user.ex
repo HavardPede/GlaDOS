@@ -33,10 +33,12 @@ defmodule Glados.Accounts.User do
   end
 
   def password_changeset(user, attrs) do
-    user 
+    user
     |> cast(attrs, [:password, :password_confirmation])
     |> validate_required([:password, :password_confirmation], message: @missing_field)
     |> validate_password()
+    |> encrypt_password()
+    |> validate_required(:encrypted_password)
   end
 
   @doc false
@@ -94,6 +96,20 @@ defmodule Glados.Accounts.User do
     user
     |> cast(attrs, [:verified])
     |> validate_required([:verified])
+  end
+
+  def user_info_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:name, :email, :phone_number, :address, :postcode, :day, :month, :year])
+    |> validate_required(
+      [:name, :email, :phone_number, :address, :postcode, :day, :month, :year],
+      message: @missing_field
+    )
+    |> validate_name()
+    |> validate_email()
+    |> set_dob()
+    |> validate_phone_number()
+    |> validate_postcode()
   end
 
   # Password validation
@@ -193,13 +209,13 @@ defmodule Glados.Accounts.User do
 
   # Validation for date of birth
   defp set_dob(%{changes: %{day: day, month: month, year: year}} = changeset) do
-    date = 
-    [year, month, day]
-    |> Enum.join("-")
+    date =
+      [year, month, day]
+      |> convert_to_two_digits()
+      |> Enum.join("-")
 
     with {:ok, dob} <- Timex.parse(date, "%Y-%m-%d", :strftime),
-      true <- valid_age?(dob)
-    do
+         true <- valid_age?(dob) do
       put_change(changeset, :dob, Timex.to_date(dob))
     else
       _ -> add_error(changeset, :dob, "Dato er ikke gyldig.")
@@ -212,6 +228,12 @@ defmodule Glados.Accounts.User do
     today = Date.utc_today()
     age = Timex.diff(today, date_of_birth, :years)
     age < 120 && age > 10
+  end
+
+  defp convert_to_two_digits(date_list), do: Enum.map(date_list, &force_two_digits/1)
+
+  defp force_two_digits(number) when is_binary(number) do
+    if String.length(number) > 1, do: number, else: "0" <> number
   end
 
   defp encrypt_password(changeset) do

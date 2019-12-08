@@ -1,0 +1,53 @@
+<div class="mt-12" id="info">
+  <h1 class="text-xl mb-6">Bruker Info</h1>
+
+  <%= form_for @changeset, Routes.account_path(@conn, :update_user_info), fn f -> %>
+    
+    <div class="mb-4 text-center lg:text-left">
+      <h4 class="text-center lg:text-left mb-1">Navn</h4>
+      <%= text_input f, :name, class: "c-standard_input" %>
+      <%= error_tag f, :name %>
+    </div>
+
+    <div class="mb-4 text-center lg:text-left">
+      <h4 class="mb-1 text-sm">Email adresse</h4>
+      <%= text_input f, :email, class: "c-standard_input" %>
+      <%= error_tag f, :email %> 
+    </div>
+
+    <div class="mb-4 text-center lg:text-left">
+      <h4 class="mb-1 text-sm">Telefon nummer</h4>
+      <%= text_input f, :phone_number, class: "c-standard_input" %>
+      <%= error_tag f, :phone_number %>
+    </div>
+
+    <div class="mb-4 text-center lg:text-left">
+      <h4 class="mb-1 text-sm">Adresse</h4>
+      <%= text_input f, :address, class: "c-standard_input" %>
+      <%= error_tag f, :address %>
+    </div>
+
+    <div class="mb-4 lg:text-left">
+      <h4 class="mb-1 text-sm">Post kode</h4>
+      <div>
+        <%= text_input f, :postcode, pattern: "[0-9]*", maxLength: 4, class: "c-standard_input" %>
+      </div>
+      <%= error_tag f, :postcode %>
+    </div>
+
+    <div class="mb-4 lg:text-left">
+      <h4 class="mb-1 text-sm">Fødselsdato</h4>
+      <div class=" flex">
+        <div class="flex flex-row">
+          <%= text_input f, :day, pattern: "[0-9]*", maxLength: 2, minLength: 2, placeholder: "DD", class: "c-standard_input text-center pr-2", value: @user.dob.day %>
+          <%= text_input f, :month, pattern: "[0-9]*", maxLength: 2, minLength: 2, placeholder: "MM", class: "c-standard_input text-center pr-2", value: @user.dob.month %>
+          <%= text_input f, :year, pattern: "[0-9]*", maxLength: 4, minLength: 4, placeholder: "YYYY", class: "c-standard_input text-center pr-2", value: @user.dob.year %>
+        </div>
+      </div>
+      <%= [:day, :month, :year, :dob] |> Enum.any?(&(f.errors[&1])) |> if() do %>
+        <span class="help-block">Datoen er ikke godkjent.</span>
+      <% end %>
+    </div>
+    <%= submit "Oppdater", class: "btn_orange new_user_btn shadow-md" %>
+  <% end%>
+</div>

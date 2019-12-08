@@ -47,13 +47,13 @@ defmodule GladosWeb.Router do
     get("/", SessionController, :new)
     post("/", SessionController, :create)
 
-    get("/registrer", UserController, :new)
-    post("/registrer", UserController, :create)
-
-    get("/verifiser", UserController, :verify_email)
-
-    get("/glemtpassord", UserController, :forgotten_password)
-    post("/glemtpassord", UserController, :send_email_for_new_password)
+    get("/registrer", AccountController, :new)
+    post("/registrer", AccountController, :create)
+    get("/verifiser", AccountController, :verify_email)
+    get("/glemtpassord", AccountController, :forgotten_password)
+    post("/glemtpassord", AccountController, :send_email_for_new_password)
+    get("/endrepassord", AccountController, :change_password)
+    put("/endrepassord", AccountController, :set_new_password)
   end
 
   # Scope for transaction logger account
@@ -65,11 +65,11 @@ defmodule GladosWeb.Router do
     get("/delete/:id", LoggerController, :delete_transaction)
   end
 
-  # Scope for verifying a new user
+  # Scope for verifying a new account
   scope "/", GladosWeb do
     pipe_through [:browser]
-    
-    get("/verifikasjonsendt", UserController, :send_email_verification)
+
+    get("/verifikasjonsendt", AccountController, :send_email_verification)
   end
 
   # Log out scope
@@ -81,7 +81,10 @@ defmodule GladosWeb.Router do
   # Member Scope
   scope "/", GladosWeb do
     pipe_through [:browser, :member]
-    resources "/profil", UserController, only: [:index]
+    resources "/profil", MemberController, only: [:index]
+    get("/profil/informasjon", AccountController, :edit)
+    put("/profil/informasjon", AccountController, :update_user_info)
+    put("/profil/informasjon", AccountController, :update_user_password)
   end
 
   # Crew Scope
@@ -91,6 +94,9 @@ defmodule GladosWeb.Router do
   # Admin Scope
   scope "/admin", GladosWeb do
     pipe_through [:browser, :admin]
+
+    get("/", AdminController, :index)
+
     get("/crew", LoggerController, :logger_crew)
     post("/crew", LoggerController, :add_logger_crew)
     get("/crew/delete/:id", LoggerController, :delete_logger_crew)
@@ -99,6 +105,10 @@ defmodule GladosWeb.Router do
     post("/transactions", LoggerController, :create_transaction)
     get("/delete/:id", LoggerController, :delete_transaction)
 
-    get("/setup/event", AdminController, :events)
+    get("/eventer", AdminController, :events)
+    get("/eventer/new", AdminController, :new_event)
+    post("/eventer/new", AdminController, :create_event)
+    get("/eventer/:event_id/rediger", AdminController, :edit_event)
+    put("/eventer/:event_id/rediger", AdminController, :update_event)
   end
 end

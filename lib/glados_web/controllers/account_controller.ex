@@ -1,0 +1,236 @@
+defmodule GladosWeb.AccountController do
+  use GladosWeb, :controller
+
+  @moduledoc """
+  Controller for handling actions related to a unique user.
+  """
+
+  alias Glados.{Accounts, Verify}
+  alias Glados.Accounts.User
+  alias GladosWeb.Endpoint
+
+  @doc """
+  Path to display form for creating a new user
+  """
+  def new(conn, _params) do
+    changeset = Accounts.change_user(%User{})
+    render(conn, "new.html", changeset: changeset, layout: {GladosWeb.LayoutView, "dark_bg.html"})
+  end
+
+  @doc """
+  Path to create a new user, given a set of params
+  """
+  def create(conn, %{"user" => user_params}) do
+    case Accounts.create_user(user_params) do
+      {:ok, user} ->
+        conn
+        |> put_session(:unverified_user, user.id)
+        |> redirect(to: Routes.account_path(conn, :send_email_verification))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "new.html",
+          changeset: changeset,
+          layout: {GladosWeb.LayoutView, "dark_bg.html"}
+        )
+    end
+  end
+
+  def send_email_verification(conn, _params) do
+    user =
+      conn
+      |> get_session(:unverified_user)
+      |> Accounts.get_user!()
+
+    Verify.send_verification(user)
+
+    conn
+    |> render("sent_verify.html",
+      layout: {GladosWeb.LayoutView, "dark_bg.html"}
+    )
+  end
+
+  @doc """
+  Path to verify user when a token is passed in
+  """
+  def verify_email(conn, %{"token" => token}) do
+    with {:ok, user_id} <- Glados.Token.verify_new_account_token(token),
+         %User{verified: false} = user <- Glados.Accounts.get_user!(user_id) do
+      Glados.Accounts.validate_user(user)
+
+      conn
+      |> put_flash(:info, "Din bruker er nå verifisert!")
+      |> redirect(to: Routes.session_path(conn, :new))
+    else
+      %User{verified: true} ->
+        conn
+        |> put_flash(:error, "Din bruker er allerede verifisert.")
+        |> redirect(to: Routes.session_path(conn, :new))
+
+      _ ->
+        conn
+        |> put_flash(:error, "Verifikasjons-lenken er ugyldig.")
+        |> redirect(to: Routes.session_path(conn, :new))
+    end
+  end
+
+  @doc """
+  Path to verify user when there is no token passed in
+  """
+  def verify_email(conn, _) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(GladosWeb.ErrorView)
+    |> render("404.html")
+  end
+
+  @doc """
+  Path to send email verification email
+  """
+  def forgotten_password(conn, _params) do
+    render(conn, "forgotten_password.html", layout: {GladosWeb.LayoutView, "dark_bg.html"})
+  end
+
+  def send_email_for_new_password(conn, %{"email" => email} = params) do
+    with {:ok, user} = Glados.Accounts.get_user_by_email(email) do
+      Verify.send_password_reset(user)
+
+      conn
+      |> put_flash(:info, "Email er sendt.")
+      |> redirect(to: Routes.account_path(Endpoint, :forgotten_password))
+    else
+      {:error, :nil_value} ->
+        conn
+        |> put_flash(:error, "Fant ingen bruker med denne epost addressen.")
+        |> redirect(to: Routes.account_path(Endpoint, :forgotten_password))
+
+      _ ->
+        conn
+        |> put_flash(:error, "En feil oppstod. Prøv igjen senere.")
+        |> render(to: Routes.account_path(Endpoint, :forgotten_password))
+    end
+  end
+
+  @doc """
+  Path for a user to change their password
+  """
+  def change_password(conn, %{"token" => token} = params) do
+    with {:ok, user_id} <- Glados.Token.set_new_password_token(token),
+         %User{} = user <- Glados.Accounts.get_user!(user_id) do
+      changeset = Glados.Accounts.change_password(user)
+
+      render(conn, "new_password.html",
+        layout: {GladosWeb.LayoutView, "dark_bg.html"},
+        changeset: changeset,
+        user_id: user.id
+      )
+    end
+  end
+
+  @doc """
+  Post path for changing password
+  """
+  def set_new_password(conn, %{"user" => user_params} = params) do
+    user = Accounts.get_user!(user_params["user_id"])
+
+    case Accounts.update_password(user, user_params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "Passordet er endret!")
+        |> redirect(to: Routes.session_path(Endpoint, :new))
+
+      {:error, changeset} ->
+        conn
+        |> render("new_password.html",
+          layout: {GladosWeb.LayoutView, "dark_bg.html"},
+          changeset: changeset,
+          user_id: user.id
+        )
+    end
+  end
+
+  @doc """
+  Path to display form for editing a user
+  """
+  def edit(conn, params) do
+    user =
+      conn
+      |> get_session(:current_user_id)
+      |> Accounts.get_user!()
+
+    info_changeset = Accounts.change_user_info(user)
+    password_changeset = Accounts.change_user_info(user)
+
+    render(
+      conn,
+      "edit.html",
+      user: user,
+      info_changeset: info_changeset,
+      password_changeset: password_changeset
+    )
+  end
+
+  @doc """
+  Path to update a user, given a set of parameters
+  """
+  def update_user_info(conn, %{"user" => user_params}) do
+    user =
+      conn
+      |> get_session(:current_user_id)
+      |> Accounts.get_user!()
+
+    case Accounts.update_user_info(user, user_params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "User updated successfully.")
+        |> redirect(to: Routes.account_path(conn, :edit))
+
+      {:error, %Ecto.Changeset{} = info_changeset} ->
+        password_changeset = Accounts.change_user_info(user)
+
+        render(
+          conn,
+          "edit.html",
+          user: user,
+          info_changeset: info_changeset,
+          password_changeset: password_changeset
+        )
+    end
+  end
+
+  def update_user_password(conn, %{"user" => user_params}) do
+    user =
+      conn
+      |> get_session(:current_user_id)
+      |> Accounts.get_user!()
+
+    case Accounts.update_password(user, user_params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:password_updated, "User password updated successfully.")
+        |> redirect(to: Routes.account_path(conn, :edit))
+
+      {:error, %Ecto.Changeset{} = password_changeset} ->
+        info_changeset = Accounts.change_user_info(user)
+
+        render(
+          conn,
+          "edit.html",
+          user: user,
+          info_changeset: info_changeset,
+          password_changeset: password_changeset
+        )
+    end
+  end
+
+  @doc """
+  Path to delete an account
+  """
+  def delete(conn, %{"id" => id}) do
+    user = Accounts.get_user!(id)
+    {:ok, _user} = Accounts.delete_user(user)
+
+    conn
+    |> put_flash(:info, "User deleted successfully.")
+    |> redirect(to: Routes.member_path(conn, :index))
+  end
+end

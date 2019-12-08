@@ -1,19 +1,27 @@
+<%
+	login_path = Routes.session_path(@conn, :new)
+	new_account_path = Routes.account_path(@conn, :new)
+	forgotten_password_path = Routes.account_path(@conn, :forgotten_password)
+	current_page = @conn.request_path
+%>
+
+
 <div class="w-full">
-    <nav class="flex flex-row justify-between items-end">
-    <a href="/" class="c-guest_nav_elem <%= if @current_path == :login, do: "c-guest_nav_elem--selected" %>">
-        <div> 
-            Login
-        </div>
-    </a>
-    <a href="/registrer" class="c-guest_nav_elem c-guest_nav_elem--middle <%= if @current_path == :new_user, do: "c-guest_nav_elem--selected" %>">
-        <div>
-            Ny Bruker
-        </div>
-    </a>
-    <a href="/glemtpassord" class="c-guest_nav_elem <%= if @current_path == :forgotten_password, do: "c-guest_nav_elem--selected" %>">
-        <div>
-            Glemt passord
-        </div>
-    </a>
-    </nav>
+	<nav class="flex flex-row justify-between items-end">
+	<a href="<%= login_path %>" class="c-guest_nav_elem <%= if current_page == login_path, do: "c-guest_nav_elem--selected" %>">
+		<div>
+			Login
+		</div>
+	</a>
+	<a href="<%= new_account_path %>" class="c-guest_nav_elem c-guest_nav_elem--middle <%= if current_page == new_account_path, do: "c-guest_nav_elem--selected" %>">
+		<div>
+			Ny Bruker
+		</div>
+	</a>
+	<a href="<%= forgotten_password_path %>" class="c-guest_nav_elem <%= if current_page == forgotten_password_path, do: "c-guest_nav_elem--selected" %>">
+		<div>
+			Glemt passord
+		</div>
+	</a>
+	</nav>
 </div>

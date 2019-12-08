@@ -9,37 +9,43 @@ defmodule GladosWeb.Plugs.PlugHelper do
     user_id = get_session(conn, :current_user_id)
     current_user = Accounts.get_user!(user_id)
 
-    case current_user.auth_level do
-      # Member
-      1 ->
-        conn
-        |> redirect(to: Routes.user_path(conn, :index))
+    user_id
+    |> Accounts.get_user!()
+    |> Map.get(:auth_level)
+    |> redir(conn)
+  end
 
-      # Logger
-      2 ->
-        conn
-        |> redirect(to: Routes.logger_path(conn, :logger_transactions))
-        |> halt()
+  # Member
+  defp redir(1, conn) do
+    conn
+    |> redirect(to: Routes.member_path(conn, :index))
+  end
 
-      # Crew
-      3 ->
-        conn
-        |> put_status(:not_found)
-        |> put_view(GladosWeb.ErrorView)
-        |> render("404.html")
+  # Logger
+  defp redir(2, conn) do
+    conn
+    |> redirect(to: Routes.logger_path(conn, :logger_transactions))
+    |> halt()
+  end
 
-      # Chief
-      4 ->
-        conn
-        |> put_status(:not_found)
-        |> put_view(GladosWeb.ErrorView)
-        |> render("404.html")
+  # Admin
+  defp redir(5, conn) do
+    conn
+    |> redirect(to: Routes.admin_path(conn, :index))
+    |> halt()
+  end
 
-      # Admin
-      5 ->
-        conn
-        |> redirect(to: Routes.logger_path(conn, :logger_crew))
-        |> halt()
-    end
+  # Default
+  defp redir(_, conn) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(GladosWeb.ErrorView)
+    |> render("404.html")
+  end
+
+  def get_current_user(conn) do
+    conn
+    |> Plug.Conn.get_session(:current_user_id)
+    |> Accounts.get_user!()
   end
 end

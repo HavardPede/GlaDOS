@@ -1,0 +1,15 @@
+<div class="mt-2 ml-4">
+  <% paths = get_paths(@conn.request_path)%>
+
+  <%= unless @conn.request_path == "/"  do %>
+    <a href="<%= Routes.url(@conn)  %>/ "> Root > </a>
+  <% end%>
+
+  
+  <%= for path <- paths do %>
+    <%= unless Integer.parse(path) != :error || String.length(path) == 32 do %>
+      <a href="<%= get_full_url(@conn, path) %>"> <%= path %></a>
+      <%= unless List.last(paths) == path, do: " > " %>
+    <% end %>
+  <% end %>
+</div>

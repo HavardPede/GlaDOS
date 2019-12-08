@@ -8,7 +8,7 @@ defmodule GladosWeb.Plugs.Guest do
   def call(conn, _opts) do
     if Plug.Conn.get_session(conn, :current_user_id) do
       conn
-      |> redirect(to: Routes.user_path(conn, :index))
+      |> redirect(to: Routes.member_path(conn, :index))
       |> halt()
     else
       conn

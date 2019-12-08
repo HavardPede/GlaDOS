@@ -25,8 +25,9 @@ defmodule GladosWeb.SessionController do
         if(user.verified) do
           conn
           |> put_session(:current_user_id, user.id)
+          |> put_session(:current_user_auth, user.auth_level)
           |> configure_session(renew: true)
-          |> redirect(to: Routes.user_path(Endpoint, :index))
+          |> redirect(to: Routes.member_path(Endpoint, :index))
         else
           conn
           |> put_session(:unverified_user, user.id)
@@ -35,7 +36,7 @@ defmodule GladosWeb.SessionController do
             [
               "Du er ikke verifisert!  ",
               link("Klikk her for å sende en ny email",
-                to: Routes.user_path(Endpoint, :send_email_verification),
+                to: Routes.account_path(Endpoint, :send_email_verification),
                 class: "dark_blue"
               ),
               "."
