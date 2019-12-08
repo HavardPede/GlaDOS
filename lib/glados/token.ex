@@ -1,10 +1,9 @@
 defmodule Glados.Token do
-
-  alias Glados.Accounts.User
-
   @moduledoc """
   Handles creating and validating tokens.
   """
+
+  alias Glados.Accounts.User
 
   @account_verification_salt "Salt og pepper, Baby!!"
   @set_new_password_salt "sprinkle some 5a1t"

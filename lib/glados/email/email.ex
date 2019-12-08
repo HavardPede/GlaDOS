@@ -1,9 +1,9 @@
 defmodule Glados.Email do
-  import Bamboo.Email
-
   @moduledoc """
   Email templates for sending email.
   """
+
+  import Bamboo.Email
 
   def verification_email(name, email, verification_url) do
     new_email(
@@ -21,7 +21,8 @@ defmodule Glados.Email do
       from: "noreply@eslgcrew.no",
       subject: "Sett nytt passord",
       html_body: "Brukernavn: <strong>#{username}</strong>",
-      html_body: "Følg denne lenken for å sette et nytt passord for din profil: #{verification_url}"
+      html_body:
+        "Følg denne lenken for å sette et nytt passord for din profil: #{verification_url}"
     )
   end
 

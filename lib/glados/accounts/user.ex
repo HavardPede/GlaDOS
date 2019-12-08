@@ -1,5 +1,10 @@
 defmodule Glados.Accounts.User do
+  @moduledoc """
+  Defines the schema for an account.
+  """
+
   use Ecto.Schema
+
   import Ecto.Changeset
   import Kernel
   alias Glados.Accounts.Encryption
@@ -198,7 +203,7 @@ defmodule Glados.Accounts.User do
   defp validate_postcode(%{changes: %{postcode: _}} = changeset) do
     changeset
     |> validate_number(:postcode,
-      less_than: 10000,
+      less_than: 10_000,
       greater_than: 999,
       message: "Postnummer må være en 4-sifret kode."
     )

@@ -11,12 +11,12 @@ defmodule GladosWeb.AdminController do
     events = Events.get_events()
     render(conn, "index.html", events: events)
   end
-    
+
   @doc """
     Displays the list of events.
   """
   def events(conn, _params) do
-    events = Glados.Events.get_events
+    events = Glados.Events.get_events()
     render(conn, "events.html", events: events)
   end
 
@@ -31,16 +31,16 @@ defmodule GladosWeb.AdminController do
       {:ok, _} ->
         conn
         |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :events))
+
       {:error, changeset} ->
         active_event = Events.get_active_event()
         render(conn, "new_event.html", changeset: changeset, active_event: active_event)
-   end
+    end
   end
 
   def edit_event(conn, %{"event_id" => event_id}) do
     with {:ok, event} <- Events.get_event(event_id),
-      active_event <- Events.get_active_event()
-    do
+         active_event <- Events.get_active_event() do
       changeset = Events.change_event(event)
       render(conn, "update_event.html", changeset: changeset, active_event: active_event)
     else
@@ -53,18 +53,19 @@ defmodule GladosWeb.AdminController do
 
   def update_event(conn, %{"event" => event_params, "event_id" => event_id}) do
     with {:ok, event} <- Events.get_event(event_id),
-      {:ok, _updated_event} <- Events.update_event(event, event_params) do
+         {:ok, _updated_event} <- Events.update_event(event, event_params) do
+      conn
+      |> put_flash(:info, "Eventet har blitt oppdatert.")
+      |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :events))
+    else
+      {:error, :nil_value} ->
         conn
-        |> put_flash(:info, "Eventet har blitt oppdatert.")
+        |> put_flash(:error, "En feil oppstod. Eventet har ikke blitt oppdatert.")
         |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :events))
-      else
-        {:error, :nil_value} -> 
-          conn
-          |> put_flash(:error, "En feil oppstod. Eventet har ikke blitt oppdatert.")
-          |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :events))
-        {:error, changeset} ->
-          active_event = Events.get_active_event()
-          render(conn, "update_event.html", changeset: changeset, active_event: active_event)
-      end
+
+      {:error, changeset} ->
+        active_event = Events.get_active_event()
+        render(conn, "update_event.html", changeset: changeset, active_event: active_event)
+    end
   end
 end

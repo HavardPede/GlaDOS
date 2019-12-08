@@ -8,11 +8,12 @@ defmodule GladosWeb.CommonView do
       "Kontroll panel" => Routes.admin_path(GladosWeb.Endpoint, :index)
     }
   end
+
   def get_nav_elements(_), do: %{}
 
   def get_paths(request_path) when Kernel.is_bitstring(request_path) do
     String.split(request_path, "/")
-    |> Enum.filter(& &1 != "")
+    |> Enum.filter(&(&1 != ""))
   end
 
   @doc """
@@ -23,13 +24,11 @@ defmodule GladosWeb.CommonView do
     Output: "www.glados.com/user"
   """
   def get_full_url(conn, path) do
-     Routes.url(conn) <> "/" <> 
-     (
-       conn.request_path
-      |> get_paths()
-      |> Helper.remove_trailing_elements(path)
-      |> Enum.join("/")
-    )
-
+    Routes.url(conn) <>
+      "/" <>
+      (conn.request_path
+       |> get_paths()
+       |> Helper.remove_trailing_elements(path)
+       |> Enum.join("/"))
   end
 end

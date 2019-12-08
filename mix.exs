@@ -47,7 +47,8 @@ defmodule Glados.MixProject do
       {:bcrypt_elixir, "~> 1.0"},
       {:bamboo, "~> 1.3"},
       {:bamboo_smtp, "~> 2.0.0"},
-      {:timex, "~> 3.5"}
+      {:timex, "~> 3.5"},
+      {:credo, "~>1.1", only: [:dev, :test], runtime: false}
     ]
   end
 

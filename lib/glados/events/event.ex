@@ -1,12 +1,14 @@
 defmodule Glados.Events.Event do
+  @moduledoc """
+  Defines the schema for an event.
+  """
+
   use Ecto.Schema
 
   import Ecto.Changeset
-
   alias Glados.Accounts.User
-  alias Glados.Events.EventCrew
   alias Glados.Events
-
+  alias Glados.Events.EventCrew
 
   @primary_key {:id, :integer, auto_generate: false}
   schema "event" do
@@ -34,14 +36,17 @@ defmodule Glados.Events.Event do
   end
 
   defp validate_dates(%{changes: %{start: start_date, end: end_date}} = changeset) do
-   validate_dates_helper(start_date, end_date, changeset)
+    validate_dates_helper(start_date, end_date, changeset)
   end
+
   defp validate_dates(%{changes: %{end: end_date}} = changeset) do
     validate_dates_helper(changeset.data.start, end_date, changeset)
   end
+
   defp validate_dates(%{changes: %{start: start_date}} = changeset) do
     validate_dates_helper(start_date, changeset.data.end, changeset)
   end
+
   defp validate_dates(changeset), do: changeset
 
   defp validate_dates_helper(start_date, end_date, changeset) do
@@ -52,13 +57,14 @@ defmodule Glados.Events.Event do
         changeset,
         :end,
         "Slutt dato må være etter start dato."
-        )
+      )
     end
   end
 
   defp validate_active(%{changes: %{active: active}} = changeset) do
     if active do
       event = Events.get_active_event()
+
       if event.id == changeset.data.id do
         changeset
       else
@@ -70,5 +76,6 @@ defmodule Glados.Events.Event do
       end
     end
   end
+
   defp validate_active(changeset), do: changeset
 end

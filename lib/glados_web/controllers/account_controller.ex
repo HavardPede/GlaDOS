@@ -1,11 +1,10 @@
 defmodule GladosWeb.AccountController do
-  use GladosWeb, :controller
-
   @moduledoc """
   Controller for handling actions related to a unique user.
   """
+  use GladosWeb, :controller
 
-  alias Glados.{Accounts, Verify}
+  alias Glados.{Accounts, EmailSender}
   alias Glados.Accounts.User
   alias GladosWeb.Endpoint
 
@@ -45,7 +44,7 @@ defmodule GladosWeb.AccountController do
       user_id ->
         user_id
         |> Accounts.get_user!()
-        |> Verify.send_verification()
+        |> EmailSender.send_verification()
 
         render(conn, "sent_verify.html", layout: {GladosWeb.LayoutView, "dark_bg.html"})
     end
@@ -92,7 +91,7 @@ defmodule GladosWeb.AccountController do
   def send_email_for_new_password(conn, %{"email" => email}) do
     case Glados.Accounts.get_user_by_email(email) do
       {:ok, user} ->
-        Verify.send_password_reset(user)
+        EmailSender.send_password_reset(user)
 
         conn
         |> put_flash(:info, "Email er sendt.")
@@ -170,21 +169,22 @@ defmodule GladosWeb.AccountController do
   @doc """
   Path to update a user, given a set of parameters
   """
-  def update_user_info(conn, %{"user" => %{"name" => _} = user_params}) do
+  def update_user(conn, %{"user" => %{"name" => _} = user_params}) do
     user = get_user(conn)
 
     Accounts.update_user_info(user, user_params)
     |> case do
       {:ok, _user} ->
         conn
-        |> put_flash(:info, "User updated successfully.")
+        |> put_flash(:info_updated, "Bruker info ble oppdatert.")
         |> redirect(to: Routes.account_path(conn, :edit))
 
       {:error, %Ecto.Changeset{} = info_changeset} ->
         password_changeset = Accounts.change_user_info(user)
 
-        render(
-          conn,
+        conn
+        |> put_flash(:info_not_updated, "Bruker info ble ikke oppdatert.")
+        |> render(
           "edit.html",
           user: user,
           info_changeset: info_changeset,
@@ -193,7 +193,7 @@ defmodule GladosWeb.AccountController do
     end
   end
 
-  def update_user_info(conn, %{"user" => %{"old_password" => _old_password} = user_params}) do
+  def update_user(conn, %{"user" => %{"old_password" => _old_password} = user_params}) do
     user = get_user(conn)
 
     case Accounts.update_password(user, user_params) do

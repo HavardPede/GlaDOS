@@ -1,4 +1,9 @@
 defmodule Glados.Logger.CrewTransactions do
+  @moduledoc """
+  Schema representing a crew transation in the cafeteria. 
+  The logger has the main responsibility over this table.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
   import Glados.Logger.LoggerCrew

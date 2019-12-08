@@ -1,9 +1,8 @@
 defmodule Glados.Events do
-  
   @moduledoc """
   The context for all functions related to events.
   """
-  
+
   alias Glados.Events.Event
   alias Glados.Repo
   alias Glados.Utils
@@ -42,7 +41,7 @@ defmodule Glados.Events do
     iex > get_events()
     []
   """
-  def get_events() do
+  def get_events do
     Repo.all(Event)
   end
 
@@ -79,7 +78,7 @@ defmodule Glados.Events do
     |> Repo.update()
   end
 
-  def get_active_event() do
-    Repo.get_by(Event, [active: true])
+  def get_active_event do
+    Repo.get_by(Event, active: true)
   end
 end

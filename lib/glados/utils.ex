@@ -9,7 +9,7 @@ defmodule Glados.Utils do
   ## Example
   iex > nillable(nil)
   {:error, :nil_value}
-  
+    
   iex > nillable(:some_value)
   {:ok, :some_value}
   """

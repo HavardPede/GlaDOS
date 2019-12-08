@@ -1,5 +1,4 @@
 defmodule Glados.Helper do
-   
   @moduledoc """
   This modules defines a lot of nice to have functions
   """
@@ -22,10 +21,10 @@ defmodule Glados.Helper do
 
   # Recursive function to remove the head of the list untill element is found
   defp find_element_by_removing_head(list, element) do
-    if(hd(list) == element) do
+    if hd(list) == element do
       list
     else
-      list 
+      list
       |> tl()
       |> find_element_by_removing_head(element)
     end

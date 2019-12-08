@@ -1,9 +1,9 @@
 defmodule GladosWeb.SessionController do
-  use GladosWeb, :controller
-
   @moduledoc """
   Controller for handling actions related to a login session.
   """
+
+  use GladosWeb, :controller
 
   import Phoenix.HTML.Link
   alias Glados.Accounts.Auth
@@ -22,7 +22,7 @@ defmodule GladosWeb.SessionController do
   def create(conn, %{"session" => auth_params}) do
     case Auth.login(auth_params) do
       {:ok, user} ->
-        if(user.verified) do
+        if user.verified do
           conn
           |> put_session(:current_user_id, user.id)
           |> put_session(:current_user_auth, user.auth_level)

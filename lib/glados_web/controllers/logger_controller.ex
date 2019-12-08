@@ -1,8 +1,8 @@
 defmodule GladosWeb.LoggerController do
   use GladosWeb, :controller
-  alias Glados.Logger.LoggerCrew
-  alias Glados.Logger.CrewTransactions
+
   alias Glados.Accounts
+  alias Glados.Logger.{CrewTransactions, LoggerCrew}
 
   @doc """
   Displays all crew members that are linked with the logger
@@ -33,7 +33,7 @@ defmodule GladosWeb.LoggerController do
       |> Enum.reverse()
 
     transactions =
-      if(logger?) do
+      if logger? do
         Enum.take(transactions, 20)
       else
         transactions
@@ -52,7 +52,9 @@ defmodule GladosWeb.LoggerController do
   end
 
   def create_transaction(conn, %{"crew_transactions" => transaction}) do
-    if(Glados.Logs.logger_crew_exists?(transaction["logger_crew_id"])) do
+    transaction["logger_crew_id"]
+    |> Glados.Logs.logger_crew_exists?()
+    |> if do
       case Glados.Logs.create_logger_transaction(transaction) do
         {:ok, _transaction} ->
           conn

@@ -1,4 +1,8 @@
 defmodule GladosWeb.Plugs.Member do
+  @moduledoc """
+  Plug that halts non-member accounts. Elevated member accounts (ie crew) still count as member.
+  """
+
   alias GladosWeb.Plugs.PlugHelper
 
   def init(opts), do: opts
@@ -8,7 +12,7 @@ defmodule GladosWeb.Plugs.Member do
   def call(conn, _opts) do
     current_user = PlugHelper.get_current_user(conn)
 
-    if(is_a_member?(current_user)) do
+    if is_a_member?(current_user) do
       conn
     else
       conn

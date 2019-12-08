@@ -108,7 +108,7 @@ defmodule GladosWeb.AccountControllerTest do
         Repo.all(Glados.Accounts.User)
         |> Enum.map(& &1.name)
 
-      assert length(new_users) == 0
+      assert Enum.empty?(new_users)
     end
 
     test "renders email verification page when valid user is added", %{conn: conn} do

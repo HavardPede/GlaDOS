@@ -1,16 +1,35 @@
 defmodule GladosWeb.Plugs.PlugHelper do
+  @moduledoc """
+  Defines a set of helper functions for plugs.
+  """
+
   import Plug.Conn
   import Phoenix.Controller
 
   alias GladosWeb.Router.Helpers, as: Routes
-  alias Glados.Accounts
+  alias Glados.{Accounts, Utils}
 
   def redirect(conn) do
     conn
     |> get_session(:current_user_id)
+    |> Utils.nillable()
+    |> case do
+      {:ok, user_id} -> redirect_user(user_id)
+      {:error, _} -> redirect_guest()
+    end
+  end
+
+  defp redirect_user(id) do
+    id
     |> Accounts.get_user!()
     |> Map.get(:auth_level)
     |> redir(conn)
+  end
+
+  defp redirect_guest do
+    conn
+    |> redirect(to: Routes.session_path(conn, :new))
+    |> halt()
   end
 
   # Member

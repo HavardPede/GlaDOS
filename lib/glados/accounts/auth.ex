@@ -1,4 +1,8 @@
 defmodule Glados.Accounts.Auth do
+  @moduledoc """
+  Handles user authentication. Mainly logging in, and checking if a user is logged in.
+  """
+
   alias Glados.Accounts.{Encryption, User}
   alias Glados.Repo
 

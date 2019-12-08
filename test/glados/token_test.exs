@@ -34,14 +34,15 @@ defmodule Glados.TokenTest do
   defp create_unverified_user(_) do
     user = fixture()
     {:ok, user: user}
-  end  
-   
+  end
+
   describe "valid user verification tokens" do
     setup [:create_unverified_user]
+
     test "The generated verification token will verify an account", %{user: user} do
       token = Token.generate_new_account_token(user)
       {:ok, user_id} = Token.verify_new_account_token(token)
       assert user_id == user.id
     end
-  end 
+  end
 end
