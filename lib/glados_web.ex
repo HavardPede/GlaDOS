@@ -40,6 +40,7 @@ defmodule GladosWeb do
       use Phoenix.HTML
 
       import GladosWeb.ErrorHelpers
+      alias GladosWeb.IconsView, as: Icons
       alias GladosWeb.Router.Helpers, as: Routes
     end
   end

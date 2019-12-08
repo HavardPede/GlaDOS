@@ -5,6 +5,7 @@
 @import "./logger.css";
 @import "./admin.css";
 @import "./error.css";
+@import "./edit.css";
 
 @tailwind base;
 @tailwind components;
