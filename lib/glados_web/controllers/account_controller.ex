@@ -4,8 +4,9 @@ defmodule GladosWeb.AccountController do
   """
   use GladosWeb, :controller
 
+  alias Ecto.Changeset
+  alias Glados.Accounts.{Encryption, User}
   alias Glados.{Accounts, EmailSender}
-  alias Glados.Accounts.User
   alias GladosWeb.Endpoint
 
   @doc """
@@ -152,10 +153,10 @@ defmodule GladosWeb.AccountController do
   Path to display form for editing a user
   """
   def edit(conn, _params) do
-    user = get_user(conn)
+    user = conn.assigns.user
 
-    info_changeset = Accounts.change_user_info(user)
-    password_changeset = Accounts.change_user_info(user)
+    info_changeset = Accounts.change_info(user)
+    password_changeset = Accounts.change_password(user)
 
     render(
       conn,
@@ -170,7 +171,7 @@ defmodule GladosWeb.AccountController do
   Path to update a user, given a set of parameters
   """
   def update_user(conn, %{"user" => %{"name" => _} = user_params}) do
-    user = get_user(conn)
+    user = conn.assigns.user
 
     Accounts.update_user_info(user, user_params)
     |> case do
@@ -180,7 +181,7 @@ defmodule GladosWeb.AccountController do
         |> redirect(to: Routes.account_path(conn, :edit))
 
       {:error, %Ecto.Changeset{} = info_changeset} ->
-        password_changeset = Accounts.change_user_info(user)
+        password_changeset = Accounts.change_password(user)
 
         conn
         |> put_flash(:info_not_updated, "Bruker info ble ikke oppdatert.")
@@ -193,27 +194,45 @@ defmodule GladosWeb.AccountController do
     end
   end
 
-  def update_user(conn, %{"user" => %{"old_password" => _old_password} = user_params}) do
-    user = get_user(conn)
+  def update_user(conn, %{"user" => %{"old_password" => old_password} = password_params}) do
+    user = conn.assigns.user
 
-    case Accounts.update_password(user, user_params) do
-      {:ok, user} ->
+    if Encryption.valid_password?(user, old_password) do
+      update_password_and_render(conn, user, password_params)
+    else
+      info_changeset = Accounts.change_info(user)
+      password_changeset = wrong_pw_changeset(user, password_params)
+      not_updated_password(conn, info_changeset, password_changeset)
+    end
+  end
+
+  defp update_password_and_render(conn, %User{} = user, params) do
+    case Accounts.update_password(user, params) do
+      {:ok, _user} ->
         conn
         |> put_flash(:password_updated, "Passordet ble oppdatert.")
         |> redirect(to: Routes.account_path(conn, :edit))
 
       {:error, %Ecto.Changeset{} = password_changeset} ->
-        info_changeset = Accounts.change_user_info(user)
-
-        conn
-        |> put_flash(:password_not_updated, "Passordet ble ikke oppdatert.")
-        |> render(
-          "edit.html",
-          user: user,
-          info_changeset: info_changeset,
-          password_changeset: password_changeset
-        )
+        info_changeset = Accounts.change_info(user)
+        not_updated_password(conn, info_changeset, password_changeset)
     end
+  end
+
+  defp wrong_pw_changeset(user, params) do
+    Accounts.change_password(user, params)
+    |> Changeset.add_error(:old_password, "Dette passordet stemmer ikke.")
+  end
+
+  defp not_updated_password(conn, info_changeset, password_changeset) do
+    conn
+    |> put_flash(:password_not_updated, "Passordet ble ikke oppdatert.")
+    |> render(
+      "edit.html",
+      user: info_changeset.data,
+      info_changeset: info_changeset,
+      password_changeset: password_changeset
+    )
   end
 
   defp render_404(conn) do
@@ -221,11 +240,5 @@ defmodule GladosWeb.AccountController do
     |> put_status(:not_found)
     |> put_view(GladosWeb.ErrorView)
     |> render("404.html")
-  end
-
-  defp get_user(conn) do
-    conn
-    |> get_session(:current_user_id)
-    |> Accounts.get_user!()
   end
 end

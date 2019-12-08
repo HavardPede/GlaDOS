@@ -1,7 +1,6 @@
 defmodule GladosWeb.LoggerController do
   use GladosWeb, :controller
 
-  alias Glados.Accounts
   alias Glados.Logger.{CrewTransactions, LoggerCrew}
 
   @doc """
@@ -20,13 +19,10 @@ defmodule GladosWeb.LoggerController do
   end
 
   def logger_transactions(conn, _params) do
-    current_user =
-      Plug.Conn.get_session(conn, :current_user_id)
-      |> Accounts.get_user!()
-
+    user = conn.assigns.user
     changeset = CrewTransactions.changeset(%CrewTransactions{}, %{})
 
-    logger? = current_user.auth_level == 2
+    logger? = user.auth_level == 2
 
     transactions =
       Glados.Logs.get_all_crew_transactions()

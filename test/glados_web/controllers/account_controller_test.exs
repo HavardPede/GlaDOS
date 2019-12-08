@@ -1,43 +1,22 @@
 defmodule GladosWeb.AccountControllerTest do
   use GladosWeb.ConnCase
 
-  alias Glados.{Accounts, Repo, Token}
+  alias Glados.Accounts.Encryption
+  alias Glados.{Repo, Token}
+  alias Helpers.AccountHelper
 
-  @user1_id Ecto.UUID.generate()
+  @extra_valid_password "SomeExtraPassw0rd"
+  @valid_name "Tommy Shelby"
+  @invalid_name "invalid"
+  @invalid_email "invalid"
+  @invalid_phone "123"
+  @invalid_address ""
+  @invalid_postcode "ab"
+  @invalid_day "60"
+  @invalid_month "60"
+  @invalid_year "60"
 
-  @valid_user_attrs %{
-    id: @user1_id,
-    name: "Test Name",
-    username: "TestUsername",
-    postcode: 1234,
-    phone_number: "123 45 678",
-    day: "01",
-    month: "01",
-    year: "2001",
-    email: "test@email.com",
-    address: "Test address",
-    auth_level: 1,
-    verified: true,
-    password: "testPassword123",
-    password_confirmation: "testPassword123"
-  }
-
-  @unverified_user_attrs %{
-    @valid_user_attrs
-    | verified: false
-  }
-
-  @invalid_user_attrs %{email: nil, name: nil, username: nil}
-
-  def fixture(:user) do
-    {:ok, user} = Accounts.create_user(@valid_user_attrs)
-    user
-  end
-
-  def fixture(:unverified_user) do
-    {:ok, user} = Accounts.create_user(@unverified_user_attrs)
-    user
-  end
+  @not_valid_info_flash "Bruker info ble ikke oppdatert."
 
   describe "create user - " do
     test "Adds user to database when using valid data", %{conn: conn} do
@@ -45,7 +24,9 @@ defmodule GladosWeb.AccountControllerTest do
         Repo.all(Glados.Accounts.User)
         |> Enum.count()
 
-      post(conn, Routes.account_path(conn, :create), user: @valid_user_attrs)
+      post(conn, Routes.account_path(conn, :create),
+        user: AccountHelper.get_valid_user_attributes()
+      )
 
       user_count =
         Repo.all(Glados.Accounts.User)
@@ -56,40 +37,52 @@ defmodule GladosWeb.AccountControllerTest do
 
     test "Does not add user to databaes when using invalid data", %{conn: conn} do
       post(conn, Routes.account_path(conn, :create),
-        user: %{@valid_user_attrs | name: "invalid_name"}
-      )
-
-      post(conn, Routes.account_path(conn, :create),
-        user: %{@valid_user_attrs | name: "invalid username", username: "inv"}
-      )
-
-      post(conn, Routes.account_path(conn, :create),
-        user: %{@valid_user_attrs | name: "invalid postcode", postcode: 0}
-      )
-
-      post(conn, Routes.account_path(conn, :create),
-        user: %{@valid_user_attrs | name: "invalid phone", phone_number: "123"}
-      )
-
-      post(conn, Routes.account_path(conn, :create),
-        user: %{@valid_user_attrs | name: "invalid day", day: "32"}
-      )
-
-      post(conn, Routes.account_path(conn, :create),
-        user: %{@valid_user_attrs | name: "invalid month", month: "13"}
-      )
-
-      post(conn, Routes.account_path(conn, :create),
-        user: %{@valid_user_attrs | name: "invalid year", year: "100"}
-      )
-
-      post(conn, Routes.account_path(conn, :create),
-        user: %{@valid_user_attrs | name: "invalid email", email: "invalid"}
+        user: %{AccountHelper.get_valid_user_attributes() | name: "invalid_name"}
       )
 
       post(conn, Routes.account_path(conn, :create),
         user: %{
-          @valid_user_attrs
+          AccountHelper.get_valid_user_attributes()
+          | name: "invalid username",
+            username: "inv"
+        }
+      )
+
+      post(conn, Routes.account_path(conn, :create),
+        user: %{AccountHelper.get_valid_user_attributes() | name: "invalid postcode", postcode: 0}
+      )
+
+      post(conn, Routes.account_path(conn, :create),
+        user: %{
+          AccountHelper.get_valid_user_attributes()
+          | name: "invalid phone",
+            phone_number: "123"
+        }
+      )
+
+      post(conn, Routes.account_path(conn, :create),
+        user: %{AccountHelper.get_valid_user_attributes() | name: "invalid day", day: "32"}
+      )
+
+      post(conn, Routes.account_path(conn, :create),
+        user: %{AccountHelper.get_valid_user_attributes() | name: "invalid month", month: "13"}
+      )
+
+      post(conn, Routes.account_path(conn, :create),
+        user: %{AccountHelper.get_valid_user_attributes() | name: "invalid year", year: "100"}
+      )
+
+      post(conn, Routes.account_path(conn, :create),
+        user: %{
+          AccountHelper.get_valid_user_attributes()
+          | name: "invalid email",
+            email: "invalid"
+        }
+      )
+
+      post(conn, Routes.account_path(conn, :create),
+        user: %{
+          AccountHelper.get_valid_user_attributes()
           | name: "invalid confirmation password",
             password_confirmation: "invalid"
         }
@@ -97,7 +90,7 @@ defmodule GladosWeb.AccountControllerTest do
 
       post(conn, Routes.account_path(conn, :create),
         user: %{
-          @valid_user_attrs
+          AccountHelper.get_valid_user_attributes()
           | name: "invalid password",
             password: "123",
             password_confirmation: "123"
@@ -112,14 +105,22 @@ defmodule GladosWeb.AccountControllerTest do
     end
 
     test "renders email verification page when valid user is added", %{conn: conn} do
-      conn = post(conn, Routes.account_path(conn, :create), user: @valid_user_attrs)
+      conn =
+        post(conn, Routes.account_path(conn, :create),
+          user: AccountHelper.get_valid_user_attributes()
+        )
+
       assert html_response(conn, 302)
 
       assert redirected_to(conn) == Routes.account_path(conn, :send_email_verification)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.account_path(conn, :create), user: @invalid_user_attrs)
+      conn =
+        post(conn, Routes.account_path(conn, :create),
+          user: AccountHelper.get_invalid_user_attributes()
+        )
+
       assert html_response(conn, 200) =~ "Lag en ny bruker for å søke crew!"
     end
   end
@@ -130,7 +131,10 @@ defmodule GladosWeb.AccountControllerTest do
     test "Using valid authentication logs the user in", %{conn: conn, user: _user} do
       conn =
         post(conn, Routes.session_path(conn, :create),
-          session: %{username: @valid_user_attrs.username, password: @valid_user_attrs.password}
+          session: %{
+            username: AccountHelper.get_valid_user_attributes().username,
+            password: AccountHelper.get_valid_user_attributes().password
+          }
         )
 
       assert redirected_to(conn) == Routes.member_path(conn, :index)
@@ -139,7 +143,10 @@ defmodule GladosWeb.AccountControllerTest do
     test "Using invalid authentication does not log the user in", %{conn: conn, user: _user} do
       conn =
         post(conn, Routes.session_path(conn, :create),
-          session: %{username: @valid_user_attrs.username, password: "Invalid password"}
+          session: %{
+            username: AccountHelper.get_valid_user_attributes().username,
+            password: "Invalid password"
+          }
         )
 
       redirected_path = redirected_to(conn, 302)
@@ -169,8 +176,8 @@ defmodule GladosWeb.AccountControllerTest do
       conn =
         post(conn, Routes.session_path(conn, :create),
           session: %{
-            username: @unverified_user_attrs.username,
-            password: @unverified_user_attrs.password
+            username: AccountHelper.get_unverified_user_attributes().username,
+            password: AccountHelper.get_unverified_user_attributes().password
           }
         )
 
@@ -190,8 +197,8 @@ defmodule GladosWeb.AccountControllerTest do
       conn =
         post(conn, Routes.session_path(conn, :create),
           session: %{
-            username: @unverified_user_attrs.username,
-            password: @unverified_user_attrs.password
+            username: AccountHelper.get_unverified_user_attributes().username,
+            password: AccountHelper.get_unverified_user_attributes().password
           }
         )
 
@@ -236,13 +243,166 @@ defmodule GladosWeb.AccountControllerTest do
     end
   end
 
-  defp create_user(_) do
-    user = fixture(:user)
-    {:ok, user: user}
+  describe "Edit account info -" do
+    setup [:create_user, :login_user]
+
+    test "when logged in, user can access edit page", %{conn: conn} do
+      conn = get(conn, Routes.account_path(conn, :edit))
+      assert html_response(conn, 200) =~ "Bruker Info"
+    end
+
+    test "allowed to edit with valid data", %{conn: conn} do
+      conn =
+        conn
+        |> put(Routes.account_path(conn, :update_user),
+          user: %{name: @valid_name}
+        )
+
+      assert html_response(conn, 200) =~ @valid_name
+    end
+
+    test "user cant update username", %{conn: conn, user: %{id: user_id}} do
+      peaky_username = "PeakyBlinder123"
+
+      put(conn, Routes.account_path(conn, :update_user),
+        user: %{name: @valid_name, username: peaky_username}
+      )
+
+      user = Glados.Accounts.get_user!(user_id)
+      refute user.username == peaky_username
+    end
+
+    test "Name must be valid", %{conn: conn} do
+      conn = put(conn, Routes.account_path(conn, :update_user), user: %{name: @invalid_name})
+
+      refute html_response(conn, 200) =~ @not_valid_info_flash
+    end
+
+    test "Email must be valid", %{conn: conn} do
+      conn =
+        put(conn, Routes.account_path(conn, :update_user),
+          user: %{name: @valid_name, email: @invalid_email}
+        )
+
+      refute html_response(conn, 200) =~ @not_valid_info_flash
+    end
+
+    test "Phone number must be valid", %{conn: conn} do
+      conn =
+        put(conn, Routes.account_path(conn, :update_user),
+          user: %{name: @valid_name, phone: @invalid_phone}
+        )
+
+      refute html_response(conn, 200) =~ @not_valid_info_flash
+    end
+
+    test "Address must be valid", %{conn: conn} do
+      conn =
+        put(conn, Routes.account_path(conn, :update_user),
+          user: %{name: @valid_name, address: @invalid_address}
+        )
+
+      refute html_response(conn, 200) =~ @not_valid_info_flash
+    end
+
+    test "Postcode must be valid", %{conn: conn} do
+      conn =
+        put(conn, Routes.account_path(conn, :update_user),
+          user: %{name: @valid_name, Postcode: @invalid_postcode}
+        )
+
+      refute html_response(conn, 200) =~ @not_valid_info_flash
+    end
+
+    test "Dob must be valid", %{conn: conn} do
+      conn =
+        put(conn, Routes.account_path(conn, :update_user),
+          user: %{
+            name: @valid_name,
+            day: @invalid_day,
+            month: @invalid_month,
+            year: @invalid_year
+          }
+        )
+
+      refute html_response(conn, 200) =~ @not_valid_info_flash
+    end
   end
 
-  defp create_unverified_user(_) do
-    user = fixture(:unverified_user)
-    {:ok, user: user}
+  describe "Edit account password -" do
+    setup [:create_user, :login_user]
+
+    test "is allowed with valid parameters", %{conn: conn, user: %{id: user_id}} do
+      conn =
+        conn
+        |> put(Routes.account_path(conn, :update_user),
+          user: %{
+            old_password: AccountHelper.get_valid_user_attributes().password,
+            password: @extra_valid_password,
+            password_confirmation: @extra_valid_password
+          }
+        )
+
+      redirected_path = redirected_to(conn, 302)
+      conn = get(recycle(conn), redirected_path)
+
+      assert html_response(conn, 200) =~ "Passordet ble oppdatert."
+
+      user_id
+      |> Glados.Accounts.get_user!()
+      |> Encryption.valid_password?(@extra_valid_password)
+      |> assert
+    end
+
+    test "not allowed with wrong old_password", %{conn: conn, user: %{id: user_id}} do
+      conn =
+        conn
+        |> put(Routes.account_path(conn, :update_user),
+          user: %{
+            old_password: "wrong password",
+            password: @extra_valid_password,
+            password_confirmation: @extra_valid_password
+          }
+        )
+
+      refute html_response(conn, 200) =~ "Passordet ble oppdatert."
+
+      user_id
+      |> Glados.Accounts.get_user!()
+      |> Encryption.valid_password?(@extra_valid_password)
+      |> refute
+    end
+
+    test "not allowed with mismatching confirmation password", %{conn: conn} do
+      conn =
+        conn
+        |> put(Routes.account_path(conn, :update_user),
+          user: %{
+            old_password: AccountHelper.get_valid_user_attributes().password,
+            password: @extra_valid_password,
+            password_confirmation: "mismatching Passw0rd"
+          }
+        )
+
+      refute html_response(conn, 200) =~ "Passordet ble oppdatert."
+    end
+
+    test "not allowed when password is too short", %{conn: conn} do
+      conn =
+        conn
+        |> put(Routes.account_path(conn, :update_user),
+          user: %{
+            old_password: AccountHelper.get_valid_user_attributes().password,
+            password: "shortPw",
+            password_confirmation: "shortPw"
+          }
+        )
+
+      refute html_response(conn, 200) =~ "Passordet ble oppdatert."
+    end
   end
+
+  defp create_user(params), do: AccountHelper.create_user(params)
+  defp create_unverified_user(params), do: AccountHelper.create_unverified_user(params)
+  defp login_user(params), do: AccountHelper.login_user(params)
 end

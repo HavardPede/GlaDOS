@@ -117,15 +117,15 @@ defmodule Glados.Accounts do
     User.changeset(user, %{})
   end
 
-  def change_user_info(%User{} = user) do
-    User.user_info_changeset(user, %{})
+  def change_info(%User{} = user, params \\ %{}) do
+    User.user_info_changeset(user, params)
   end
 
   @doc """
   Returns a changeset for setting the new password on an account
   """
-  def change_password(%User{} = user) do
-    User.password_changeset(user, %{})
+  def change_password(%User{} = user, params \\ %{}) do
+    User.password_changeset(user, params)
   end
 
   @doc """

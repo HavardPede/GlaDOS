@@ -14,19 +14,19 @@ defmodule GladosWeb.Plugs.PlugHelper do
     |> get_session(:current_user_id)
     |> Utils.nillable()
     |> case do
-      {:ok, user_id} -> redirect_user(user_id)
-      {:error, _} -> redirect_guest()
+      {:ok, user_id} -> redirect_user(conn, user_id)
+      {:error, _} -> redirect_guest(conn)
     end
   end
 
-  defp redirect_user(id) do
+  defp redirect_user(conn, id) do
     id
     |> Accounts.get_user!()
     |> Map.get(:auth_level)
     |> redir(conn)
   end
 
-  defp redirect_guest do
+  defp redirect_guest(conn) do
     conn
     |> redirect(to: Routes.session_path(conn, :new))
     |> halt()
