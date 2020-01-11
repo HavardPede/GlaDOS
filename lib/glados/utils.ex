@@ -15,4 +15,22 @@ defmodule Glados.Utils do
   """
   def nillable(nil), do: {:error, :nil_value}
   def nillable(value), do: {:ok, value}
+
+  @doc """
+  Returns {:ok, value} when given value
+
+  ## Example
+    iex > ok(:some_value)
+    {:ok, :some_value}
+  """
+  def ok(value), do: {:ok, value}
+
+  @doc """
+  Returns {:error, value} when given value
+
+  ## Example
+    iex > error(:some_value)
+    {:error, :some_value}
+  """
+  def error(value), do: {:error, value}
 end

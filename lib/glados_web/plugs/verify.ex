@@ -7,6 +7,8 @@ defmodule GladosWeb.Plugs.Verify do
   import Plug.Conn
   import Phoenix.Controller
   alias Glados.Accounts
+  alias GladosWeb.Plugs.PlugHelper
+  alias GladosWeb.Router.Helpers, as: Routes
 
   def init(opts), do: opts
 
@@ -17,7 +19,8 @@ defmodule GladosWeb.Plugs.Verify do
     if user.verified do
       conn
       |> put_flash(:error, "Din bruker er allerede verifisert.")
-      |> redirect(to: "/")
+      |> redirect(to: Routes.session_path(conn, :new))
+      |> halt()
     else
       conn
     end
@@ -25,10 +28,6 @@ defmodule GladosWeb.Plugs.Verify do
 
   # If no unverified session, redirect
   def call(conn, _opts) do
-    conn
-    |> put_status(:not_found)
-    |> put_view(GladosWeb.ErrorView)
-    |> render("404.html")
-    |> halt()
+    PlugHelper.render_404(conn)
   end
 end

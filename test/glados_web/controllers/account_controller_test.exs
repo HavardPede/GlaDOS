@@ -169,7 +169,7 @@ defmodule GladosWeb.AccountControllerTest do
     end
   end
 
-  describe "Account verification" do
+  describe "Account verification -" do
     setup [:create_unverified_user]
 
     test "Logging in to an unverfied user shows a link to verify", %{conn: conn, user: _user} do
@@ -188,7 +188,10 @@ defmodule GladosWeb.AccountControllerTest do
     test "Verifying user works", %{conn: conn, user: user} do
       token = Token.generate_new_account_token(user)
 
-      conn = get(conn, Routes.account_path(conn, :verify_email, token: token))
+      conn =
+        conn
+        |> Plug.Test.init_test_session(unverified_user: user.id)
+        |> get(Routes.account_path(conn, :verify_email, token: token))
 
       redirected_path = redirected_to(conn, 302)
       conn = get(recycle(conn), redirected_path)
@@ -211,17 +214,31 @@ defmodule GladosWeb.AccountControllerTest do
     } do
       token = Token.generate_new_account_token(user)
 
-      conn = get(conn, Routes.account_path(conn, :verify_email, token: token))
+      conn =
+        conn
+        |> Plug.Test.init_test_session(unverified_user: user.id)
+        |> get(Routes.account_path(conn, :verify_email, token: token))
 
       redirected_path = redirected_to(conn, 302)
       conn = get(recycle(conn), redirected_path)
       assert html_response(conn, 200) =~ "Din bruker er nå verifisert!"
 
-      conn = get(conn, Routes.account_path(conn, :verify_email, token: token))
+      conn =
+        conn
+        |> get(Routes.account_path(conn, :verify_email, token: token))
 
       redirected_path = redirected_to(conn, 302)
       conn = get(recycle(conn), redirected_path)
       assert html_response(conn, 200) =~ "Din bruker er allerede verifisert."
+    end
+
+    test "Verification url with valid token but missing session data throws 404", %{
+      conn: conn,
+      user: user
+    } do
+      token = Token.generate_new_account_token(user)
+      conn = get(conn, Routes.account_path(conn, :verify_email, token: token))
+      assert html_response(conn, 404)
     end
 
     test "Does not allow user to view /verifiser without valid token", %{conn: conn} do
@@ -230,10 +247,7 @@ defmodule GladosWeb.AccountControllerTest do
       assert html_response(conn, 404)
 
       conn = get(conn, Routes.account_path(conn, :verify_email, token: "invalid_token"))
-
-      redirected_path = redirected_to(conn, 302)
-      conn = get(recycle(conn), redirected_path)
-      assert html_response(conn, 200) =~ "Verifikasjons-lenken er ugyldig."
+      assert html_response(conn, 404)
     end
 
     test "Does not allow the user to view /verifikasjonsendt without an unverified user in session",
@@ -275,7 +289,7 @@ defmodule GladosWeb.AccountControllerTest do
     test "Name must be valid", %{conn: conn} do
       conn = put(conn, Routes.account_path(conn, :update_user), user: %{name: @invalid_name})
 
-      refute html_response(conn, 200) =~ @not_valid_info_flash
+      assert html_response(conn, 200) =~ @not_valid_info_flash
     end
 
     test "Email must be valid", %{conn: conn} do
@@ -284,7 +298,7 @@ defmodule GladosWeb.AccountControllerTest do
           user: %{name: @valid_name, email: @invalid_email}
         )
 
-      refute html_response(conn, 200) =~ @not_valid_info_flash
+      assert html_response(conn, 200) =~ @not_valid_info_flash
     end
 
     test "Phone number must be valid", %{conn: conn} do
@@ -293,7 +307,7 @@ defmodule GladosWeb.AccountControllerTest do
           user: %{name: @valid_name, phone: @invalid_phone}
         )
 
-      refute html_response(conn, 200) =~ @not_valid_info_flash
+      assert html_response(conn, 200) =~ @not_valid_info_flash
     end
 
     test "Address must be valid", %{conn: conn} do
@@ -302,7 +316,7 @@ defmodule GladosWeb.AccountControllerTest do
           user: %{name: @valid_name, address: @invalid_address}
         )
 
-      refute html_response(conn, 200) =~ @not_valid_info_flash
+      assert html_response(conn, 200) =~ @not_valid_info_flash
     end
 
     test "Postcode must be valid", %{conn: conn} do
@@ -311,7 +325,7 @@ defmodule GladosWeb.AccountControllerTest do
           user: %{name: @valid_name, Postcode: @invalid_postcode}
         )
 
-      refute html_response(conn, 200) =~ @not_valid_info_flash
+      assert html_response(conn, 200) =~ @not_valid_info_flash
     end
 
     test "Dob must be valid", %{conn: conn} do
@@ -325,7 +339,7 @@ defmodule GladosWeb.AccountControllerTest do
           }
         )
 
-      refute html_response(conn, 200) =~ @not_valid_info_flash
+      assert html_response(conn, 200) =~ @not_valid_info_flash
     end
   end
 

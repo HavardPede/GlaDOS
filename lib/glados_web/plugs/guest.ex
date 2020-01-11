@@ -3,10 +3,7 @@ defmodule GladosWeb.Plugs.Guest do
   Plug that redirects the user to a authenticated page, if they are logged in (not guest).
   """
 
-  import Plug.Conn
-  import Phoenix.Controller
   alias GladosWeb.Plugs.PlugHelper
-  alias GladosWeb.Router.Helpers, as: Routes
 
   def init(opts), do: opts
 

@@ -46,14 +46,17 @@ defmodule GladosWeb.Router do
 
     get("/", SessionController, :new)
     post("/", SessionController, :create)
-
     get("/registrer", AccountController, :new)
     post("/registrer", AccountController, :create)
-    get("/verifiser", AccountController, :verify_email)
     get("/glemtpassord", AccountController, :forgotten_password)
     post("/glemtpassord", AccountController, :send_email_for_new_password)
     get("/endrepassord", AccountController, :change_password)
     put("/endrepassord", AccountController, :set_new_password)
+  end
+
+  scope "/", GladosWeb do
+    pipe_through [:browser, :guest, :verify]
+    get("/verifiser", AccountController, :verify_email)
   end
 
   # Scope for transaction logger account

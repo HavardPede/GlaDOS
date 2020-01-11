@@ -59,6 +59,7 @@ defmodule Glados.Events do
   def get_event(event_id) do
     Repo.get(Event, event_id)
     |> Utils.nillable()
+    |> Repo.preload(:crew_member)
   end
 
   @doc """
@@ -78,7 +79,53 @@ defmodule Glados.Events do
     |> Repo.update()
   end
 
+  @doc """
+  Fetches the activity that is currently active, or returns nil
+  """
   def get_active_event do
     Repo.get_by(Event, active: true)
+    |> Utils.nillable()
+  end
+
+  @doc """
+  Fetches the current event. This goes as the following priority.
+  1. Currently active
+  2. Next event
+  3. Previous event
+  4. nil
+  """
+  def get_current_event do
+    cond do
+      {:ok, event} = get_active_event() -> event
+      {:ok, event} = get_next_event() -> event
+      {:ok, event} = get_previous_event() -> event
+      true -> nil
+    end
+  end
+
+  def get_next_event do
+    coming_events =
+      get_events()
+      |> Enum.filter(&(Timex.compare(&1.start, Timex.now()) >= 0))
+
+    if Enum.empty?(coming_events) do
+      {:error, nil}
+    else
+      Enum.min_by(coming_events, & &1.start)
+      |> Utils.ok()
+    end
+  end
+
+  def get_previous_event do
+    previous_events =
+      get_events()
+      |> Enum.filter(&(Timex.compare(&1.end, Timex.now()) < 0))
+
+    if Enum.empty?(previous_events) do
+      {:error, nil}
+    else
+      Enum.max_by(previous_events, & &1.end)
+      |> Utils.ok()
+    end
   end
 end

@@ -8,6 +8,7 @@ defmodule GladosWeb.AccountController do
   alias Glados.Accounts.{Encryption, User}
   alias Glados.{Accounts, EmailSender}
   alias GladosWeb.Endpoint
+  alias GladosWeb.Plugs.PlugHelper
 
   @doc """
   Path to display form for creating a new user
@@ -40,7 +41,7 @@ defmodule GladosWeb.AccountController do
     |> get_session(:unverified_user)
     |> case do
       nil ->
-        render_404(conn)
+        PlugHelper.render_404(conn)
 
       user_id ->
         user_id
@@ -79,7 +80,7 @@ defmodule GladosWeb.AccountController do
   Path to verify user when there is no token passed in
   """
   def verify_email(conn, _) do
-    render_404(conn)
+    PlugHelper.render_404(conn)
   end
 
   @doc """
@@ -233,12 +234,5 @@ defmodule GladosWeb.AccountController do
       info_changeset: info_changeset,
       password_changeset: password_changeset
     )
-  end
-
-  defp render_404(conn) do
-    conn
-    |> put_status(:not_found)
-    |> put_view(GladosWeb.ErrorView)
-    |> render("404.html")
   end
 end

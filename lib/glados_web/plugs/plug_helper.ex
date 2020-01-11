@@ -65,4 +65,15 @@ defmodule GladosWeb.Plugs.PlugHelper do
     |> Plug.Conn.get_session(:current_user_id)
     |> Accounts.get_user!()
   end
+
+  @doc """
+  Given a connection, redirect to a 404 page.
+  """
+  def render_404(conn) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(GladosWeb.ErrorView)
+    |> render("404.html")
+    |> halt()
+  end
 end
