@@ -8,7 +8,7 @@ defmodule Glados.Events do
   alias Glados.Utils
 
   @doc """
-  Returns a changeset for a specifi event.
+  Returns a changeset for a specific event.
   """
   def change_event(%Event{} = event) do
     Event.changeset(event, %{})
@@ -25,8 +25,9 @@ defmodule Glados.Events do
     iex > create_event(:valid)
     {:ok, %Event{}}
   """
-  def create_event(attrs \\ %{}) do
-    Event.changeset(%Event{}, attrs)
+  def create_event(%{} = attrs) do
+    %Event{}
+    |> Event.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -58,8 +59,8 @@ defmodule Glados.Events do
   """
   def get_event(event_id) do
     Repo.get(Event, event_id)
-    |> Utils.nillable()
     |> Repo.preload(:crew_member)
+    |> Utils.nillable()
   end
 
   @doc """
@@ -95,12 +96,11 @@ defmodule Glados.Events do
   4. nil
   """
   def get_current_event do
-    cond do
-      {:ok, event} = get_active_event() -> event
-      {:ok, event} = get_next_event() -> event
-      {:ok, event} = get_previous_event() -> event
-      true -> nil
-    end
+    [get_active_event(), get_next_event(), get_previous_event()]
+    |> Enum.find_value(fn
+      {:ok, event} -> event
+      _ -> false
+    end)
   end
 
   def get_next_event do

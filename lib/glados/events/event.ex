@@ -61,19 +61,20 @@ defmodule Glados.Events.Event do
     end
   end
 
-  defp validate_active(%{changes: %{active: active}} = changeset) do
-    if active do
-      event = Events.get_active_event()
-
-      if event.id == changeset.data.id do
+  defp validate_active(%{changes: %{active: true}, data: %{id: id}} = changeset) do
+    case Events.get_active_event() do
+      {:error, :nil_value} ->
         changeset
-      else
+
+      {:ok, %{id: ^id}} ->
+        changeset
+
+      _ ->
         add_error(
           changeset,
           :active,
           "Det finnes allerede et aktivt event."
         )
-      end
     end
   end
 

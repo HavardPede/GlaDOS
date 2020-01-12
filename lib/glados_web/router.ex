@@ -13,6 +13,10 @@ defmodule GladosWeb.Router do
     plug(:accepts, ["json"])
   end
 
+  pipeline :fetch_event do
+    plug(GladosWeb.Plugs.FetchEvent)
+  end
+
   pipeline :auth do
     plug(GladosWeb.Plugs.Auth)
   end
@@ -78,15 +82,23 @@ defmodule GladosWeb.Router do
   # Log out scope
   scope "/", GladosWeb do
     pipe_through [:browser, :auth]
+
     get("/logout", SessionController, :delete)
   end
 
   # Member Scope
   scope "/", GladosWeb do
     pipe_through [:browser, :member]
-    resources "/profil", MemberController, only: [:index]
+
+    get("/hovedside", MemberController, :index)
     get("/profil/informasjon", AccountController, :edit)
     put("/profil/informasjon", AccountController, :update_user)
+  end
+
+  scope "/:event_id", GladosWeb do
+    pipe_through [:browser, :member, :fetch_event]
+
+    get("/", MemberController, :event_landing)
   end
 
   # Crew Scope
