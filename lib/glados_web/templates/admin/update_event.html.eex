@@ -1,6 +1,6 @@
 <div class="w-4/5 lg:w-3/5 mx-auto border text-center mb-8">
   <div class="bg-gray-500 w-full text-gray-200 rounded-t-lg">
-    <h1 class="mt-0 p-5">Lag et nytt event!</h1>
+    <h1 class="mt-0 p-5">Oppdater eventet!</h1>
   </div>
   
   <%= form_for @changeset, Routes.admin_path(@conn, :update_event, @changeset.data.id), 

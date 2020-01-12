@@ -81,11 +81,18 @@ defmodule Glados.Events do
   end
 
   @doc """
-  Fetches the activity that is currently active, or returns nil
+  Fetches the activity that is currently active, and returns a result_tuple
   """
   def get_active_event do
     Repo.get_by(Event, active: true)
     |> Utils.nillable()
+  end
+
+  @doc """
+  Fetches the currently active event, or nil
+  """
+  def get_active_event! do
+    Repo.get_by(Event, active: true)
   end
 
   @doc """

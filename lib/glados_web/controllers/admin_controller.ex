@@ -3,6 +3,7 @@ defmodule GladosWeb.AdminController do
 
   alias Glados.Events
   alias Glados.Events.{Event}
+  alias GladosWeb.Plugs.PlugHelper
 
   @doc """
     Displays index admin page.
@@ -21,7 +22,8 @@ defmodule GladosWeb.AdminController do
   end
 
   def new_event(conn, _params) do
-    active_event = Events.get_active_event()
+    active_event = Events.get_active_event!()
+
     changeset = Events.change_event(%Event{})
     render(conn, "new_event.html", changeset: changeset, active_event: active_event)
   end
@@ -34,14 +36,17 @@ defmodule GladosWeb.AdminController do
         |> halt()
 
       {:error, changeset} ->
-        active_event = Events.get_active_event()
+        active_event = Events.get_active_event!()
+
         render(conn, "new_event.html", changeset: changeset, active_event: active_event)
     end
   end
 
+  def create_event(conn, _), do: PlugHelper.render_404(conn)
+
   def edit_event(conn, %{"event_id" => event_id}) do
     with {:ok, event} <- Events.get_event(event_id),
-         active_event <- Events.get_active_event() do
+         active_event <- Events.get_active_event!() do
       changeset = Events.change_event(event)
       render(conn, "update_event.html", changeset: changeset, active_event: active_event)
     else
@@ -68,8 +73,10 @@ defmodule GladosWeb.AdminController do
         |> halt()
 
       {:error, changeset} ->
-        active_event = Events.get_active_event()
+        active_event = Events.get_active_event!()
         render(conn, "update_event.html", changeset: changeset, active_event: active_event)
     end
   end
+
+  def update_event(conn, _params), do: PlugHelper.render_404(conn)
 end
