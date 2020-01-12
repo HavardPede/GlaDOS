@@ -7,6 +7,13 @@ defmodule Glados.MixProject do
       version: "0.1.0",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -48,7 +55,8 @@ defmodule Glados.MixProject do
       {:bamboo, "~> 1.3"},
       {:bamboo_smtp, "~> 2.0.0"},
       {:timex, "~> 3.5"},
-      {:credo, "~>1.1", only: [:dev, :test], runtime: false}
+      {:credo, "~>1.1", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
