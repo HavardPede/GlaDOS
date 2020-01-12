@@ -29,6 +29,7 @@ defmodule GladosWeb.AccountController do
         conn
         |> put_session(:unverified_user, user.id)
         |> redirect(to: Routes.account_path(conn, :send_email_verification))
+        |> halt()
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html",
@@ -65,11 +66,13 @@ defmodule GladosWeb.AccountController do
       conn
       |> put_flash(:info, "Din bruker er nå verifisert!")
       |> redirect(to: Routes.session_path(conn, :new))
+      |> halt()
     else
       _ ->
         conn
         |> put_flash(:error, "Verifikasjons-lenken er ugyldig.")
         |> redirect(to: Routes.session_path(conn, :new))
+        |> halt()
     end
   end
 
@@ -95,11 +98,13 @@ defmodule GladosWeb.AccountController do
         conn
         |> put_flash(:info, "Email er sendt.")
         |> redirect(to: Routes.account_path(Endpoint, :forgotten_password))
+        |> halt()
 
       {:error, :nil_value} ->
         conn
         |> put_flash(:error, "Fant ingen bruker med denne epost addressen.")
         |> redirect(to: Routes.account_path(Endpoint, :forgotten_password))
+        |> halt()
 
       _ ->
         conn
@@ -126,6 +131,7 @@ defmodule GladosWeb.AccountController do
         conn
         |> put_flash(:error, "Lenken er ikke gyldig.")
         |> redirect(to: Routes.session_path(conn, :new))
+        |> halt()
     end
   end
 
@@ -145,6 +151,7 @@ defmodule GladosWeb.AccountController do
           conn
           |> put_flash(:info, "Passordet er endret!")
           |> redirect(to: Routes.session_path(Endpoint, :new))
+          |> halt()
 
         {:error, changeset} ->
           conn
@@ -159,6 +166,7 @@ defmodule GladosWeb.AccountController do
         conn
         |> put_flash(:error, "En feil oppstod.")
         |> redirect(to: Routes.session_path(conn, :new))
+        |> halt()
     end
   end
 
@@ -194,6 +202,7 @@ defmodule GladosWeb.AccountController do
         conn
         |> put_flash(:info_updated, "Bruker info ble oppdatert.")
         |> redirect(to: Routes.account_path(conn, :edit))
+        |> halt()
 
       {:error, %Ecto.Changeset{} = info_changeset} ->
         password_changeset = Accounts.change_password(user)
@@ -227,6 +236,7 @@ defmodule GladosWeb.AccountController do
         conn
         |> put_flash(:password_updated, "Passordet ble oppdatert.")
         |> redirect(to: Routes.account_path(conn, :edit))
+        |> halt()
 
       {:error, %Ecto.Changeset{} = password_changeset} ->
         info_changeset = Accounts.change_info(user)

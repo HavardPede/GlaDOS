@@ -98,7 +98,7 @@ defmodule GladosWeb.Router do
   scope "/:event_id", GladosWeb do
     pipe_through [:browser, :member, :fetch_event]
 
-    get("/", MemberController, :event_landing)
+    get("/forside", MemberController, :event_landing)
   end
 
   # Crew Scope

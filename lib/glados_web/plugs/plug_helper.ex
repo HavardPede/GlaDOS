@@ -35,6 +35,7 @@ defmodule GladosWeb.Plugs.PlugHelper do
   defp redir("member", conn) do
     conn
     |> redirect(to: Routes.member_path(conn, :index))
+    |> halt()
   end
 
   defp redir("logger", conn) do

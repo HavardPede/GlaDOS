@@ -31,6 +31,7 @@ defmodule GladosWeb.AdminController do
       {:ok, _} ->
         conn
         |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :events))
+        |> halt()
 
       {:error, changeset} ->
         active_event = Events.get_active_event()
@@ -48,6 +49,7 @@ defmodule GladosWeb.AdminController do
         conn
         |> put_flash(:error, "Oops, vi klarte ikke å finne dette eventet.")
         |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :events))
+        |> halt()
     end
   end
 
@@ -57,11 +59,13 @@ defmodule GladosWeb.AdminController do
       conn
       |> put_flash(:info, "Eventet har blitt oppdatert.")
       |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :events))
+      |> halt()
     else
       {:error, :nil_value} ->
         conn
         |> put_flash(:error, "En feil oppstod. Eventet har ikke blitt oppdatert.")
         |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :events))
+        |> halt()
 
       {:error, changeset} ->
         active_event = Events.get_active_event()

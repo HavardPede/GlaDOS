@@ -28,6 +28,7 @@ defmodule GladosWeb.SessionController do
           |> put_session(:account_type, user.account_type)
           |> configure_session(renew: true)
           |> redirect(to: Routes.member_path(Endpoint, :index))
+          |> halt()
         else
           conn
           |> put_session(:unverified_user, user.id)
@@ -49,6 +50,7 @@ defmodule GladosWeb.SessionController do
         conn
         |> put_flash(:error, "Et problem oppstod med ditt brukernavn/passord")
         |> redirect(to: Routes.session_path(Endpoint, :new))
+        |> halt()
     end
   end
 
@@ -57,5 +59,6 @@ defmodule GladosWeb.SessionController do
     |> configure_session(drop: true)
     |> put_flash(:info, "Du har logget ut. Sees senere")
     |> redirect(to: Routes.session_path(conn, :new))
+    |> halt()
   end
 end
