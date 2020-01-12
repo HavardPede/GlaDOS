@@ -1,10 +1,10 @@
 defmodule GladosWeb.AccountControllerTest do
   use GladosWeb.ConnCase
 
-  alias Glados.Accounts.Encryption
   alias Glados.{Repo, Token}
   alias Helpers.AccountHelper
 
+  @encryption Application.get_env(:glados, :password_encryption)
   @extra_valid_password "SomeExtraPassw0rd"
   @valid_name "Tommy Shelby"
   @invalid_name "invalid"
@@ -17,6 +17,7 @@ defmodule GladosWeb.AccountControllerTest do
   @invalid_year "60"
 
   @not_valid_info_flash "Bruker info ble ikke oppdatert."
+  @valid_info_flash "Bruker info ble oppdatert."
 
   describe "create user - " do
     test "Adds user to database when using valid data", %{conn: conn} do
@@ -137,7 +138,7 @@ defmodule GladosWeb.AccountControllerTest do
           }
         )
 
-      assert redirected_to(conn) == Routes.member_path(conn, :index)
+      assert Routes.member_path(conn, :index) == redirected_to(conn)
     end
 
     test "Using invalid authentication does not log the user in", %{conn: conn, user: _user} do
@@ -147,20 +148,6 @@ defmodule GladosWeb.AccountControllerTest do
             username: AccountHelper.get_valid_user_attributes().username,
             password: "Invalid password"
           }
-        )
-
-      redirected_path = redirected_to(conn, 302)
-      conn = get(recycle(conn), redirected_path)
-      assert html_response(conn, 200) =~ "Velkommen til"
-    end
-
-    test "Using hashed password as authentication does not log the user in", %{
-      conn: conn,
-      user: user
-    } do
-      conn =
-        post(conn, Routes.session_path(conn, :create),
-          session: %{username: user.username, password: user.encrypted_password}
         )
 
       redirected_path = redirected_to(conn, 302)
@@ -272,7 +259,10 @@ defmodule GladosWeb.AccountControllerTest do
           user: %{name: @valid_name}
         )
 
-      assert html_response(conn, 200) =~ @valid_name
+      redirected_path = redirected_to(conn, 302)
+      conn = get(recycle(conn), redirected_path)
+
+      assert html_response(conn, 200) =~ @valid_info_flash
     end
 
     test "user cant update username", %{conn: conn, user: %{id: user_id}} do
@@ -304,7 +294,7 @@ defmodule GladosWeb.AccountControllerTest do
     test "Phone number must be valid", %{conn: conn} do
       conn =
         put(conn, Routes.account_path(conn, :update_user),
-          user: %{name: @valid_name, phone: @invalid_phone}
+          user: %{name: @valid_name, phone_number: @invalid_phone}
         )
 
       assert html_response(conn, 200) =~ @not_valid_info_flash
@@ -322,7 +312,7 @@ defmodule GladosWeb.AccountControllerTest do
     test "Postcode must be valid", %{conn: conn} do
       conn =
         put(conn, Routes.account_path(conn, :update_user),
-          user: %{name: @valid_name, Postcode: @invalid_postcode}
+          user: %{name: @valid_name, postcode: @invalid_postcode}
         )
 
       assert html_response(conn, 200) =~ @not_valid_info_flash
@@ -364,7 +354,7 @@ defmodule GladosWeb.AccountControllerTest do
 
       user_id
       |> Glados.Accounts.get_user!()
-      |> Encryption.valid_password?(@extra_valid_password)
+      |> @encryption.valid_password?(@extra_valid_password)
       |> assert
     end
 
@@ -383,7 +373,7 @@ defmodule GladosWeb.AccountControllerTest do
 
       user_id
       |> Glados.Accounts.get_user!()
-      |> Encryption.valid_password?(@extra_valid_password)
+      |> @encryption.valid_password?(@extra_valid_password)
       |> refute
     end
 

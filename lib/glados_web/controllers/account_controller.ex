@@ -5,10 +5,12 @@ defmodule GladosWeb.AccountController do
   use GladosWeb, :controller
 
   alias Ecto.Changeset
-  alias Glados.Accounts.{Encryption, User}
+  alias Glados.Accounts.User
   alias Glados.{Accounts, EmailSender}
   alias GladosWeb.Endpoint
   alias GladosWeb.Plugs.PlugHelper
+
+  @encryption Application.get_env(:glados, :password_encryption)
 
   @doc """
   Path to display form for creating a new user
@@ -198,7 +200,7 @@ defmodule GladosWeb.AccountController do
   def update_user(conn, %{"user" => %{"old_password" => old_password} = password_params}) do
     user = conn.assigns.user
 
-    if Encryption.valid_password?(user, old_password) do
+    if @encryption.valid_password?(user, old_password) do
       update_password_and_render(conn, user, password_params)
     else
       info_changeset = Accounts.change_info(user)

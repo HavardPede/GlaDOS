@@ -35,3 +35,29 @@ defmodule Glados.Accounts.Encryption do
     end
   end
 end
+
+defmodule Glados.Accounts.MockEncryption do
+  @moduledoc """
+  Mocks handling of password encryption and validation.
+  This is used for testing purposes to reduce testing time.
+  """
+
+  alias Glados.Accounts.User
+
+  def hash_password(password), do: password
+
+  def validate_password(%User{} = user, password) do
+    if user.encrypted_password == password do
+      {:ok, user}
+    else
+      {:error, "invalid password"}
+    end
+  end
+
+  def valid_password?(user, password) do
+    case validate_password(user, password) do
+      {:ok, _user} -> true
+      {:error, _user} -> false
+    end
+  end
+end

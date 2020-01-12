@@ -7,9 +7,9 @@ defmodule Glados.Accounts.User do
 
   import Ecto.Changeset
   import Kernel
-  alias Glados.Accounts.Encryption
   alias Glados.Events.{Event, EventCrew}
 
+  @encryption Application.get_env(:glados, :password_encryption)
   @missing_field "Du må fylle inn dette feltet."
 
   @primary_key {:id, :binary_id, auto_generate: false}
@@ -107,7 +107,7 @@ defmodule Glados.Accounts.User do
     user
     |> cast(attrs, [:name, :email, :phone_number, :address, :postcode, :day, :month, :year])
     |> validate_required(
-      [:name, :email, :phone_number, :address, :postcode, :day, :month, :year],
+      [:name, :email, :phone_number, :address, :postcode],
       message: @missing_field
     )
     |> validate_name()
@@ -245,7 +245,7 @@ defmodule Glados.Accounts.User do
     password = get_change(changeset, :password)
 
     if password do
-      encrypted_password = Encryption.hash_password(password)
+      encrypted_password = @encryption.hash_password(password)
       put_change(changeset, :encrypted_password, encrypted_password)
     else
       changeset
