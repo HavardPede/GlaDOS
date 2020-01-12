@@ -1,8 +1,17 @@
 defmodule Glados.Accounts.User do
+  @moduledoc """
+  Defines the schema for an account.
+  """
+
   use Ecto.Schema
+
   import Ecto.Changeset
   import Kernel
-  alias Glados.Accounts.Encryption
+  alias Glados.Events.{Event, EventCrew}
+
+  @encryption Application.get_env(:glados, :password_encryption)
+  @missing_field "Du må fylle inn dette feltet."
+  @valid_account_types ["member", "logger", "admin"]
 
   @primary_key {:id, :binary_id, auto_generate: false}
   schema "users" do
@@ -12,7 +21,7 @@ defmodule Glados.Accounts.User do
     field(:address, :string)
     field(:postcode, :integer)
     field(:phone_number, :string)
-    field(:auth_level, :integer)
+    field(:account_type, :string, null: false)
     field(:verified, :boolean)
 
     field(:password, :string, virtual: true)
@@ -24,7 +33,18 @@ defmodule Glados.Accounts.User do
     field(:year, :string, virtual: true)
     field(:dob, :date)
 
+    many_to_many(:event, Event, join_through: EventCrew, on_replace: :delete)
+
     timestamps()
+  end
+
+  def password_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:password, :password_confirmation])
+    |> validate_required([:password, :password_confirmation], message: @missing_field)
+    |> validate_password()
+    |> encrypt_password()
+    |> validate_required(:encrypted_password)
   end
 
   @doc false
@@ -43,7 +63,7 @@ defmodule Glados.Accounts.User do
       :phone_number,
       :password,
       :password_confirmation,
-      :auth_level,
+      :account_type,
       :verified,
       :id
     ])
@@ -59,12 +79,12 @@ defmodule Glados.Accounts.User do
         :year,
         :email,
         :address,
-        :auth_level,
+        :account_type,
         :verified,
         :password,
         :password_confirmation
       ],
-      message: "Du må fylle inn dette feltet."
+      message: @missing_field
     )
     |> validate_username()
     |> validate_password()
@@ -73,7 +93,7 @@ defmodule Glados.Accounts.User do
     |> set_dob()
     |> validate_phone_number()
     |> validate_postcode()
-    |> validate_number(:auth_level, less_than: 5)
+    |> validate_account_type()
     |> encrypt_password()
     |> validate_required(:encrypted_password)
   end
@@ -82,6 +102,20 @@ defmodule Glados.Accounts.User do
     user
     |> cast(attrs, [:verified])
     |> validate_required([:verified])
+  end
+
+  def user_info_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:name, :email, :phone_number, :address, :postcode, :day, :month, :year])
+    |> validate_required(
+      [:name, :email, :phone_number, :address, :postcode],
+      message: @missing_field
+    )
+    |> validate_name()
+    |> validate_email()
+    |> set_dob()
+    |> validate_phone_number()
+    |> validate_postcode()
   end
 
   # Password validation
@@ -170,7 +204,7 @@ defmodule Glados.Accounts.User do
   defp validate_postcode(%{changes: %{postcode: _}} = changeset) do
     changeset
     |> validate_number(:postcode,
-      less_than: 10000,
+      less_than: 10_000,
       greater_than: 999,
       message: "Postnummer må være en 4-sifret kode."
     )
@@ -179,15 +213,26 @@ defmodule Glados.Accounts.User do
   # Only called if changeset dont have postcode
   defp validate_postcode(changeset), do: changeset
 
+  defp validate_account_type(%{changes: %{account_type: account_type}} = changeset) do
+    if account_type in @valid_account_types do
+      changeset
+    else
+      add_error(changeset, :account_type, "Profil typen '#{account_type}' er ikke godkjent.")
+    end
+  end
+
+  # Only called if changeset dont have postcode
+  defp validate_account_type(changeset), do: changeset
+
   # Validation for date of birth
   defp set_dob(%{changes: %{day: day, month: month, year: year}} = changeset) do
-    date = 
-    [year, month, day]
-    |> Enum.join("-")
+    date =
+      [year, month, day]
+      |> convert_to_two_digits()
+      |> Enum.join("-")
 
     with {:ok, dob} <- Timex.parse(date, "%Y-%m-%d", :strftime),
-      true <- valid_age?(dob)
-    do
+         true <- valid_age?(dob) do
       put_change(changeset, :dob, Timex.to_date(dob))
     else
       _ -> add_error(changeset, :dob, "Dato er ikke gyldig.")
@@ -202,11 +247,17 @@ defmodule Glados.Accounts.User do
     age < 120 && age > 10
   end
 
+  defp convert_to_two_digits(date_list), do: Enum.map(date_list, &force_two_digits/1)
+
+  defp force_two_digits(number) when is_binary(number) do
+    if String.length(number) > 1, do: number, else: "0" <> number
+  end
+
   defp encrypt_password(changeset) do
     password = get_change(changeset, :password)
 
     if password do
-      encrypted_password = Encryption.hash_password(password)
+      encrypted_password = @encryption.hash_password(password)
       put_change(changeset, :encrypted_password, encrypted_password)
     else
       changeset

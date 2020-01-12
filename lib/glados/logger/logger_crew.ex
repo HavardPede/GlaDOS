@@ -1,4 +1,13 @@
 defmodule Glados.Logger.LoggerCrew do
+  @moduledoc """
+  Module to represent each crew member that should be logged,
+  and some trivial data about these crew members.
+  This was an early implementation and will be removed as crew members
+  start creating accounts on the application.
+  """
+
+  # TODO remove this schema once crew members actually start using Glados.
+
   use Ecto.Schema
   import Ecto.Changeset
   alias Glados.Logger.CrewTransactions

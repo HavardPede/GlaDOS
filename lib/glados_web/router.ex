@@ -13,6 +13,10 @@ defmodule GladosWeb.Router do
     plug(:accepts, ["json"])
   end
 
+  pipeline :fetch_event do
+    plug(GladosWeb.Plugs.FetchEvent)
+  end
+
   pipeline :auth do
     plug(GladosWeb.Plugs.Auth)
   end
@@ -46,11 +50,17 @@ defmodule GladosWeb.Router do
 
     get("/", SessionController, :new)
     post("/", SessionController, :create)
+    get("/registrer", AccountController, :new)
+    post("/registrer", AccountController, :create)
+    get("/glemtpassord", AccountController, :forgotten_password)
+    post("/glemtpassord", AccountController, :send_email_for_new_password)
+    get("/endrepassord", AccountController, :change_password)
+    put("/endrepassord", AccountController, :set_new_password)
+  end
 
-    get("/registrer", UserController, :new)
-    post("/registrer", UserController, :create)
-
-    get("/verifiser", UserController, :verify_email)
+  scope "/", GladosWeb do
+    pipe_through [:browser, :guest, :verify]
+    get("/verifiser", AccountController, :verify_email)
   end
 
   # Scope for transaction logger account
@@ -62,27 +72,33 @@ defmodule GladosWeb.Router do
     get("/delete/:id", LoggerController, :delete_transaction)
   end
 
-  # Scope for verifying a new user
+  # Scope for verifying a new account
   scope "/", GladosWeb do
     pipe_through [:browser]
 
-    get("/verifikasjonsendt", UserController, :send_email_verification)
+    get("/verifikasjonsendt", AccountController, :send_email_verification)
   end
 
   # Log out scope
   scope "/", GladosWeb do
     pipe_through [:browser, :auth]
+
     get("/logout", SessionController, :delete)
   end
 
   # Member Scope
   scope "/", GladosWeb do
     pipe_through [:browser, :member]
-    resources "/profil", UserController, only: [:index]
+
+    get("/hovedside", MemberController, :index)
+    get("/profil/informasjon", AccountController, :edit)
+    put("/profil/informasjon", AccountController, :update_user)
   end
 
-  scope "/", GladosWeb do
-    pipe_through [:browser, :redirect]
+  scope "/:event_id", GladosWeb do
+    pipe_through [:browser, :member, :fetch_event]
+
+    get("/forside", MemberController, :event_landing)
   end
 
   # Crew Scope
@@ -92,6 +108,9 @@ defmodule GladosWeb.Router do
   # Admin Scope
   scope "/admin", GladosWeb do
     pipe_through [:browser, :admin]
+
+    get("/", AdminController, :index)
+
     get("/crew", LoggerController, :logger_crew)
     post("/crew", LoggerController, :add_logger_crew)
     get("/crew/delete/:id", LoggerController, :delete_logger_crew)
@@ -99,5 +118,11 @@ defmodule GladosWeb.Router do
     get("/transactions", LoggerController, :logger_transactions)
     post("/transactions", LoggerController, :create_transaction)
     get("/delete/:id", LoggerController, :delete_transaction)
+
+    get("/eventer", AdminController, :events)
+    get("/eventer/new", AdminController, :new_event)
+    post("/eventer/new", AdminController, :create_event)
+    get("/eventer/:event_id/rediger", AdminController, :edit_event)
+    put("/eventer/:event_id/rediger", AdminController, :update_event)
   end
 end

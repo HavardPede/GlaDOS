@@ -1,19 +1,24 @@
 defmodule GladosWeb.Plugs.LoggerAuth do
-  alias Glados.Accounts
+  @moduledoc """
+  Plug that redirects all non-logger users.
+  """
+
+  alias GladosWeb.Plugs.PlugHelper
 
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    current_user =
-      conn
-      |> Plug.Conn.get_session(:current_user_id)
-      |> Accounts.get_user!()
+    current_user = PlugHelper.get_current_user(conn)
 
-    if(current_user.auth_level == 2) do
+    if is_logger?(current_user) do
       conn
     else
       conn
-      |> GladosWeb.Plugs.PlugHelper.redirect()
+      |> PlugHelper.redirect()
     end
+  end
+
+  defp is_logger?(user) do
+    user.account_type == "logger"
   end
 end

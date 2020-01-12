@@ -56,7 +56,7 @@ defmodule Glados.Logs do
     |> Repo.insert()
   end
 
-  def get_all_crew_transactions(), do: Repo.all(CrewTransactions)
+  def get_all_crew_transactions, do: Repo.all(CrewTransactions)
 
   def get_crew_transaction!(id), do: Repo.get!(CrewTransactions, id)
 

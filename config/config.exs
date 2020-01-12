@@ -8,7 +8,8 @@
 use Mix.Config
 
 config :glados,
-  ecto_repos: [Glados.Repo]
+  ecto_repos: [Glados.Repo],
+  password_encryption: Glados.Accounts.Encryption
 
 config :glados, Glados.Mailer,
   adapter: Bamboo.SMTPAdapter,

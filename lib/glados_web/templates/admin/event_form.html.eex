@@ -1,0 +1,65 @@
+<div class="c-field_container py-3">
+  <p>Event navn</p>
+  <div>
+    <%= text_input @form, :name, placeholder: "LanMine Old but Gold", class: "c-standard_input bg-gray-100 border"%>
+  </div>
+  <%= error_tag @form, :name %>
+</div>
+
+<div class="c-field_container py-3">
+  <p>Adresse</p>
+  <div>
+    <%= text_input @form, :address, placeholder: "Hvalerhallen, Rødveien 28, 1684 Vesterøy", class: "c-standard_input bg-gray-100 border" %>
+  </div>
+  <%= error_tag @form, :address %>
+</div>
+
+<div class="c-field_container py-3">
+  <p>Lan nummer</p>
+  <div>
+    <%= number_input @form, :id, placeholder: "1", class: "c-standard_input bg-gray-100 border" %>
+  </div>
+  <%= error_tag @form, :id %>
+</div>
+
+<div class="c-field_container py-3">
+  <p>Start dato</p>
+  <div>
+    <%= datetime_select @form, :start, builder: fn b -> %>
+      <%= b.(:day, [class: "c-dropdown"]) %> <%= b.(:month, [class: "c-dropdown"]) %> <%= b.(:year, [class: "c-dropdown"]) %>
+      <div>
+        <%= b.(:hour, [class: "c-dropdown mx-1"]) %> 
+        <%= b.(:minute, [class: "c-dropdown mx-1", options: [{"0 min", 0}, {"30 min", 30}]]) %>
+      </div>
+    <% end %>
+  </div>
+  <%= error_tag @form, :start %>
+</div>
+
+<div class="c-field_container py-3">
+  <p>Slutt dato</p>
+  <div>
+    <%= datetime_select @form, :end, builder: fn b -> %>
+    <%= b.(:day, [class: "c-dropdown"]) %> <%= b.(:month, [class: "c-dropdown"]) %> <%= b.(:year, [class: "c-dropdown"]) %>
+    <div>
+      <%= b.(:hour, [class: "c-dropdown mx-1"]) %> 
+      <%= b.(:minute, [class: "c-dropdown mx-1", options: [{"0 min", 0}, {"30 min", 30}]]) %>
+    </div>
+  <% end %>
+  </div>
+  <%= error_tag @form, :end %>
+</div>
+
+<div class="c-field_container py-3">
+  <%= if @active_event && @form.data.id != @active_event.id do %>
+    <p class="mb-4">Er dette lanet aktivt?</p>
+    <%= hidden_input(@form, :active, value: false) %>
+    <p class="italic text-sm">Lanet kan ikke settes aktivt, siden <span class="text-red-500"><%= @active_event.name %></span> er aktiv.</p>
+  <% else %>
+    <p>Er dette lanet aktivt?</p>
+    <div>
+      <%= select(@form, :active, [ja: true, nei: false], [class: "c-dropdown"]) %>
+    </div>
+    <%= error_tag @form, :active %>
+  <% end %>
+</div>

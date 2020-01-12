@@ -1,8 +1,7 @@
 defmodule GladosWeb.LoggerController do
   use GladosWeb, :controller
-  alias Glados.Logger.LoggerCrew
-  alias Glados.Logger.CrewTransactions
-  alias Glados.Accounts
+
+  alias Glados.Logger.{CrewTransactions, LoggerCrew}
 
   @doc """
   Displays all crew members that are linked with the logger
@@ -20,20 +19,17 @@ defmodule GladosWeb.LoggerController do
   end
 
   def logger_transactions(conn, _params) do
-    current_user =
-      Plug.Conn.get_session(conn, :current_user_id)
-      |> Accounts.get_user!()
-
+    user = conn.assigns.user
     changeset = CrewTransactions.changeset(%CrewTransactions{}, %{})
 
-    logger? = current_user.auth_level == 2
+    logger? = user.account_type == "logger"
 
     transactions =
       Glados.Logs.get_all_crew_transactions()
       |> Enum.reverse()
 
     transactions =
-      if(logger?) do
+      if logger? do
         Enum.take(transactions, 20)
       else
         transactions
@@ -52,21 +48,26 @@ defmodule GladosWeb.LoggerController do
   end
 
   def create_transaction(conn, %{"crew_transactions" => transaction}) do
-    if(Glados.Logs.logger_crew_exists?(transaction["logger_crew_id"])) do
+    transaction["logger_crew_id"]
+    |> Glados.Logs.logger_crew_exists?()
+    |> if do
       case Glados.Logs.create_logger_transaction(transaction) do
         {:ok, _transaction} ->
           conn
           |> redirect(to: Routes.logger_path(conn, :logger_transactions))
+          |> halt()
 
         {:error, _} ->
           conn
           |> put_flash(:error, "Transaksjon ble ikke lagt til")
           |> redirect(to: Routes.logger_path(conn, :logger_transactions))
+          |> halt()
       end
     else
       conn
       |> put_flash(:error, "Transaksjon ble ikke lagt til")
       |> redirect(to: Routes.logger_path(conn, :logger_transactions))
+      |> halt()
     end
   end
 
@@ -78,11 +79,13 @@ defmodule GladosWeb.LoggerController do
       {:ok, _user} ->
         conn
         |> redirect(to: Routes.logger_path(conn, :logger_crew))
+        |> halt()
 
       {:error, _} ->
         conn
         |> put_flash(:error, "Crew medlem ble ikke lagt til.")
         |> redirect(to: Routes.logger_path(conn, :logger_crew))
+        |> halt()
     end
   end
 
@@ -94,11 +97,13 @@ defmodule GladosWeb.LoggerController do
         conn
         |> put_flash(:info, "Kjøp ble fjernet.")
         |> redirect(to: "/admin/transactions")
+        |> halt()
 
       {:error, _} ->
         conn
         |> put_flash(:error, "Kjøp kunne ikke fjernes.")
         |> redirect(to: "/admin/transactions")
+        |> halt()
     end
   end
 
@@ -110,11 +115,13 @@ defmodule GladosWeb.LoggerController do
         conn
         |> put_flash(:info, "Crew medlem ble fjernet.")
         |> redirect(to: Routes.logger_path(conn, :logger_crew))
+        |> halt()
 
       {:error, _} ->
         conn
         |> put_flash(:error, "Crew medlem kunne ikke fjernes.")
         |> redirect(to: Routes.logger_path(conn, :logger_crew))
+        |> halt()
     end
   end
 end

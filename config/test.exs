@@ -14,5 +14,8 @@ config :glados, GladosWeb.Endpoint,
   http: [port: 4002],
   server: false
 
+config :glados,
+  password_encryption: Glados.Accounts.MockEncryption
+
 # Print only warnings and errors during test
 config :logger, level: :warn

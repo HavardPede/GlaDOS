@@ -1,9 +1,9 @@
 defmodule GladosWeb.SessionController do
-  use GladosWeb, :controller
-
   @moduledoc """
   Controller for handling actions related to a login session.
   """
+
+  use GladosWeb, :controller
 
   import Phoenix.HTML.Link
   alias Glados.Accounts.Auth
@@ -22,11 +22,13 @@ defmodule GladosWeb.SessionController do
   def create(conn, %{"session" => auth_params}) do
     case Auth.login(auth_params) do
       {:ok, user} ->
-        if(user.verified) do
+        if user.verified do
           conn
           |> put_session(:current_user_id, user.id)
+          |> put_session(:account_type, user.account_type)
           |> configure_session(renew: true)
-          |> redirect(to: Routes.user_path(Endpoint, :index))
+          |> redirect(to: Routes.member_path(Endpoint, :index))
+          |> halt()
         else
           conn
           |> put_session(:unverified_user, user.id)
@@ -35,7 +37,7 @@ defmodule GladosWeb.SessionController do
             [
               "Du er ikke verifisert!  ",
               link("Klikk her for å sende en ny email",
-                to: Routes.user_path(Endpoint, :send_email_verification),
+                to: Routes.account_path(Endpoint, :send_email_verification),
                 class: "dark_blue"
               ),
               "."
@@ -48,6 +50,7 @@ defmodule GladosWeb.SessionController do
         conn
         |> put_flash(:error, "Et problem oppstod med ditt brukernavn/passord")
         |> redirect(to: Routes.session_path(Endpoint, :new))
+        |> halt()
     end
   end
 
@@ -56,5 +59,6 @@ defmodule GladosWeb.SessionController do
     |> configure_session(drop: true)
     |> put_flash(:info, "Du har logget ut. Sees senere")
     |> redirect(to: Routes.session_path(conn, :new))
+    |> halt()
   end
 end

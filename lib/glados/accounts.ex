@@ -38,6 +38,15 @@ defmodule Glados.Accounts do
   def get_user!(id), do: Repo.get!(User, id)
 
   @doc """
+  Gets a single user by email.
+  Raises `Ecto.NoResultsError` if the User does not exist.
+  """
+  def get_user_by_email(email) do
+    Repo.get_by(User, email: email)
+    |> Glados.Utils.nillable()
+  end
+
+  @doc """
   Creates a user.
 
   ## Examples
@@ -50,7 +59,7 @@ defmodule Glados.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
-    %User{auth_level: 1, verified: false, id: Ecto.UUID.generate()}
+    %User{account_type: "member", verified: false, id: Ecto.UUID.generate()}
     |> User.changeset(attrs)
     |> Repo.insert()
   end
@@ -60,16 +69,16 @@ defmodule Glados.Accounts do
 
   ## Examples
 
-      iex> update_user(user, %{field: new_value})
+      iex> update_user_info(user, %{field: new_value})
       {:ok, %User{}}
 
-      iex> update_user(user, %{field: bad_value})
+      iex> update_user_info(user, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_user(%User{} = user, attrs) do
+  def update_user_info(%User{} = user, attrs) do
     user
-    |> User.changeset(attrs)
+    |> User.user_info_changeset(attrs)
     |> Repo.update()
   end
 
@@ -106,5 +115,25 @@ defmodule Glados.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  def change_info(%User{} = user, params \\ %{}) do
+    User.user_info_changeset(user, params)
+  end
+
+  @doc """
+  Returns a changeset for setting the new password on an account
+  """
+  def change_password(%User{} = user, params \\ %{}) do
+    User.password_changeset(user, params)
+  end
+
+  @doc """
+  Set change password
+  """
+  def update_password(%User{} = user, attrs) do
+    user
+    |> User.password_changeset(attrs)
+    |> Repo.update()
   end
 end

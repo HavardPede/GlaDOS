@@ -1,14 +1,18 @@
 run:
 	iex -S mix phx.server
 
-setup_static:
-	cd assets && node install
+clean:
+	rm -rf priv/static/* assets/node_modules deps/ mix.lock assets/yarn.lock
 
-cleandb:
-	mix ecto.reset
+setup:
+	mix deps.get
+	cd assets && yarn install
 
-migratedb:
-	mix ecto.migrate
+test: dummy
+	mix test --trace
+
+dummy:
 
 build:
+	mix phx.digest
 	mix compile

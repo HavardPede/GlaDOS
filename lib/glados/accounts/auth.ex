@@ -1,6 +1,12 @@
 defmodule Glados.Accounts.Auth do
-  alias Glados.Accounts.{Encryption, User}
+  @moduledoc """
+  Handles user authentication. Mainly logging in, and checking if a user is logged in.
+  """
+
+  alias Glados.Accounts.User
   alias Glados.Repo
+
+  @encryption Application.get_env(:glados, :password_encryption)
 
   @doc """
   Function to login a user.
@@ -20,7 +26,7 @@ defmodule Glados.Accounts.Auth do
   defp authenticate(nil, _password), do: nil
 
   defp authenticate(user, password) do
-    case Encryption.validate_password(user, password) do
+    case @encryption.validate_password(user, password) do
       {:ok, authenticated_user} ->
         authenticated_user.username == user.username
 

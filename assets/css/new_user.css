@@ -13,11 +13,13 @@
     margin-right: 10px;
 }
 
-#user_year,
-#user_postcode {
+#user_year {
     width: 60px;
 }
+#user_postcode {
+    width: 90px;
+}
 
-.standardInputField {
+.c-standard_input {
     outline-color: #fdad5c;
 }

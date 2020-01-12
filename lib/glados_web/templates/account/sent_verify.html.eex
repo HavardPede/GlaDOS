@@ -10,7 +10,7 @@
         Har du ikke fått den? 
         <br>
         <span class="mt-4"><%= link("Klikk her for å sende en ny email.",
-                to: Routes.user_path(@conn, :send_email_verification),
+                to: Routes.account_path(@conn, :send_email_verification),
                 class: "orange") %></span>
     </div>
     

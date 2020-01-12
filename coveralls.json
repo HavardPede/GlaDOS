@@ -1,0 +1,19 @@
+{
+  "skip_files": [
+    "lib/glados.ex",
+    "lib/glados_web.ex",
+    "lib/glados_web/endpoint.ex",
+    "lib/glados_web/gettext.ex",
+    "lib/glados_web/router.ex",
+    "lib/glados_web/channels/user_socket.ex",
+    "test/support/channel_case.ex",
+    "test/support/conn_case.ex",
+    "lib/glados/application.ex",
+    "lib/glados/email_sender.ex",
+    "test/support/data_case.ex",
+    "test/helpers/event_helper.ex",
+    "test/helpers/account_helper.ex",
+    "lib/glados/repo.ex",
+    "lib/glados/email/email.ex"
+  ]
+}

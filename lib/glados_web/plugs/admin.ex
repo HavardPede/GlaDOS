@@ -1,19 +1,24 @@
 defmodule GladosWeb.Plugs.Admin do
-  alias Glados.Accounts
+  @moduledoc """
+  Plug that redirects user if they are not admin.
+  """
+
+  alias GladosWeb.Plugs.PlugHelper
 
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    current_user =
-      conn
-      |> Plug.Conn.get_session(:current_user_id)
-      |> Accounts.get_user!()
+    current_user = PlugHelper.get_current_user(conn)
 
-    if(current_user.auth_level > 4) do
+    if is_admin?(current_user) do
       conn
     else
       conn
-      |> GladosWeb.Plugs.PlugHelper.redirect()
+      |> PlugHelper.redirect()
     end
+  end
+
+  defp is_admin?(user) do
+    user.account_type == "admin"
   end
 end
