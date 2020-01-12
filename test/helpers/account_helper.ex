@@ -19,7 +19,7 @@ defmodule Helpers.AccountHelper do
     year: "2001",
     email: "test@email.com",
     address: "Test address",
-    auth_level: 1,
+    account_type: "member",
     verified: true,
     password: "testPassword123",
     password_confirmation: "testPassword123"
@@ -39,6 +39,11 @@ defmodule Helpers.AccountHelper do
     {:ok, user: user}
   end
 
+  def create_admin_user(_) do
+    user = fixture(:admin)
+    {:ok, user: user}
+  end
+
   def create_unverified_user(_) do
     user = fixture(:unverified_user)
     {:ok, user: user}
@@ -54,12 +59,17 @@ defmodule Helpers.AccountHelper do
     user
   end
 
+  defp fixture(:admin) do
+    {:ok, user} = Accounts.create_user(%{@unverified_user_attrs | account_type: "admin"})
+    user
+  end
+
   def login_user(%{conn: conn, user: user}) do
     conn =
       conn
       |> init_test_session(%{
         current_user_id: user.id,
-        current_user_auth: user.auth_level
+        account_type: user.account_type
       })
 
     {:ok, conn: conn}

@@ -11,6 +11,7 @@ defmodule Glados.Accounts.User do
 
   @encryption Application.get_env(:glados, :password_encryption)
   @missing_field "Du må fylle inn dette feltet."
+  @valid_account_types ["member", "logger", "admin"]
 
   @primary_key {:id, :binary_id, auto_generate: false}
   schema "users" do
@@ -20,7 +21,7 @@ defmodule Glados.Accounts.User do
     field(:address, :string)
     field(:postcode, :integer)
     field(:phone_number, :string)
-    field(:auth_level, :integer)
+    field(:account_type, :string, null: false)
     field(:verified, :boolean)
 
     field(:password, :string, virtual: true)
@@ -62,7 +63,7 @@ defmodule Glados.Accounts.User do
       :phone_number,
       :password,
       :password_confirmation,
-      :auth_level,
+      :account_type,
       :verified,
       :id
     ])
@@ -78,7 +79,7 @@ defmodule Glados.Accounts.User do
         :year,
         :email,
         :address,
-        :auth_level,
+        :account_type,
         :verified,
         :password,
         :password_confirmation
@@ -92,7 +93,7 @@ defmodule Glados.Accounts.User do
     |> set_dob()
     |> validate_phone_number()
     |> validate_postcode()
-    |> validate_number(:auth_level, less_than: 5)
+    |> validate_account_type()
     |> encrypt_password()
     |> validate_required(:encrypted_password)
   end
@@ -211,6 +212,17 @@ defmodule Glados.Accounts.User do
 
   # Only called if changeset dont have postcode
   defp validate_postcode(changeset), do: changeset
+
+  defp validate_account_type(%{changes: %{account_type: account_type}} = changeset) do
+    if account_type in @valid_account_types do
+      changeset
+    else
+      add_error(changeset, :account_type, "Profil typen '#{account_type}' er ikke godkjent.")
+    end
+  end
+
+  # Only called if changeset dont have postcode
+  defp validate_account_type(changeset), do: changeset
 
   # Validation for date of birth
   defp set_dob(%{changes: %{day: day, month: month, year: year}} = changeset) do

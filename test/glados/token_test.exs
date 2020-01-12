@@ -16,7 +16,7 @@ defmodule Glados.TokenTest do
     year: "2001",
     email: "test@email.com",
     address: "Test address",
-    auth_level: 1,
+    account_type: "member",
     verified: false,
     password: "testPassword123",
     password_confirmation: "testPassword123"

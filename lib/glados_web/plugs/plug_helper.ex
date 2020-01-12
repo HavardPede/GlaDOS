@@ -22,7 +22,7 @@ defmodule GladosWeb.Plugs.PlugHelper do
   defp redirect_user(conn, id) do
     id
     |> Accounts.get_user!()
-    |> Map.get(:auth_level)
+    |> Map.get(:account_type)
     |> redir(conn)
   end
 
@@ -32,21 +32,18 @@ defmodule GladosWeb.Plugs.PlugHelper do
     |> halt()
   end
 
-  # Member
-  defp redir(1, conn) do
+  defp redir("member", conn) do
     conn
     |> redirect(to: Routes.member_path(conn, :index))
   end
 
-  # Logger
-  defp redir(2, conn) do
+  defp redir("logger", conn) do
     conn
     |> redirect(to: Routes.logger_path(conn, :logger_transactions))
     |> halt()
   end
 
-  # Admin
-  defp redir(5, conn) do
+  defp redir("admin", conn) do
     conn
     |> redirect(to: Routes.admin_path(conn, :index))
     |> halt()

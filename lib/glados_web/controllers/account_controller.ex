@@ -66,11 +66,6 @@ defmodule GladosWeb.AccountController do
       |> put_flash(:info, "Din bruker er nå verifisert!")
       |> redirect(to: Routes.session_path(conn, :new))
     else
-      %User{verified: true} ->
-        conn
-        |> put_flash(:error, "Din bruker er allerede verifisert.")
-        |> redirect(to: Routes.session_path(conn, :new))
-
       _ ->
         conn
         |> put_flash(:error, "Verifikasjons-lenken er ugyldig.")
@@ -126,31 +121,48 @@ defmodule GladosWeb.AccountController do
         changeset: changeset,
         user_id: user.id
       )
+    else
+      {:error, :invalid} ->
+        conn
+        |> put_flash(:error, "Lenken er ikke gyldig.")
+        |> redirect(to: Routes.session_path(conn, :new))
     end
   end
+
+  def change_password(conn, _params), do: PlugHelper.render_404(conn)
 
   @doc """
   Post path for changing password
   """
-  def set_new_password(conn, %{"user" => user_params}) do
-    user_params["user_id"]
-    |> Accounts.get_user!()
-    |> Accounts.update_password(user_params)
-    |> case do
-      {:ok, _user} ->
-        conn
-        |> put_flash(:info, "Passordet er endret!")
-        |> redirect(to: Routes.session_path(Endpoint, :new))
 
-      {:error, changeset} ->
+  def set_new_password(conn, %{"user" => user_params, "token" => token}) do
+    with {:ok, user_id} <- Glados.Token.set_new_password_token(token),
+         %User{} = user <- Glados.Accounts.get_user!(user_id) do
+      user
+      |> Accounts.update_password(user_params)
+      |> case do
+        {:ok, _user} ->
+          conn
+          |> put_flash(:info, "Passordet er endret!")
+          |> redirect(to: Routes.session_path(Endpoint, :new))
+
+        {:error, changeset} ->
+          conn
+          |> render("new_password.html",
+            layout: {GladosWeb.LayoutView, "dark_bg.html"},
+            changeset: changeset,
+            user_id: changeset.data.id
+          )
+      end
+    else
+      _ ->
         conn
-        |> render("new_password.html",
-          layout: {GladosWeb.LayoutView, "dark_bg.html"},
-          changeset: changeset,
-          user_id: changeset.data.id
-        )
+        |> put_flash(:error, "En feil oppstod.")
+        |> redirect(to: Routes.session_path(conn, :new))
     end
   end
+
+  def set_new_password(conn, _), do: PlugHelper.render_404(conn)
 
   @doc """
   Path to display form for editing a user

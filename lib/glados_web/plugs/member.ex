@@ -7,8 +7,6 @@ defmodule GladosWeb.Plugs.Member do
 
   def init(opts), do: opts
 
-  @member_auth_levels [1, 3, 4]
-
   def call(conn, _opts) do
     current_user = PlugHelper.get_current_user(conn)
 
@@ -20,5 +18,5 @@ defmodule GladosWeb.Plugs.Member do
     end
   end
 
-  defp is_a_member?(%{auth_level: member_type}), do: member_type in @member_auth_levels
+  defp is_a_member?(%{account_type: account_type}), do: account_type == "member"
 end

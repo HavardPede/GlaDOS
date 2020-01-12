@@ -59,7 +59,7 @@ defmodule Glados.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
-    %User{auth_level: 1, verified: false, id: Ecto.UUID.generate()}
+    %User{account_type: "member", verified: false, id: Ecto.UUID.generate()}
     |> User.changeset(attrs)
     |> Repo.insert()
   end

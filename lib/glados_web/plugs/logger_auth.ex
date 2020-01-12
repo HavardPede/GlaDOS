@@ -19,6 +19,6 @@ defmodule GladosWeb.Plugs.LoggerAuth do
   end
 
   defp is_logger?(user) do
-    user.auth_level == 2
+    user.account_type == "logger"
   end
 end

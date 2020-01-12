@@ -15,7 +15,7 @@
         <%= text_input f, :username, class: "c-standard_input lg:w-3/5" %>
       </div>
       <div class="mb-4 mx-auto">
-        <h3 class="mb-1">Password</h3>
+        <h3 class="mb-1">Passord</h3>
         <%= password_input f, :password, class: "c-standard_input lg:w-3/5" %>
       </div>
       <div class="pb-4">

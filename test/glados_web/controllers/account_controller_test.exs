@@ -1,7 +1,7 @@
 defmodule GladosWeb.AccountControllerTest do
   use GladosWeb.ConnCase
 
-  alias Glados.{Repo, Token}
+  alias Glados.{Accounts, Repo, Token}
   alias Helpers.AccountHelper
 
   @encryption Application.get_env(:glados, :password_encryption)
@@ -228,13 +228,24 @@ defmodule GladosWeb.AccountControllerTest do
       assert html_response(conn, 404)
     end
 
-    test "Does not allow user to view /verifiser without valid token", %{conn: conn} do
-      conn = get(conn, Routes.account_path(conn, :verify_email))
+    test "Does not allow user to view /verifiser without valid token", %{conn: conn, user: user} do
+      conn =
+        conn
+        |> Plug.Test.init_test_session(unverified_user: user.id)
+        |> get(Routes.account_path(conn, :verify_email))
 
       assert html_response(conn, 404)
 
-      conn = get(conn, Routes.account_path(conn, :verify_email, token: "invalid_token"))
-      assert html_response(conn, 404)
+      conn =
+        conn
+        |> recycle()
+        |> Plug.Test.init_test_session(unverified_user: user.id)
+        |> get(Routes.account_path(conn, :verify_email, token: "invalid_token"))
+
+      redirected_path = redirected_to(conn, 302)
+      conn = get(recycle(conn), redirected_path)
+
+      assert html_response(conn, 200) =~ "Verifikasjons-lenken er ugyldig."
     end
 
     test "Does not allow the user to view /verifikasjonsendt without an unverified user in session",
@@ -403,6 +414,135 @@ defmodule GladosWeb.AccountControllerTest do
         )
 
       refute html_response(conn, 200) =~ "Passordet ble oppdatert."
+    end
+  end
+
+  describe ":new" do
+    test "shows the page for creating a new account", %{conn: conn} do
+      conn =
+        conn
+        |> get(Routes.account_path(conn, :new))
+
+      assert html_response(conn, 200) =~ "Lag en ny bruker for å søke crew!"
+    end
+  end
+
+  describe ":forgotten_password" do
+    test "shows a page to change password", %{conn: conn} do
+      conn =
+        conn
+        |> get(Routes.account_path(conn, :forgotten_password))
+
+      assert html_response(conn, 200) =~ "Har du glemt passordet ditt?"
+    end
+  end
+
+  describe ":change_password" do
+    setup [:create_user]
+
+    test "shows a password-changing page when using correct token", %{user: user, conn: conn} do
+      token = Token.generate_new_password_token(user)
+
+      conn =
+        conn
+        |> get(Routes.account_path(conn, :change_password, token: token))
+
+      assert html_response(conn, 200) =~ "Bekreft passord"
+    end
+
+    test "throws 404 when token is missing", %{conn: conn} do
+      conn =
+        conn
+        |> get(Routes.account_path(conn, :change_password))
+
+      assert html_response(conn, 404)
+    end
+
+    test "redirects to login when token is wrong", %{conn: conn} do
+      conn =
+        conn
+        |> get(Routes.account_path(conn, :change_password, token: "invalid_token"))
+
+      redirected_path = redirected_to(conn, 302)
+      conn = get(recycle(conn), redirected_path)
+
+      assert Routes.session_path(conn, :new) == conn.request_path
+    end
+  end
+
+  describe ":set_new_password" do
+    setup [:create_user]
+
+    test "updates password when given a valid token and passwords", %{conn: conn, user: user} do
+      token = Token.generate_new_password_token(user)
+
+      conn =
+        conn
+        |> put(Routes.account_path(conn, :set_new_password, token: token), %{
+          "user" => %{
+            "password" => @extra_valid_password,
+            "password_confirmation" => @extra_valid_password
+          }
+        })
+
+      redirected_path = redirected_to(conn, 302)
+      conn = get(recycle(conn), redirected_path)
+      assert html_response(conn, 200) =~ "Passordet er endret!"
+
+      updated_user = Accounts.get_user!(user.id)
+      assert user.encrypted_password != updated_user.encrypted_password
+    end
+
+    test "throws 404 when no token is specified", %{conn: conn} do
+      conn =
+        conn
+        |> put(Routes.account_path(conn, :set_new_password), %{
+          "user" => %{
+            "password" => @extra_valid_password,
+            "password_confirmation" => @extra_valid_password
+          }
+        })
+
+      assert html_response(conn, 404)
+    end
+
+    test "redirects to login without changing password when token is wrong", %{
+      conn: conn,
+      user: user
+    } do
+      conn =
+        conn
+        |> put(Routes.account_path(conn, :set_new_password, token: "invalid_token"), %{
+          "user" => %{
+            "password" => @extra_valid_password,
+            "password_confirmation" => @extra_valid_password
+          }
+        })
+
+      redirected_path = redirected_to(conn, 302)
+      conn = get(recycle(conn), redirected_path)
+      assert html_response(conn, 200) =~ "En feil oppstod."
+
+      updated_user = Accounts.get_user!(user.id)
+      assert user.encrypted_password == updated_user.encrypted_password
+    end
+
+    test "reloads page if passwords does not match", %{conn: conn, user: user} do
+      token = Token.generate_new_password_token(user)
+
+      conn =
+        conn
+        |> put(Routes.account_path(conn, :set_new_password, token: token), %{
+          "user" => %{
+            "password" => @extra_valid_password,
+            "password_confirmation" => "does_not_match"
+          }
+        })
+
+      assert html_response(conn, 200) =~ "Bekreft passord"
+
+      updated_user = Accounts.get_user!(user.id)
+      assert user.encrypted_password == updated_user.encrypted_password
     end
   end
 

@@ -25,7 +25,7 @@ defmodule GladosWeb.SessionController do
         if user.verified do
           conn
           |> put_session(:current_user_id, user.id)
-          |> put_session(:current_user_auth, user.auth_level)
+          |> put_session(:account_type, user.account_type)
           |> configure_session(renew: true)
           |> redirect(to: Routes.member_path(Endpoint, :index))
         else

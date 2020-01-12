@@ -1,4 +1,4 @@
-<% auth = Plug.Conn.get_session(@conn, :current_user_auth) %>
+<% account_type = Plug.Conn.get_session(@conn, :account_type) %>
 <nav class="flex items-center justify-between flex-wrap bg-grue h-12 shadow-xl">
   <div class="flex items-center flex-shrink-0 text-white">
     <img src=<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %> class="h-10  m-1 mr-4" />
@@ -13,7 +13,7 @@
   <input type="checkbox" class="hidden" id="menu-toggle">
   <div class="hidden w-full lg:flex lg:items-center lg:w-auto" id="menu">
     <div class="text-md text-white lg:flex-grow lg:flex flex-row-reverse text-center bg-grue">
-      <%= for {key, value} <- get_nav_elements(auth) do %>
+      <%= for {key, value} <- get_nav_elements(account_type) do %>
         <a href="<%= value %>" class="c-nav_elem lg:border-0 lg:border-b-4">                
           <%= key %>
         </a>
@@ -39,7 +39,7 @@
     <img src=<%= Routes.static_path(@conn, "/images/down-arrow.png" ) %> class="cursor-pointer h-6 mr-6 float-right mt-1 hover:border" id="accountArrow" />
   </div>
     <ul class=" mt-8 mr-3" id="accountTabList">
-      <%= if auth < 3 do %>
+      <%= if account_type not in ["admin", "logger"] do %>
         <a href="<%= Routes.account_path(@conn, :edit) %>">
           <li class="c-user_dropdown_elem text-grue bg-white border-2 border-grue hover:text-orange-500 hover:border-orange-500">
             Min Profil

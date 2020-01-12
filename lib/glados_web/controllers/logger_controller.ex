@@ -22,7 +22,7 @@ defmodule GladosWeb.LoggerController do
     user = conn.assigns.user
     changeset = CrewTransactions.changeset(%CrewTransactions{}, %{})
 
-    logger? = user.auth_level == 2
+    logger? = user.account_type == "logger"
 
     transactions =
       Glados.Logs.get_all_crew_transactions()

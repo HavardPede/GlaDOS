@@ -19,6 +19,6 @@ defmodule GladosWeb.Plugs.Admin do
   end
 
   defp is_admin?(user) do
-    user.auth_level > 4
+    user.account_type == "admin"
   end
 end
