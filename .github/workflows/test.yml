@@ -19,6 +19,6 @@ jobs:
       - name: Install static assets
         run: |
           cd assets && yarn && yarn deploy
-          && cd ../ && mix phx.digest
+          cd ../ && mix phx.digest
       - name: Run Tests
         run: mix test
