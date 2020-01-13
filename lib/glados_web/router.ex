@@ -92,8 +92,8 @@ defmodule GladosWeb.Router do
     pipe_through [:browser, :member]
 
     get("/hovedside", MemberController, :index)
-    get("/profil/informasjon", AccountController, :edit)
-    put("/profil/informasjon", AccountController, :update_user)
+    get("/profil", AccountController, :edit)
+    put("/profil", AccountController, :update_user)
   end
 
   scope "/:event_id", GladosWeb do
