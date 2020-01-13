@@ -1,8 +1,8 @@
 <div class="mt-2 ml-4">
   <% paths = get_paths(@conn.request_path)%>
 
-  <%= unless @conn.request_path == "/"  do %>
-    <a href="<%= Routes.url(@conn)  %>/ "> Root > </a>
+  <%= unless @conn.request_path == "/hovedside"  do %>
+    <a href="<%= Routes.url(@conn)  %>/ "> hovedside > </a>
   <% end%>
 
   
