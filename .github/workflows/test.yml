@@ -16,9 +16,5 @@ jobs:
           mix local.rebar --force
           mix local.hex --force
           mix deps.get
-      - name: Install static assets
-        run: |
-          cd assets && yarn && yarn deploy
-          cd ../ && mix phx.digest
       - name: Run Tests
         run: mix test
