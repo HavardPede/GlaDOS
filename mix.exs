@@ -5,7 +5,7 @@ defmodule Glados.MixProject do
     [
       app: :glados,
       version: "0.1.0",
-      elixir: "~> 1.9.2",
+      elixir: "~> 1.9",
       elixirc_paths: elixirc_paths(Mix.env()),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
