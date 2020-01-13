@@ -1,20 +1,41 @@
-name: test
+name: Elixir CI
 
 on: push
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    container:
-      image: elixir:1.9.1-slim
+  test:
+    runs-on: ${{ matrix.os }}
+    name: OTP ${{ matrix.otp }} | Elixir ${{ matrix.elixir }} | OS ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
+        otp: [22.x]
+        elixir: [1.9.4]
+        node: ["10"]
 
     steps:
-      - uses: actions/checkout@v1
-      - name: Install Dependencies
+      - uses: actions/checkout@v1.0.0
+      - uses: webfactory/ssh-agent@e181806200805a1b73d626e059836863e4b697c9
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - uses: actions/setup-elixir@v1.0.0
+        with:
+          otp-version: ${{ matrix.otp }}
+          elixir-version: ${{ matrix.elixir }}
+
+      - name: Install dependencies
         run: |
           mix local.rebar --force
           mix local.hex --force
           mix deps.get
-      - name: Run Tests
-        run: mix test
+      - name: Run tests
+        run: |
+          mix compile
+          make test
+        env:
+          MIX_ENV: test
+
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
