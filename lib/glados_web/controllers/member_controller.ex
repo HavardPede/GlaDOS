@@ -1,6 +1,9 @@
 defmodule GladosWeb.MemberController do
   use GladosWeb, :controller
 
+  import Phoenix.LiveView.Controller
+  alias GladosWeb.LiveView
+
   alias Glados.Events
 
   def index(conn, _params) do
@@ -11,6 +14,7 @@ defmodule GladosWeb.MemberController do
   end
 
   def event_landing(conn, _params) do
-    render(conn, "event_landing_page.html")
+    session = %{message: "hello"}
+    live_render(conn, LiveView.ApplicationPage, session: session)
   end
 end

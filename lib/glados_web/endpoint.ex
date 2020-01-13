@@ -1,6 +1,8 @@
 defmodule GladosWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :glados
 
+  socket "/live", Phoenix.LiveView.Socket
+
   socket "/socket", GladosWeb.UserSocket,
     websocket: true,
     longpoll: false
