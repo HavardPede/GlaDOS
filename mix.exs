@@ -5,7 +5,7 @@ defmodule Glados.MixProject do
     [
       app: :glados,
       version: "0.1.0",
-      elixir: "~> 1.5",
+      elixir: "~> 1.9",
       elixirc_paths: elixirc_paths(Mix.env()),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
@@ -50,8 +50,8 @@ defmodule Glados.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 1.0"},
-      {:comeonin, "~> 4.0"},
-      {:bcrypt_elixir, "~> 1.0"},
+      {:comeonin, "~> 5.1"},
+      {:bcrypt_elixir, "~> 2.0"},
       {:bamboo, "~> 1.3"},
       {:bamboo_smtp, "~> 2.0.0"},
       {:timex, "~> 3.5"},
