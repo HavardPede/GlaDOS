@@ -6,7 +6,7 @@
   1. <%= @questions.q1.question %>
   <input type="text phx-focus="myfocus" phx-blur="myblur" class="c-standard_input w-4/5 md:w-3/5 mt-2"/>
 
-  <%= @questions.q2.question %>
+  <%= render @questions.q1.type <> "_application_input.html", data: @questions.q1 %>
 
   <%= @questions.q3.question %>
 </div>
