@@ -145,3 +145,8 @@ h5 {
 html {
   font-family: "Fira Code", monospace;
 }
+
+.phx-connected,
+.phx-disconnected {
+  width: 100%;
+}

@@ -50,7 +50,7 @@ defmodule GladosWeb.AdminController do
       changeset = Events.change_event(event)
       render(conn, "update_event.html", changeset: changeset, active_event: active_event)
     else
-      {:error, :nil_value} ->
+      {:error, :missing_event} ->
         conn
         |> put_flash(:error, "Oops, vi klarte ikke å finne dette eventet.")
         |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :events))
@@ -66,7 +66,7 @@ defmodule GladosWeb.AdminController do
       |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :events))
       |> halt()
     else
-      {:error, :nil_value} ->
+      {:error, :missing_event} ->
         conn
         |> put_flash(:error, "En feil oppstod. Eventet har ikke blitt oppdatert.")
         |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :events))

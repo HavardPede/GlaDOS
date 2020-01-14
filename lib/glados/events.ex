@@ -5,7 +5,6 @@ defmodule Glados.Events do
 
   alias Glados.Events.Event
   alias Glados.Repo
-  alias Glados.Utils
 
   @doc """
   Returns a changeset for a specific event.
@@ -55,12 +54,12 @@ defmodule Glados.Events do
     {:ok, %Event{}}
 
     iex > get_event(456)
-    {:error, :nil_value}
+    {:error, :missing_event}
   """
   def get_event(event_id) do
     Repo.get(Event, event_id)
     |> Repo.preload(:crew_member)
-    |> Utils.nillable()
+    |> OK.required(:missing_event)
   end
 
   @doc """
@@ -85,7 +84,7 @@ defmodule Glados.Events do
   """
   def get_active_event do
     Repo.get_by(Event, active: true)
-    |> Utils.nillable()
+    |> OK.required(:no_active_event)
   end
 
   @doc """
@@ -119,7 +118,7 @@ defmodule Glados.Events do
       {:error, nil}
     else
       Enum.min_by(coming_events, & &1.start)
-      |> Utils.ok()
+      |> OK.wrap()
     end
   end
 
@@ -132,7 +131,7 @@ defmodule Glados.Events do
       {:error, nil}
     else
       Enum.max_by(previous_events, & &1.end)
-      |> Utils.ok()
+      |> OK.wrap()
     end
   end
 end

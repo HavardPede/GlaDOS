@@ -43,7 +43,7 @@ defmodule Glados.Accounts do
   """
   def get_user_by_email(email) do
     Repo.get_by(User, email: email)
-    |> Glados.Utils.nillable()
+    |> OK.required(:missing_user)
   end
 
   @doc """

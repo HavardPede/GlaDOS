@@ -1,6 +1,6 @@
-defmodule Glados.Helper do
+defmodule Glados.Toolbox.List do
   @moduledoc """
-  This modules defines a lot of nice to have functions
+  Contains extra functions to handle lists.
   """
 
   @doc """
@@ -19,7 +19,7 @@ defmodule Glados.Helper do
     |> Enum.reverse()
   end
 
-  # Recursive function to remove the head of the list untill element is found
+  # Recursive function to remove the head of the list until element is found
   defp find_element_by_removing_head(list, element) do
     if hd(list) == element do
       list

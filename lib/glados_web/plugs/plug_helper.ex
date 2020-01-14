@@ -7,12 +7,12 @@ defmodule GladosWeb.Plugs.PlugHelper do
   import Phoenix.Controller
 
   alias GladosWeb.Router.Helpers, as: Routes
-  alias Glados.{Accounts, Utils}
+  alias Glados.{Accounts}
 
   def redirect(conn) do
     conn
     |> get_session(:current_user_id)
-    |> Utils.nillable()
+    |> OK.required()
     |> case do
       {:ok, user_id} -> redirect_user(conn, user_id)
       {:error, _} -> redirect_guest(conn)

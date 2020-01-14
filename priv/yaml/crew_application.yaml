@@ -1,31 +1,44 @@
 version: 1
 description: Defines all questions for crew applications
 
-Q1:
+q1:
+  type: crew
+  question: "Hvilket crew ønsker du som første valg?"
+
+q2:
+  type: crew
+  question: "Hvilket crew ønsker du som andre valg?"
+
+q3:
   type: string
   default: ""
-  question: 
-Q2:
+  question: "Hva slags relevant erfaring har du?"
+
+q4:
   type: string
   default: ""
-  question: 
-Q3:
+  question: "Har du noen allergier?"
+
+q5:
   type: string
   default: ""
-  question: 
-Q4:
+  question: "Har du noen sykdommer eller lignende, som vi bør vite om?"
+
+q6:
   type: string
   default: ""
-  question: 
-Q5:
+  question: "Vennligst oppgi en kontakt-person i tilfelle noe oppstår. (navn og nummer)"
+
+q7:
+  type: checkboxes
+  default: ""
+  question: "Vil du være tilgjengelig ved følgende?"
+  boxes:
+    - Opprigg
+    - Nedrigg
+    - Lan
+
+q8:
   type: string
   default: ""
-  question: 
-Q6:
-  type: string
-  default: ""
-  question: 
-Q7:
-  type: string
-  default: ""
-  question: 
+  question: "Fyll ut ekstra relevant informasjon i henhold til tilstedeværelse."

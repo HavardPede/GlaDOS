@@ -100,7 +100,7 @@ defmodule GladosWeb.AccountController do
         |> redirect(to: Routes.account_path(Endpoint, :forgotten_password))
         |> halt()
 
-      {:error, :nil_value} ->
+      {:error, :missing_user} ->
         conn
         |> put_flash(:error, "Fant ingen bruker med denne epost addressen.")
         |> redirect(to: Routes.account_path(Endpoint, :forgotten_password))
