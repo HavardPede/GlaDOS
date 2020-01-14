@@ -62,7 +62,7 @@ defmodule Glados.Events.Event do
   end
 
   defp validate_active(%{changes: %{active: true}, data: %{id: id}} = changeset) do
-    case Events.get_active_event() |> IO.inspect() do
+    case Events.get_active_event() do
       {:error, :no_active_event} ->
         changeset
 

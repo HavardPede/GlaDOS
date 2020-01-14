@@ -1,6 +1,9 @@
 defmodule GladosWeb.LiveView.ApplicationPage do
-  use Phoenix.LiveView
+  @moduledoc """
+  The liveview session handler for the application page.
+  """
 
+  use Phoenix.LiveView
   alias Glados.Toolbox
 
   @questions_path "./priv/yaml/crew_application.yaml"
@@ -9,7 +12,7 @@ defmodule GladosWeb.LiveView.ApplicationPage do
     Phoenix.View.render(GladosWeb.MemberView, "application_page.html", assigns)
   end
 
-  def mount(%{message: message}, socket) do
+  def mount(%{}, socket) do
     {:ok, questions} =
       @questions_path
       |> YamlElixir.read_from_file()
