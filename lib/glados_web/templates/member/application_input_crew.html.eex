@@ -1,0 +1,6 @@
+<select class="w-32 mt-1" name="<%= @name %>">
+  <option value="" disabled selected hidden>...</option>
+  <%= for crew <- @crew do %>
+    <option value="<%= crew %>" <%= if crew == @answer, do: "selected" %> ><%= crew %></option>
+  <% end %>
+</select>

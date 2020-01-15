@@ -15,6 +15,6 @@ defmodule GladosWeb.MemberController do
 
   def event_landing(conn, _params) do
     session = %{}
-    live_render(conn, LiveView.ApplicationPage, session: session)
+    live_render(conn, LiveView.CrewApplication, session: session)
   end
 end

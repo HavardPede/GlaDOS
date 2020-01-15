@@ -1,0 +1,22 @@
+<div class="w-4/5 mx-auto h-64 flex flex-col">
+  <div class="mb-12">
+    <h1 class="text-3xl my-0">Crew søknad</h1>
+    <h2 class="text-xl">Lanmine 30 - Generations</h2>
+  </div>
+
+  <form phx-change="set_answer" onsubmit="return false;">
+    <%= for question_number <- get_question_numbers(@page) do %>
+      <%
+        question_atom = question_atom(question_number) 
+        question_data = @questions[question_atom]
+      %>
+      <div class="mb-4 flex flex-col"> 
+          <%= if question_atom in Map.keys(@questions) do %>
+            <%= question_number %>. <%= question_data.question %>
+            <%= render gen_input_file(question_data.type), data: question_data, answer: @answers[question_atom], name: question_atom, crew: @crew %>
+          <% end %>
+        </div>
+    <% end %>
+  </form>
+  <%= render "crew_application_nav.html", page: @page, max_pages: @max_pages, activate_next_btn: activate_next_btn?(@page, @answers) %>
+</div>

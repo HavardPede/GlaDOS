@@ -1,6 +1,3 @@
-version: 1
-description: Defines all questions for crew applications
-
 q1:
   type: crew
   question: "Hvilket crew ønsker du som første valg?"

@@ -1,0 +1,1 @@
+<input type="string" name="<%= @name %>" class="mt-1 c-standard_input" phx-value-question="<%= @name %>" value="<%= @answer %>" %>
