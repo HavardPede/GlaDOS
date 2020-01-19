@@ -8,7 +8,7 @@ defmodule Glados.Events.Event do
   import Ecto.Changeset
   alias Glados.Accounts.User
   alias Glados.Events
-  alias Glados.Events.EventCrew
+  alias Glados.Events.EventCrewMember
 
   @primary_key {:id, :integer, auto_generate: false}
   schema "event" do
@@ -18,7 +18,7 @@ defmodule Glados.Events.Event do
     field(:address, :string, null: false)
     field(:active, :boolean)
 
-    many_to_many(:crew_member, User, join_through: EventCrew, on_replace: :delete)
+    many_to_many(:crew_member, User, join_through: EventCrewMember, on_replace: :delete)
 
     timestamps()
   end

@@ -1,6 +1,8 @@
-<div class="m-auto mt-8 flex flex-row items-center">
-  <div class="w-24"><%= if @page > 1 do %><button type="button" class="border w-24 btn_orange p-1" phx-click="prev_page">Forrige</button><% end %></div>
-  <span class="text-lg mx-3"><%= @page %> / <%= @max_pages %></span>
-  <div class="w-24"><%= if @page < @max_pages && @activate_next_btn do %><button type="button" class="border w-24 btn_orange p-1" phx-click="next_page">Neste</button><% end %></div>
-  <%= @activate_next_btn %> <%= #TODO make this show true when there are 3 answers %>
+<div class="flex flex-row m-auto mt-12">
+  <input type="button" <%= unless @show_back, do: "disabled" %> class="c-btn mr-3 w-24 text-center" phx-click="previous_page" value="Forrige" />
+  <%= if @last_page do %>
+    <input type="button" <%= unless @show_next , do: "disabled" %> class="c-btn c-btn--orange ml-3 text-center" phx-click="send_application" value="Send Søknad" />
+  <%= else %>
+    <input type="button" <%= unless @show_next , do: "disabled" %> class="c-btn ml-3 w-24 text-center" phx-click="next_page" value="neste" />
+  <% end %>
 </div>

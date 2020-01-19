@@ -1,0 +1,39 @@
+.c-btn {
+  height: 40px;
+  border-radius: 13px;
+  border: 1px solid #d6d6d6;
+  color: white;
+  background-color: var(--payne);
+  padding: 0px 15px 0px 15px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.c-btn:focus {
+  outline: 0px;
+  color: var(--azure);
+}
+.c-btn:hover {
+  font-size: 14px;
+  color: var(--azure);
+}
+
+.c-btn:disabled {
+  background-color: #f1f4f8;
+  color: var(--azure);
+  border: 0px;
+}
+
+.c-btn--orange {
+  background-color: var(--main-orange);
+}
+
+.c-btn--orange:hover {
+  background-color: transparent;
+  color: var(--main-orange);
+}
+
+.c-btn--orange:focus {
+  background-color: transparent;
+  color: var(--main-orange);
+}

@@ -1,6 +1,6 @@
-<select class="w-32 mt-1" name="<%= @name %>">
+<select class="w-32 mt-3" name="<%= @name %>" phx-value_something="deffo something">
   <option value="" disabled selected hidden>...</option>
   <%= for crew <- @crew do %>
-    <option value="<%= crew %>" <%= if crew == @answer, do: "selected" %> ><%= crew %></option>
+    <option class="bg-azure" value="<%= crew %>" <%= if crew == @answer, do: "selected" %> ><%= crew %></option>
   <% end %>
 </select>

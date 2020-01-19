@@ -1,1 +1,1 @@
-<input type="string" name="<%= @name %>" class="mt-1 c-standard_input" phx-value-question="<%= @name %>" value="<%= @answer %>" %>
+<textarea rows="4" name="<%= @name %>" cols="50" class="bg-azure resize-none mt-3 mb-0 rounded shadow-md"><%= @answer %></textarea>

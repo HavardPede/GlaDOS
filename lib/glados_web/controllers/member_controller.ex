@@ -13,8 +13,8 @@ defmodule GladosWeb.MemberController do
     render(conn, "index.html", events: events, current_event: current_event)
   end
 
-  def event_landing(conn, _params) do
-    session = %{}
+  def event_landing(conn, %{"event_id" => event_id}) do
+    session = %{user_id: conn.assigns.user.id, event_id: event_id}
     live_render(conn, LiveView.CrewApplication, session: session)
   end
 end

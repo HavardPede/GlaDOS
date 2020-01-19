@@ -7,7 +7,7 @@ defmodule Glados.Accounts.User do
 
   import Ecto.Changeset
   import Kernel
-  alias Glados.Events.{Event, EventCrew}
+  alias Glados.Events.{Event, EventCrewMember}
 
   @encryption Application.get_env(:glados, :password_encryption)
   @missing_field "Du må fylle inn dette feltet."
@@ -33,7 +33,7 @@ defmodule Glados.Accounts.User do
     field(:year, :string, virtual: true)
     field(:dob, :date)
 
-    many_to_many(:event, Event, join_through: EventCrew, on_replace: :delete)
+    many_to_many(:event, Event, join_through: EventCrewMember, on_replace: :delete)
 
     timestamps()
   end

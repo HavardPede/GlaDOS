@@ -1,0 +1,17 @@
+<div class="w-5/12 flex flex-col mr-8 p-2 bg-chalice text-sm text-aquaDark rounded shadow-xl hidden md:block">
+  <%= Enum.map(@page_order,fn page -> %>
+  <% colour = if @categorized_pages[page] == :invalid, do: "text-wine" %>
+  <div class="my-2 flex flex-row justify-start">
+    <div class="w-6 <%= colour %> fill-current">
+      <%= 
+          case @categorized_pages[page] do
+            :complete -> GladosWeb.IconsView.render("checkmark.html") 
+            :invalid -> GladosWeb.IconsView.render("x.html") 
+            _ -> ""
+          end
+          %>
+    </div>
+    <span class="<%= colour %> <%= if @page == page, do: "underline" %>"><%= page %></span>
+  </div>
+<% end) %>
+</div>

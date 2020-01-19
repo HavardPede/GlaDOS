@@ -1,6 +1,5 @@
 <div class="w-full">
   <table class="w-4/5 mx-auto c-standard_table">
-    
     <tr>
       <th>Event navn</th>
       <th>start</th>
@@ -18,8 +17,7 @@
       </tr>
     <% end %>
   </table>
-
   <div class="w-4/5 mx-auto mt-4 flex justify-end">
-    <%= link "Nytt arrangement", to: Routes.admin_path(@conn, :new_event), class: "btn_orange newUserBtn mt-0 py-2 h-8", method: :get %>
+    <%= link "Nytt arrangement", to: Routes.admin_path(@conn, :new_event), class: "c-btn c-btn--orange newUserBtn mt-0 py-2 h-8", method: :get %>
   </div>
 </div>
