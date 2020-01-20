@@ -80,6 +80,6 @@
     </div>
 
     <div class="w-3/5 lg:w-4/5 mx-auto flex flex-col lg:flex-row mb-4">
-      <%= submit "Lag profil", class: "btn_orange new_user_btn shadow-md" %>
+      <%= submit "Lag profil", class: "c-btn c-btn--orange new_user_btn shadow-md" %>
   <% end%>
 </div>

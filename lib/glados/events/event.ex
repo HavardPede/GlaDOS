@@ -8,7 +8,6 @@ defmodule Glados.Events.Event do
   import Ecto.Changeset
   alias Glados.Accounts.User
   alias Glados.Events
-  alias Glados.Events.EventCrew
 
   @primary_key {:id, :integer, auto_generate: false}
   schema "event" do
@@ -18,7 +17,7 @@ defmodule Glados.Events.Event do
     field(:address, :string, null: false)
     field(:active, :boolean)
 
-    many_to_many(:crew_member, User, join_through: EventCrew, on_replace: :delete)
+    many_to_many(:crew_members, User, join_through: "event_crew_members", on_replace: :delete)
 
     timestamps()
   end
@@ -63,7 +62,7 @@ defmodule Glados.Events.Event do
 
   defp validate_active(%{changes: %{active: true}, data: %{id: id}} = changeset) do
     case Events.get_active_event() do
-      {:error, :nil_value} ->
+      {:error, :no_active_event} ->
         changeset
 
       {:ok, %{id: ^id}} ->

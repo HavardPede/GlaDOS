@@ -1,31 +1,48 @@
-version: 1
-description: Defines all questions for crew applications
+page_order: ["Crew", "Personlig info", "Tilstedeværelse"]
+Crew:
+  1:
+    type: crew
+    question: "Hvilket crew ønsker du som første valg?"
+  2:
+    type: crew
+    question: "Hvilket crew ønsker du som andre valg?"
+  3:
+    type: string
+    default: ""
+    question: "Hva slags relevant erfaring har du?"
 
-Q1:
-  type: string
-  default: ""
-  question: 
-Q2:
-  type: string
-  default: ""
-  question: 
-Q3:
-  type: string
-  default: ""
-  question: 
-Q4:
-  type: string
-  default: ""
-  question: 
-Q5:
-  type: string
-  default: ""
-  question: 
-Q6:
-  type: string
-  default: ""
-  question: 
-Q7:
-  type: string
-  default: ""
-  question: 
+Personlig info:
+  1:
+    type: string
+    default: ""
+    question: "Har du noen allergier?"
+  2:
+    type: string
+    default: ""
+    question: "Har du noen sykdommer eller lignende, som vi bør vite om?"
+  3:
+    type: string
+    default: ""
+    question: "Vennligst oppgi en kontakt-person i tilfelle noe oppstår. (navn og nummer)"
+
+Tilstedeværelse:
+  1:
+    type: radio
+    default: "yes"
+    question: "Er du tilgjengelig ved opprigg?"
+    boxes:
+      - Opprigg
+      - Nedrigg
+      - Lan
+  2:
+    type: radio
+    default: "yes"
+    question: "Er du tilgjengelig ved Nedrigg?"
+  3:
+    type: radio
+    default: "yes"
+    question: "Er du tilgjengelig ved selve LANet?"
+  4:
+    type: string
+    default: ""
+    question: "Fyll ut ekstra relevant informasjon i henhold til tilstedeværelse."

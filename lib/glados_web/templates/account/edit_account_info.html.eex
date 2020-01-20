@@ -50,6 +50,6 @@
         <span class="help-block">Datoen er ikke godkjent.</span>
       <% end %>
     </div>
-    <%= submit "Oppdater", class: "btn_orange new_user_btn shadow-md" %>
+    <%= submit "Oppdater", class: "c-btn c-btn--orange new_user_btn shadow-md" %>
   <% end%>
 </div>

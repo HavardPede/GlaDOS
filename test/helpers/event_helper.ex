@@ -42,6 +42,8 @@ defmodule Helpers.EventHelper do
       @valid_inputs
       |> Map.put(:active, true)
       |> Events.create_event()
+
+    {:ok, event_id: @valid_inputs.id, event: event}
   end
 
   @doc """
@@ -52,7 +54,7 @@ defmodule Helpers.EventHelper do
       @valid_inputs_2
       |> Events.create_event()
 
-    {:ok, event_id: @valid_inputs.id, event2: event}
+    {:ok, event_id2: @valid_inputs.id, event2: event}
   end
 
   @doc """

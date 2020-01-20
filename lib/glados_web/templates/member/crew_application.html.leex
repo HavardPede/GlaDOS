@@ -1,0 +1,19 @@
+
+  <div class="flex flex-row items-start">
+   <%= GladosWeb.MemberView.render("crew_application_list.html", page: @page, pages: @pages, page_order: @page_order, categorized_pages: @categorized_pages) %>
+    <div class="w-4/5 md:w-full mx-auto flex flex-col">
+      <div class="mb-12">
+        <h1 class="text-3xl my-0">Crew søknad</h1>
+        <h2 class="text-xl">Lanmine 30 - Generations</h2>
+      </div>
+      <form phx-change="set_answer" onsubmit="return false;">
+        <%= for {question_number, question_data} <- @questions do %>
+          <div class="mb-4 flex flex-col c-application_question"> 
+            <%= question_number %>. <%= question_data.question %>
+            <%= render gen_input_file(question_data.type), answer: @answers[@page][question_number], name: question_number, page: @page, crew: @crew, data: question_data%>
+          </div>
+        <% end %>
+      </form>
+       <%= GladosWeb.MemberView.render("crew_application_nav.html", show_next: is_page_complete?(@page, @categorized_pages), show_back: not is_first_page?(@page, @page_order), last_page: is_last_page?(@page, @page_order)) %>
+    </div>
+  </div>

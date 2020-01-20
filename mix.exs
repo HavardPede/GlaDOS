@@ -56,7 +56,11 @@ defmodule Glados.MixProject do
       {:bamboo_smtp, "~> 2.0.0"},
       {:timex, "~> 3.5"},
       {:credo, "~>1.1", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.10", only: :test}
+      {:excoveralls, "~> 0.10", only: :test},
+      {:phoenix_live_view, "~> 0.4.0"},
+      {:floki, ">= 0.0.0", only: :test},
+      {:yaml_elixir, "~> 2.4"},
+      {:ok, git: "https://github.com/CrowdHailer/OK/"}
     ]
   end
 

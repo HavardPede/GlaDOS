@@ -30,6 +30,7 @@ config :glados, Glados.Mailer,
 config :glados, GladosWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "gknN1DOBtmVSX9B+XMG47VV8xYIBqbIvggd4Dlk6Rx7zI1cIwTtcx9hTUZW3Y8JV",
+  live_view: [signing_salt: "96HjcS0DmQvxYovwGSeT26MRhiXz9EoQ"],
   render_errors: [view: GladosWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Glados.PubSub, adapter: Phoenix.PubSub.PG2]
 

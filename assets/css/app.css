@@ -6,7 +6,7 @@
 @import "./admin.css";
 @import "./error.css";
 @import "./edit.css";
-
+@import "./btn.css";
 @tailwind base;
 @tailwind components;
 
@@ -109,7 +109,8 @@
 
 :root {
   --main-orange: #eba134;
-  --dark-blue: #606c76;
+  --payne: #606c76;
+  --azure: #e2e8f0;
 }
 
 .danger {
@@ -121,19 +122,19 @@
 }
 
 .bg-grue {
-  background-color: var(--dark-blue);
+  background-color: var(--payne);
 }
 
 .bg-grue-hover:hover {
-  background-color: var(--dark-blue) !important;
+  background-color: var(--payne) !important;
 }
 
 .text-grue {
-  color: var(--dark-blue);
+  color: var(--payne);
 }
 
 .border-grue {
-  border-color: var(--dark-blue);
+  border-color: var(--payne);
 }
 
 form,
@@ -143,5 +144,14 @@ h5 {
 }
 
 html {
-  font-family: "Fira Code", monospace;
+  font-family: "Courier Prime", monospace;
+}
+
+.phx-connected,
+.phx-disconnected {
+  width: 100%;
+}
+
+.c-application_question:last-of-type {
+  margin-bottom: 0px;
 }
