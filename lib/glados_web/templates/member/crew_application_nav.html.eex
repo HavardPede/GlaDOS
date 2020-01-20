@@ -2,7 +2,7 @@
   <input type="button" <%= unless @show_back, do: "disabled" %> class="c-btn mr-3 w-24 text-center" phx-click="previous_page" value="Forrige" />
   <%= if @last_page do %>
     <input type="button" <%= unless @show_next , do: "disabled" %> class="c-btn c-btn--orange ml-3 text-center" phx-click="send_application" value="Send Søknad" />
-  <%= else %>
+  <% else %>
     <input type="button" <%= unless @show_next , do: "disabled" %> class="c-btn ml-3 w-24 text-center" phx-click="next_page" value="neste" />
   <% end %>
 </div>

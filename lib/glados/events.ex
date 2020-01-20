@@ -58,7 +58,7 @@ defmodule Glados.Events do
   """
   def get_event(event_id) do
     Repo.get(Event, event_id)
-    |> Repo.preload(:crew_member)
+    |> Repo.preload(:crew_members)
     |> OK.required(:missing_event)
   end
 

@@ -16,7 +16,7 @@ defmodule GladosWeb.LiveView.CrewApplication do
     page_order = CrewApplications.get_page_order()
     page = hd(page_order)
     pages = CrewApplications.get_pages()
-    answers = CrewApplications.create_answers_map()
+    answers = CrewApplications.create_answers_map(user_id, event_id)
     categorized_pages = categorize_pages(answers, page_order)
 
     socket =
@@ -42,8 +42,7 @@ defmodule GladosWeb.LiveView.CrewApplication do
           assigns: %{
             answers: old_answers,
             page: page,
-            page_order: page_order,
-            categorized_pages: categorized_pages
+            page_order: page_order
           }
         } = socket
       ) do
@@ -100,9 +99,11 @@ defmodule GladosWeb.LiveView.CrewApplication do
         "send_application",
         _values,
         %{
-          user_id: user_id,
-          event_id: event_id,
-          answers: answers
+          assigns: %{
+            user_id: user_id,
+            event_id: event_id,
+            answers: answers
+          }
         } = socket
       ) do
     EventCrewMembers.send_application(user_id, event_id, answers)

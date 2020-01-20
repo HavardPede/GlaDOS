@@ -26,4 +26,20 @@ defmodule Glados.Toolbox.Map do
   end
 
   def keys_to_atom(not_map), do: not_map
+
+  def keys_to_integer(%{} = map) do
+    Enum.map(map, fn
+      {key, value} when is_bitstring(key) ->
+        case Integer.parse(key) do
+          :error -> key
+          {number, _} -> {number, keys_to_integer(value)}
+        end
+
+      {key, value} ->
+        {key, keys_to_integer(value)}
+    end)
+    |> Map.new()
+  end
+
+  def keys_to_integer(not_map), do: not_map
 end
