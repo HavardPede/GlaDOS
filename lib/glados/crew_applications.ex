@@ -69,16 +69,4 @@ defmodule Glados.CrewApplications do
     end)
     |> Map.new()
   end
-
-  @doc """
-  Given a value, return an atom of structure :qV, where V is value.
-
-  # example
-  iex > question_atom(3)
-  :q3
-  """
-  def question_atom(value) do
-    "q#{value}"
-    |> String.to_atom()
-  end
 end

@@ -26,7 +26,7 @@ defmodule Helpers.EventHelper do
   @doc """
   Creates an event and adds it to the db.
   """
-  def create_event() do
+  def create_event do
     {:ok, event} =
       @valid_inputs
       |> Events.create_event()
@@ -37,7 +37,7 @@ defmodule Helpers.EventHelper do
   @doc """
   Creates an event that is set to active.
   """
-  def create_active_event() do
+  def create_active_event do
     {:ok, event} =
       @valid_inputs
       |> Map.put(:active, true)
@@ -49,7 +49,7 @@ defmodule Helpers.EventHelper do
   @doc """
   Creates an event with id 2.
   """
-  def create_second_event() do
+  def create_second_event do
     {:ok, event} =
       @valid_inputs_2
       |> Events.create_event()
@@ -60,5 +60,5 @@ defmodule Helpers.EventHelper do
   @doc """
   Returns attributes for the event, as a map
   """
-  def get_event_data(), do: @valid_inputs
+  def get_event_data, do: @valid_inputs
 end
