@@ -12,12 +12,11 @@ defmodule GladosWeb.LiveView.CrewApplication do
     Phoenix.View.render(GladosWeb.MemberView, "crew_application.html", assigns)
   end
 
-  def mount(%{user_id: user_id, event_id: event_id}, socket) do
+  def mount(%{user_id: user_id, event_id: event_id, application: application}, socket) do
     page_order = CrewApplications.get_page_order()
     page = hd(page_order)
     pages = CrewApplications.get_pages()
-    answers = CrewApplications.create_answers_map(user_id, event_id)
-    categorized_pages = categorize_pages(answers, page_order)
+    categorized_pages = categorize_pages(application, page_order)
 
     socket =
       socket
@@ -26,7 +25,7 @@ defmodule GladosWeb.LiveView.CrewApplication do
       |> assign(:categorized_pages, categorized_pages)
       |> assign(:page_order, page_order)
       |> assign(:questions, pages[page])
-      |> assign(:answers, answers)
+      |> assign(:answers, application)
       |> assign(:crew, @crew)
       |> assign(:selected_crew, %{})
       |> assign(:event_id, event_id)
