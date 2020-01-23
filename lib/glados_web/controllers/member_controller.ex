@@ -15,10 +15,10 @@ defmodule GladosWeb.MemberController do
   def event_landing(conn, %{"event_id" => event_id}) do
     EventCrewMembers.get_event_crew_member(conn.assigns.user.id, event_id)
     |> case do
-      {:ok, %{role: "applicant"} = member} ->
+      {:ok, %{role: "applicant"}} ->
         render_event_landing(conn, :waiting)
 
-      {:ok, member} ->
+      {:ok, _member} ->
         render("crew_landing_page.html")
 
       {:error, :does_not_exist} ->
