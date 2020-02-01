@@ -9,7 +9,7 @@ defmodule Glados.Events do
   @doc """
   Returns a changeset for a specific event.
   """
-  def change_event(%Event{} = event) do
+  def change_event(%Event{} = event \\ %Event{}) do
     Event.changeset(event, %{})
   end
 
@@ -58,6 +58,22 @@ defmodule Glados.Events do
   """
   def get_event(event_id) do
     Repo.get(Event, event_id)
+    |> OK.required(:missing_event)
+  end
+
+  @doc """
+  Fetches an event when given an id, and preloads the crew members. 
+
+  ## example
+
+    iex > get_preloaded_event(123)
+    {:ok, %Event{}}
+
+    iex > get_preloaded_event(456)
+    {:error, :missing_event}
+  """
+  def get_preloaded_event(event_id) do
+    Repo.get(Event, event_id)
     |> Repo.preload(:crew_members)
     |> OK.required(:missing_event)
   end
@@ -80,29 +96,13 @@ defmodule Glados.Events do
   end
 
   @doc """
-  Fetches the activity that is currently active, and returns a result_tuple
-  """
-  def get_active_event do
-    Repo.get_by(Event, active: true)
-    |> OK.required(:no_active_event)
-  end
-
-  @doc """
-  Fetches the currently active event, or nil
-  """
-  def get_active_event! do
-    Repo.get_by(Event, active: true)
-  end
-
-  @doc """
   Fetches the current event. This goes as the following priority.
-  1. Currently active
-  2. Next event
-  3. Previous event
-  4. nil
+  1. Next event
+  2. Previous event
+  3. nil
   """
   def get_current_event do
-    [get_active_event(), get_next_event(), get_previous_event()]
+    [get_next_event(), get_previous_event()]
     |> Enum.find_value(fn
       {:ok, event} -> event
       _ -> false

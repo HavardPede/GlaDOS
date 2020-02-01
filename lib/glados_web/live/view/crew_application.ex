@@ -1,4 +1,4 @@
-defmodule GladosWeb.LiveView.CrewApplication do
+defmodule GladosWeb.Live.View.CrewApplication do
   @moduledoc """
   The liveview session handler for the application page.
   """

@@ -31,7 +31,6 @@ defmodule Glados.Events.Event do
       message: "Du må fylle inn dette feltet."
     )
     |> validate_dates()
-    |> validate_active()
   end
 
   defp validate_dates(%{changes: %{start: start_date, end: end_date}} = changeset) do
@@ -60,22 +59,4 @@ defmodule Glados.Events.Event do
     end
   end
 
-  defp validate_active(%{changes: %{active: true}, data: %{id: id}} = changeset) do
-    case Events.get_active_event() do
-      {:error, :no_active_event} ->
-        changeset
-
-      {:ok, %{id: ^id}} ->
-        changeset
-
-      _ ->
-        add_error(
-          changeset,
-          :active,
-          "Det finnes allerede et aktivt event."
-        )
-    end
-  end
-
-  defp validate_active(changeset), do: changeset
 end

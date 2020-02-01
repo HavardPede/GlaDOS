@@ -3,7 +3,7 @@ defmodule GladosWeb.MemberController do
 
   import Phoenix.LiveView.Controller
   alias Glados.{CrewApplications, Events, EventCrewMembers}
-  alias GladosWeb.LiveView
+  alias GladosWeb.Live
 
   def index(conn, _params) do
     events = Events.get_events()
@@ -39,6 +39,6 @@ defmodule GladosWeb.MemberController do
   def crew_application(conn, %{"event_id" => event_id}) do
     application = CrewApplications.create_answers_map(conn.assigns.user.id, event_id)
     session = %{user_id: conn.assigns.user.id, event_id: event_id, application: application}
-    live_render(conn, LiveView.CrewApplication, session: session)
+    live_render(conn, Live.View.CrewApplication, session: session)
   end
 end

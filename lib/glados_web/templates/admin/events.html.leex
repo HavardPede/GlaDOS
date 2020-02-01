@@ -1,0 +1,25 @@
+<div class="w-full">
+  <table class="w-4/5 mx-auto c-standard_table">
+    <tr>
+      <th>Event navn</th>
+      <th>start</th>
+      <th>Slutt</th>
+      <th>Status</th>
+      <th></th>
+    </tr>
+    <%= for event <- @events do %>
+    <tr class="c-standard_table leading-loose <%= if event.active, do: "c-standard_table--green" %>">
+      <td><%= event.name %></td>
+      <td><%= "#{event.start.day}.#{event.start.month}.#{event.start.year}" %></td>
+      <td><%= "#{event.end.day}.#{event.end.month}.#{event.end.year}" %></td>
+      <td><%= if event.active, do: "aktivt", else: "inaktivt" %></td>
+      <td>
+        <a class="c-btn c-btn--hollow" phx-value-event_id="<%= event.id %>" phx-click="edit_event">Endre</a>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+  <div class="w-4/5 mx-auto mt-4 flex justify-end">
+    <a class="c-btn mt-0 py-2 h-8" phx-click="new_event">Nytt arrangement</a>
+  </div>
+</div>

@@ -48,23 +48,7 @@ defmodule Glados.EventsTest do
     end
   end
 
-  describe "get_active_event()" do
-    test "returns an event if there there is an active one in the database." do
-      EventHelper.create_active_event()
-      assert {:ok, %Events.Event{}} = Events.get_active_event()
-    end
-
-    test "returns nil if there is no active event in the database." do
-      assert {:error, _} = Events.get_active_event()
-    end
-  end
-
   describe "get_current_event()" do
-    test "returns active event if it exists" do
-      EventHelper.create_active_event()
-      assert %Events.Event{active: true} = Events.get_current_event()
-    end
-
     test "returns next upcoming event if there is no active event" do
       EventHelper.create_event()
       assert %Events.Event{active: false, start: start_time} = Events.get_current_event()

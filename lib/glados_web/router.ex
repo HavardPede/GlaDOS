@@ -1,6 +1,9 @@
 defmodule GladosWeb.Router do
   use GladosWeb, :router
 
+  import Phoenix.LiveView.Router
+  alias Live.View.EventsLiveView
+
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
@@ -111,7 +114,11 @@ defmodule GladosWeb.Router do
   scope "/admin", GladosWeb do
     pipe_through [:browser, :admin]
 
-    get("/", AdminController, :index)
+    live("/", EventsLiveView, layout: {GladosWeb.LayoutView, "admin_layout.html"})
+
+    live("/eventer/:event_id/rediger", EventsLiveView,
+      layout: {GladosWeb.LayoutView, "admin_layout.html"}
+    )
 
     get("/crew", LoggerController, :logger_crew)
     post("/crew", LoggerController, :add_logger_crew)
@@ -120,11 +127,5 @@ defmodule GladosWeb.Router do
     get("/transactions", LoggerController, :logger_transactions)
     post("/transactions", LoggerController, :create_transaction)
     get("/delete/:id", LoggerController, :delete_transaction)
-
-    get("/eventer", AdminController, :events)
-    get("/eventer/new", AdminController, :new_event)
-    post("/eventer/new", AdminController, :create_event)
-    get("/eventer/:event_id/rediger", AdminController, :edit_event)
-    put("/eventer/:event_id/rediger", AdminController, :update_event)
   end
 end

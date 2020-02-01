@@ -17,7 +17,18 @@ defmodule Glados.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "Glados",
+      source_url: "https://github.com/HavardPede/GlaDOS",
+      homepage_url: "localhost:4001",
+      docs: [
+        # The main page in the docs
+        main: "glados",
+        logo: "assets/static/images/logo_70x.png",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -60,6 +71,7 @@ defmodule Glados.MixProject do
       {:phoenix_live_view, "~> 0.4.0"},
       {:floki, ">= 0.0.0", only: :test},
       {:yaml_elixir, "~> 2.4"},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:ok, git: "https://github.com/CrowdHailer/OK/"}
     ]
   end

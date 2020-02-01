@@ -4,9 +4,7 @@
 
 <body>
   <main role="main">
-    <%= render(GladosWeb.CommonView, "navigation.html", conn: @conn) %>
-    <%= render(GladosWeb.CommonView, "breadcrumbs.html", conn: @conn) %>
-    <div class="max-w-3xl m-auto mt-12 flex content-around flex-col md:flex-row">
+    <div class="w-full flex content-around flex-col md:flex-row">
       <%= render @view_module, @view_template, assigns %>
     </div>
     <%= render "alert.html", conn: @conn %>

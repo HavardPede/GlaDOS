@@ -1,0 +1,25 @@
+<div class="w-full">
+  <%= if Enum.empty?(@crew) do %>
+  <div class="bg-cinderous w-4/5 p-4 mx-auto text-center text-white font-bold mt-4">
+    <h2>Det er ingen crew medlemmer for dette eventet enda.</h2>
+  </div>
+  <% else %>
+  <table class="w-4/5 mx-auto c-standard_table">
+    <tr>
+      <th>Navn</th>
+      <th></th>
+    </tr>
+
+
+    <%= for crew_member <- @crew do %>
+    <tr class="c-standard_table leading-loose">
+      <td><%= crew_member.name %></td>
+      <td>
+        <a class="c-btn c-btn--hollow" phx-value-crew_member_id="<%= crew_member.id %>" phx-click="">
+          Se Søknad</a>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+  <% end %>
+</div>

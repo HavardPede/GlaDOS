@@ -1,0 +1,34 @@
+<div class="w-4/5 mx-auto">
+  <div class="">
+    <div class="mr-4 flex flex-row items-center bg-azure">
+      <label class="switch ">
+        <input type="checkbox">
+        <div>
+          <span></span>
+        </div>
+      </label>
+      <span class="ml-4">Søknader stengt.</span>
+    </div>
+  </div>
+  <%= if Enum.empty?(@applicants) do %>
+  <div class="bg-cinderous p-4 mt-12 text-center text-white font-bold mt-4">
+    <h3>Det er ingen ubehandlede søknader for dette eventet enda.</h3>
+  </div>
+  <% else %>
+  <table class="w-4/5 mx-auto c-standard_table mt-12 ">
+    <tr>
+      <th>Navn</th>
+      <th></th>
+    </tr>
+    <%= for applicant <- @applicants do %>
+    <tr class="c-standard_table leading-loose">
+      <td><%= applicant.user.name %></td>
+      <td>
+        <a class="c-btn c-btn--hollow" phx-value-applicant_id="<%= applicant.user.id %>" phx-click="review_applicant">
+          Se Søknad</a>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+  <% end %>
+</div>
