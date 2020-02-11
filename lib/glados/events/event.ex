@@ -15,8 +15,7 @@ defmodule Glados.Events.Event do
     field(:start, :naive_datetime)
     field(:end, :naive_datetime)
     field(:address, :string, null: false)
-    field(:active, :boolean)
-
+    field(:allow_applications, :boolean)
     many_to_many(:crew_members, User, join_through: "event_crew_members", on_replace: :delete)
 
     timestamps()
@@ -25,9 +24,9 @@ defmodule Glados.Events.Event do
   @doc false
   def changeset(event, attrs) do
     event
-    |> cast(attrs, [:id, :name, :start, :end, :address, :active])
+    |> cast(attrs, [:id, :name, :start, :end, :address, :allow_applications])
     |> validate_required(
-      [:id, :name, :start, :end, :address, :active],
+      [:id, :name, :start, :end, :address, :allow_applications],
       message: "Du må fylle inn dette feltet."
     )
     |> validate_dates()

@@ -1,0 +1,12 @@
+<%= for {grouping, answers} <- @applicant.application do %>
+<span class="text-lg underline"><%= grouping %></span>
+<%= for {_, answer} <- answers do %>
+<%= inspect answer %>
+<% end %>
+<% end %>
+<%= f = form_for :crew, "#", [phx_change: :set_crew_role, phx_submit: :set_crew_role] %>
+
+Tildel plass:
+<%= select f, :crew, @crew_list, selected: @applicant.crew %>
+</form>
+<% IO.inspect @applicant |> Map.keys %>

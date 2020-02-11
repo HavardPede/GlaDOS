@@ -25,14 +25,14 @@
 <div class="flex flex-row flex-wrap justify-around">
   <div class="mt-3">
     <p>Start dato</p>
-    <input class="border rounded bg-gray-100" type="datetime-local" name="start" value="2018-06-12T19:30"
+    <input class="border rounded bg-gray-100" type="datetime-local" name="event[start]" value="2018-06-12T19:30"
       min="2018-06-07T00:00" max="2018-07-14T00:00">
 
     <%= error_tag @form, :start %>
   </div>
   <div class="mt-3">
     <p>Slutt dato</p>
-    <input class="border rounded bg-gray-100" type="datetime-local" name="start" value="2018-06-12T19:30"
+    <input class="border rounded bg-gray-100" type="datetime-local" name="event[end]" value="2018-06-12T19:30"
       min="2018-06-07T00:00" max="2018-07-14T00:00">
     <%= error_tag @form, :end %>
   </div>

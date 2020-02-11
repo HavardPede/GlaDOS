@@ -1,9 +1,8 @@
 defmodule GladosWeb.Router do
   use GladosWeb, :router
 
-  import Phoenix.LiveView.Router
-  alias Live.View.EventsLiveView
-
+  alias GladosWeb.Plugs.{Admin, Auth, FetchEvent, Guest, LoggerAuth, Member, Verify}
+  
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
@@ -17,35 +16,35 @@ defmodule GladosWeb.Router do
     plug(:accepts, ["json"])
   end
 
-  pipeline :fetch_event do
-    plug(GladosWeb.Plugs.FetchEvent)
-  end
-
   pipeline :auth do
-    plug(GladosWeb.Plugs.Auth)
+    plug(Auth)
   end
 
   pipeline :verify do
-    plug(GladosWeb.Plugs.Verify)
+    plug(Verify)
   end
 
   pipeline :guest do
-    plug(GladosWeb.Plugs.Guest)
+    plug(Guest)
   end
 
   pipeline :member do
-    plug(GladosWeb.Plugs.Auth)
-    plug(GladosWeb.Plugs.Member)
+    plug(Auth)
+    plug(Member)
   end
 
   pipeline :logger do
-    plug(GladosWeb.Plugs.Auth)
-    plug(GladosWeb.Plugs.LoggerAuth)
+    plug(Auth)
+    plug(LoggerAuth)
   end
 
   pipeline :admin do
-    plug(GladosWeb.Plugs.Auth)
-    plug(GladosWeb.Plugs.Admin)
+    plug(Auth)
+    plug(Admin)
+  end
+
+  pipeline :fetch_event do
+    plug(FetchEvent)
   end
 
   # Scope for login page
@@ -111,14 +110,36 @@ defmodule GladosWeb.Router do
   # Chief Scope
 
   # Admin Scope
-  scope "/admin", GladosWeb do
+  scope "/admin/kontrollpanel", GladosWeb do
+    pipe_through [:browser, :admin, :fetch_event]
+
+    get("/eventer", AdminController, :index)
+    get("/eventer/nytt", AdminController, :new_event)
+    post("/eventer/nytt", AdminController, :create_event)
+
+    get("/eventer/:event_id/rediger", AdminController, :edit_event)
+    get("/eventer/:event_id/rediger", AdminController, :edit_event)
+
+    get("/eventer/:event_id/crew", AdminController, :view_crew)
+    post("/eventer/:event_id/crew", AdminController, :set_crew_id)
+
+    get("/eventer/:event_id/cafeteria", AdminController, :cafeteria)
+    post("/eventer/:event_id/cafeteria", AdminController, :create_product)
+    delete("/eventer/:event_id/cafeteria/:product_id/delete", AdminController, :delete_product)
+
+    get("/eventer/:event_id/soknader", AdminController, :view_applications)
+    get("/eventer/:event_id/soknader/:applicant_id", AdminController, :review_application)
+  end
+  
+  scope "/admin/api", GladosWeb do
+    pipe_through [:api, :admin, :fetch_event]
+
+    post("/:event_id/toggle_applications", ApiController, :toggle_applications)
+  end
+
+  # Logger Scope
+  scope "/admin/controlpanel", GladosWeb do
     pipe_through [:browser, :admin]
-
-    live("/", EventsLiveView, layout: {GladosWeb.LayoutView, "admin_layout.html"})
-
-    live("/eventer/:event_id/rediger", EventsLiveView,
-      layout: {GladosWeb.LayoutView, "admin_layout.html"}
-    )
 
     get("/crew", LoggerController, :logger_crew)
     post("/crew", LoggerController, :add_logger_crew)

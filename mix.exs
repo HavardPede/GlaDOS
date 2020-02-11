@@ -26,7 +26,7 @@ defmodule Glados.MixProject do
       docs: [
         # The main page in the docs
         main: "glados",
-        logo: "assets/static/images/logo_70x.png",
+        logo: "assets/static/images/logo_alpha.png",
         extras: ["README.md"]
       ]
     ]

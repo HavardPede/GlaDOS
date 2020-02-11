@@ -20,7 +20,7 @@ defmodule GladosWeb do
   def controller do
     quote do
       use Phoenix.Controller, namespace: GladosWeb
-
+      use OK.Pipe
       import Plug.Conn
       import Phoenix.LiveView.Controller
       alias GladosWeb.Router.Helpers, as: Routes

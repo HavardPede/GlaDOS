@@ -25,7 +25,7 @@ defmodule Glados.Events do
     {:ok, %Event{}}
   """
   def create_event(%{} = attrs) do
-    %Event{}
+    %Event{allow_applications: false}
     |> Event.changeset(attrs)
     |> Repo.insert()
   end

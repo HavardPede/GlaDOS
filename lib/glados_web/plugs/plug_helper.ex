@@ -46,7 +46,7 @@ defmodule GladosWeb.Plugs.PlugHelper do
 
   defp redir("admin", conn) do
     conn
-    |> redirect(to: Routes.live_path(conn, GladosWeb.Live.View.EventsLiveView))
+    |> redirect(to: Routes.admin_path(conn, :index))
     |> halt()
   end
 

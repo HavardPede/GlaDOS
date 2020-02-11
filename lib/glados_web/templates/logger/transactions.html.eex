@@ -1,49 +1,48 @@
 <div class="newCrewRegister">
     <%= form_for @changeset, Routes.logger_path(@conn, :create_transaction), fn f -> %>
 
-        <div class="top_new_user"> 
-            <img src="<%= Routes.static_path(@conn, "/images/logo_70x.png" ) %>" class="new_user_logo">
-            <div>
-                <h2 class="orange_h2">GLaDOS</h2>
-            </div>
-        </div> 
-        <div class="newCrewColumn">
-            <div class="newCrewField">
-                <%= if @logger, do: text_input f, :logger_crew_id, autofocus: true %>
-                </div>
-        </div>
-
+    <div class="top_new_user">
+        <img src="<%= Routes.static_path(@conn, "/images/logo_alpha.png" ) %>" class="new_user_logo">
         <div>
-            <table class="crewTable">
-                <tr class="tableHeadCrew">
-                    <th>Navn</th>
-                    <th>Etternavn</th>
-                    <th>Crew</th>
-                    <th>Dato</th>
-                    <th>Klokkeslett</th>
-                    <th></th>
-                </tr>
-                <%= for transaction <- @transactions do %>
-                   <% date = Timex.shift(transaction.inserted_at, hours: 2)%>
-                    <tr>
-                        <%= if (transaction.logger_crew_id) do %>
-                        <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].name %></td>
-                        <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].last_name %></td>
-                        <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].crew %></td>
-                        <td><%= date.day %> / <%= date.month %></td>
-                        <td><%= date.hour %>:<%= if (date.minute < 10), do: 0 %><%= date.minute %></td>
-                        <td  class="deleteTransaction">
-                            <%= if @logger do %>
-                                <%= link "Slett", to: Routes.logger_path(@conn, :delete_transaction, transaction.id) %>
-                            <% else %>
-                                <%= link "Slett", to: "/admin/delete/#{transaction.id}" %>
-                            <% end %>  
-                        </td>
-                        <% end %>
-                    </tr>
+            <h2 class="orange_h2">GLaDOS</h2>
+        </div>
+    </div>
+    <div class="newCrewColumn">
+        <div class="newCrewField">
+            <%= if @logger, do: text_input f, :logger_crew_id, autofocus: true %>
+        </div>
+    </div>
+
+    <div>
+        <table class="crewTable">
+            <tr class="tableHeadCrew">
+                <th>Navn</th>
+                <th>Etternavn</th>
+                <th>Crew</th>
+                <th>Dato</th>
+                <th>Klokkeslett</th>
+                <th></th>
+            </tr>
+            <%= for transaction <- @transactions do %>
+            <% date = Timex.shift(transaction.inserted_at, hours: 2)%>
+            <tr>
+                <%= if (transaction.logger_crew_id) do %>
+                <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].name %></td>
+                <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].last_name %></td>
+                <td><%= if (transaction.logger_crew_id), do: @crew[transaction.logger_crew_id].crew %></td>
+                <td><%= date.day %> / <%= date.month %></td>
+                <td><%= date.hour %>:<%= if (date.minute < 10), do: 0 %><%= date.minute %></td>
+                <td class="deleteTransaction">
+                    <%= if @logger do %>
+                    <%= link "Slett", to: Routes.logger_path(@conn, :delete_transaction, transaction.id) %>
+                    <% else %>
+                    <%= link "Slett", to: "/admin/delete/#{transaction.id}" %>
+                    <% end %>
+                </td>
                 <% end %>
-            </table>
-        </div> 
+            </tr>
+            <% end %>
+        </table>
+    </div>
     <% end%>
 </div>
-

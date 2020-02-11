@@ -4,7 +4,7 @@
     <h2 class="orange_h2">Glados</h2>
   </div>
   <div class="w-2/5 lg:w-1/2 mx-auto lg:h-full lg:float-right h-full">
-    <img src="<%= Routes.static_path(@conn, "/images/logo.png" ) %>" class="flex-0 loginLogo lg:pl-20">
+    <img src="<%= Routes.static_path(@conn, "/images/logo_alpha.png" ) %>" class="flex-0 loginLogo lg:pl-20">
   </div>
   <div class="w-4/5 m-auto lg:m-3 md:w-3/5 lg:ml-8">
     <%= form_for @conn, Routes.session_path(@conn, :new), [as: :session], fn f -> %>
@@ -20,6 +20,6 @@
     <div class="pb-4">
       <%= submit "Logg inn", class: "shadow-md c-btn c-btn--orange" %>
     </div>
-  <% end %>
-</div>
+    <% end %>
+  </div>
 </div>

@@ -1,0 +1,28 @@
+<div class="w-full"></div>
+<table class="w-4/5 mx-auto c-standard_table mb-12">
+  <tr>
+    <th>Produkt navn</th>
+    <th>Strek kode</th>
+    <th></th>
+  </tr>
+  <tr>
+    <%= form_for @changeset, Routes.admin_path(GladosWeb.Endpoint, :create_product, @event.id), fn f -> %>
+    <td><%= text_input f, :name, [class: "mx-auto w-full h-full leading-loose text-center bg-transparent",
+        placeholder: "PRODUKT NAVN"] %></td>
+    <td><%= text_input f, :barcode, [class: "mx-auto w-full h-full leading-loose text-center bg-transparent text-sm md:text-md",
+        placeholder: "STREK KODE"] %></td>
+    <td><%= submit "lag produkt", class: "c-btn" %></td>
+    <% end %>
+  </tr>
+  <%= for product <- @products do %>
+  <tr class="c-standard_table leading-loose">
+    <td><%= product.name %></td>
+    <td><%= product.barcode %></td>
+    <td>
+      <%= link "slett", to: Routes.admin_path(GladosWeb.Endpoint, :delete_product, @event.id, product.id),
+        method: :delete, class: "c-btn c-btn--hollow" %>
+    </td>
+  </tr>
+  <% end %>
+</table>
+</div>

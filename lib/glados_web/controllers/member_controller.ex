@@ -2,7 +2,7 @@ defmodule GladosWeb.MemberController do
   use GladosWeb, :controller
 
   import Phoenix.LiveView.Controller
-  alias Glados.{CrewApplications, Events, EventCrewMembers}
+  alias Glados.{CrewApplications, Events, EventCrew}
   alias GladosWeb.Live
 
   def index(conn, _params) do
@@ -13,7 +13,7 @@ defmodule GladosWeb.MemberController do
   end
 
   def event_landing(conn, %{"event_id" => event_id}) do
-    EventCrewMembers.get_event_crew_member(conn.assigns.user.id, event_id)
+    EventCrew.get_event_crew_member(conn.assigns.user.id, event_id)
     |> case do
       {:ok, %{role: "applicant"}} ->
         render_event_landing(conn, :waiting)

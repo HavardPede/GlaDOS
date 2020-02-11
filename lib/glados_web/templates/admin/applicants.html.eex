@@ -1,13 +1,15 @@
 <div class="w-4/5 mx-auto">
   <div class="">
-    <div class="mr-4 flex flex-row items-center bg-azure">
-      <label class="switch ">
-        <input type="checkbox">
-        <div>
-          <span></span>
-        </div>
-      </label>
-      <span class="ml-4">Søknader stengt.</span>
+    <div class="mr-4 flex flex-row items-center">
+      <form phx-change="toggle_allow_applications">
+        <label class="switch ">
+          <input type="checkbox" <%= if @event.allow_applications, do: "checked", else: "" %>>
+          <div>
+            <span></span>
+          </div>
+        </label>
+      </form>
+      <span class="ml-4"><%= if @event.allow_applications, do: "Folk kan søke.", else: "Søknader stengt." %></span>
     </div>
   </div>
   <%= if Enum.empty?(@applicants) do %>
@@ -24,7 +26,7 @@
     <tr class="c-standard_table leading-loose">
       <td><%= applicant.user.name %></td>
       <td>
-        <a class="c-btn c-btn--hollow" phx-value-applicant_id="<%= applicant.user.id %>" phx-click="review_applicant">
+        <a href="<%= Routes.admin_path(GladosWeb.Endpoint, :review_application, @event.id, applicant.user.id) %> "class="c-btn c-btn--hollow">
           Se Søknad</a>
       </td>
     </tr>

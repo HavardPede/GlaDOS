@@ -1,0 +1,23 @@
+<div class="bg-payne h-screen w-48 fixed text-white text-right flex flex-col justify-between">
+  <div>
+    <img src="<%= static_path(Endpoint, "/images/logo_alpha.png" ) %>" class="h-12 mx-auto mt-5 mb-8" />
+    <%= for {nav_text, nav_link} <- @pages  do %>
+    <div
+      class="w-2/3 float-right uppercase py-2 pr-4 hover:text-cinderous border-cinderous <%= if nav_text == @current_page, do: "border-b-2"%>">
+      <a href="<%= nav_link %>"><%= nav_text %></a>
+    </div>
+    <%= if nav_text == @current_page do %>
+    <%= for {sub_page, sub_page_link} <- @sub_pages do %>
+    <a href="<%=  sub_page_link %>"
+      class="w-2/3 float-right text-left capitalize text-xs py-2 px-4 <%= if @current_sub_page == sub_page, do: "font-bold" %> cursor-pointer hover:text-cinderous">
+      <%= sub_page %>
+    </a>
+
+    <% end %>
+    <% end %>
+    <% end %>
+  </div>
+  <a href=" <%= session_path(Endpoint, :delete) %>" class="py-4 bg-cinderous uppercase hover:bg-moss text-center">
+    Logg
+    ut</a>
+</div>

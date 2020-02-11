@@ -7,15 +7,25 @@
   <table class="w-4/5 mx-auto c-standard_table">
     <tr>
       <th>Navn</th>
+      <th>ID kort</th>
       <th></th>
     </tr>
 
 
     <%= for crew_member <- @crew do %>
-    <tr class="c-standard_table leading-loose">
-      <td><%= crew_member.name %></td>
+    <tr class="leading-loose">
+      <td><%= crew_member.user.name %></td>
       <td>
-        <a class="c-btn c-btn--hollow" phx-value-crew_member_id="<%= crew_member.id %>" phx-click="">
+        <form method="post">
+          <input type="text" name="id_card" class="mx-auto w-full h-full leading-loose text-center bg-transparent"
+            placeholder="Legg til ID" value="<%= crew_member.id_card %>">
+          <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token() %>">
+          <input type="hidden" name="user_id" value="<%= crew_member.user_id %>">
+          <input type="submit" style="display: none" /></form>
+      </td>
+      <td>
+        <a href="<%= Routes.admin_path(GladosWeb.Endpoint, :review_application, @event.id, crew_member.user.id) %>"
+          class="c-btn c-btn--hollow">
           Se Søknad</a>
       </td>
     </tr>

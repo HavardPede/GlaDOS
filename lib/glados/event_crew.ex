@@ -1,13 +1,25 @@
-defmodule Glados.EventCrewMembers do
+defmodule Glados.EventCrew do
   @moduledoc """
   Defines logic for handling crew members per event.
   """
 
   import Ecto.Query, only: [from: 2]
   require OK
-  alias Ecto
+  alias Ecto.Changeset
   alias Glados.Events.EventCrewMember
-  alias Glados.{Repo, Roles}
+  alias Glados.{Repo, EventCrew}
+  @crew ["", "Kantine", "Security", "Info", "Scene", "Compo", "Ryddecrew"]
+  @roles ["applicant", "member", "leader", "admin"]
+
+  @doc """
+  Returns the list of possible roles for a crew member.
+  """
+  def get_event_roles, do: @roles
+  @doc """
+  Returns the list of crew.
+  """
+  def get_crew_list, do: @crew
+
 
   @doc """
   Returns the changeset for the given user
@@ -23,6 +35,9 @@ defmodule Glados.EventCrewMembers do
     Repo.all(EventCrewMember)
   end
 
+  @doc """
+  Fetches all members linked with an event, both applicants and crew, and returns a Result type
+  """
   @doc """
   Returns applicants that has yet to be accepted.
   Returns a monad.
@@ -45,6 +60,7 @@ defmodule Glados.EventCrewMembers do
       where: applicant.role != "applicant" and applicant.event_id == ^event_id
     )
     |> Repo.all()
+    |> Repo.preload([:user, :event])
     |> OK.wrap()
   end
 
@@ -67,13 +83,22 @@ defmodule Glados.EventCrewMembers do
   Given a crew member, update the role
   """
   def set_role(%EventCrewMember{} = crew_member, role \\ "member") do
-    if role in Roles.get_event_roles() do
+    if role in get_event_roles() do
       crew_member
       |> Changeset.change(role: role)
       |> Repo.update()
     else
       OK.failure(:invalid_role)
     end
+  end
+
+  @doc """
+  Updates a crew member with new information
+  """
+  def update(%EventCrewMember{} = crew_member, updates) do
+      crew_member
+      |> Changeset.change(updates)
+      |> Repo.update()
   end
 
   @doc """
