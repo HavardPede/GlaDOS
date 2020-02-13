@@ -8,6 +8,7 @@ defmodule Glados.Repo.Migrations.CreateProductTable do
       add :event_id, references("event", type: :integer, on_delete: :nilify_all)
       timestamps()
     end
+    create unique_index(:products, [:barcode])
   end
 
   def down do

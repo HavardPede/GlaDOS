@@ -24,6 +24,7 @@ defmodule Glados.Products.Product do
       [:name, :barcode, :event_id],
       message: "Du må fylle inn dette feltet."
     )
+    |> unique_constraint(:barcode, message: "Strekkoden finnes allerede")
   end
 
 end
