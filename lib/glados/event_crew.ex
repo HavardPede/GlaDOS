@@ -7,7 +7,7 @@ defmodule Glados.EventCrew do
   require OK
   alias Ecto.Changeset
   alias Glados.Events.EventCrewMember
-  alias Glados.{Repo, EventCrew}
+  alias Glados.{Repo}
   @crew ["", "Kantine", "Security", "Info", "Scene", "Compo", "Ryddecrew"]
   @roles ["applicant", "member", "leader", "admin"]
 
@@ -36,10 +36,7 @@ defmodule Glados.EventCrew do
   end
 
   @doc """
-  Fetches all members linked with an event, both applicants and crew, and returns a Result type
-  """
-  @doc """
-  Returns applicants that has yet to be accepted.
+  Returns applicants that has yet to be accepted to the event.
   Returns a monad.
   """
   def get_applicants(event_id) do

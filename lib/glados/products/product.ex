@@ -5,8 +5,7 @@ defmodule Glados.Products.Product do
  use Ecto.Schema
 
   import Ecto.Changeset
-  alias Glados.Accounts.User
-  alias Glados.Events
+  alias Glados.Events.Event
 
   schema "products" do
     field(:name, :string, null: false)

@@ -18,7 +18,7 @@ defmodule GladosWeb.Plugs.FetchEvent do
         |> assign(:event, event)
 
       {:error, _} ->
-        PlugHelper.render_404(conn)
+        PlugHelper.throw_404(conn)
     end
   end
 

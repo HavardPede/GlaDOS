@@ -3,7 +3,7 @@ defmodule GladosWeb.Live.View.LoggerLive do
   The liveview session responsible for the logger live view.
   """
   use Phoenix.LiveView
-  alias Glados.{Events, EventCrew, Products}
+  #alias Glados.{Events, EventCrew, Products}
 
   def mount(_params, socket) do
     socket

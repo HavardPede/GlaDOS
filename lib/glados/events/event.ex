@@ -7,7 +7,6 @@ defmodule Glados.Events.Event do
 
   import Ecto.Changeset
   alias Glados.Accounts.User
-  alias Glados.Events
 
   @primary_key {:id, :integer, auto_generate: false}
   schema "event" do

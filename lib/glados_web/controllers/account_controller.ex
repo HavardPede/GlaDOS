@@ -44,7 +44,7 @@ defmodule GladosWeb.AccountController do
     |> get_session(:unverified_user)
     |> case do
       nil ->
-        PlugHelper.render_404(conn)
+        PlugHelper.throw_404(conn)
 
       user_id ->
         user_id
@@ -80,7 +80,7 @@ defmodule GladosWeb.AccountController do
   Path to verify user when there is no token passed in
   """
   def verify_email(conn, _) do
-    PlugHelper.render_404(conn)
+    PlugHelper.throw_404(conn)
   end
 
   @doc """
@@ -135,7 +135,7 @@ defmodule GladosWeb.AccountController do
     end
   end
 
-  def change_password(conn, _params), do: PlugHelper.render_404(conn)
+  def change_password(conn, _params), do: PlugHelper.throw_404(conn)
 
   @doc """
   Post path for changing password
@@ -170,7 +170,7 @@ defmodule GladosWeb.AccountController do
     end
   end
 
-  def set_new_password(conn, _), do: PlugHelper.render_404(conn)
+  def set_new_password(conn, _), do: PlugHelper.throw_404(conn)
 
   @doc """
   Path to display form for editing a user

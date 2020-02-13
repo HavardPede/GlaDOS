@@ -68,7 +68,7 @@ defmodule GladosWeb.Plugs.PlugHelper do
   @doc """
   Given a connection, redirect to a 404 page.
   """
-  def render_404(conn) do
+  def throw_404(conn) do
     conn
     |> put_status(:not_found)
     |> put_view(GladosWeb.ErrorView)

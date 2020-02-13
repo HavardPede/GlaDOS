@@ -49,15 +49,15 @@ defmodule Glados.EventsTest do
   end
 
   describe "get_current_event()" do
-    test "returns next upcoming event if there is no active event" do
+    test "returns next upcoming event" do
       EventHelper.create_event()
-      assert %Events.Event{active: false, start: start_time} = Events.get_current_event()
+      assert %Events.Event{start: start_time} = Events.get_current_event()
       assert -1 == Timex.compare(Timex.now(), start_time)
     end
 
-    test "returns previous event if there is no upcoming or active event" do
+    test "returns previous event if there is no upcoming event" do
       EventHelper.create_second_event()
-      assert %Events.Event{active: false, start: start_time} = Events.get_current_event()
+      assert %Events.Event{start: start_time} = Events.get_current_event()
       assert 1 == Timex.compare(Timex.now(), start_time)
     end
   end

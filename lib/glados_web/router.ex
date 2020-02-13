@@ -122,7 +122,7 @@ defmodule GladosWeb.Router do
     post("/eventer/nytt", AdminController, :create_event)
 
     get("/eventer/:event_id/rediger", AdminController, :edit_event)
-    get("/eventer/:event_id/rediger", AdminController, :edit_event)
+    put("/eventer/:event_id/rediger", AdminController, :update_event)
 
     get("/eventer/:event_id/crew", AdminController, :view_crew)
     post("/eventer/:event_id/crew", AdminController, :set_crew_id)

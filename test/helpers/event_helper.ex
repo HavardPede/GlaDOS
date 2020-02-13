@@ -35,18 +35,6 @@ defmodule Helpers.EventHelper do
   end
 
   @doc """
-  Creates an event that is set to active.
-  """
-  def create_active_event do
-    {:ok, event} =
-      @valid_inputs
-      |> Map.put(:active, true)
-      |> Events.create_event()
-
-    {:ok, event_id: @valid_inputs.id, event: event}
-  end
-
-  @doc """
   Creates an event with id 2.
   """
   def create_second_event do

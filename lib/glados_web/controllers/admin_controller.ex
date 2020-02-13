@@ -5,7 +5,7 @@ defmodule GladosWeb.AdminController do
   use GladosWeb, :controller
 
   require Logger
-  alias Glados.{Events, Events.Event, EventCrew, Products}
+  alias Glados.{Events, EventCrew, Products}
   alias GladosWeb.Plugs.PlugHelper
   alias GladosWeb.Endpoint
 
@@ -56,7 +56,7 @@ defmodule GladosWeb.AdminController do
     end
   end
 
-  def create_event(conn, _), do: PlugHelper.render_404(conn)
+  def create_event(conn, _), do: PlugHelper.throw_404(conn)
 
   ## 
   ## EDIT EVENT PAGE
@@ -69,7 +69,29 @@ defmodule GladosWeb.AdminController do
 
     render(conn, "edit_event.html", assigns)
   end
-  
+
+  ##
+  ## UPDATE EVENT
+  ##
+  def update_event(%{assigns: %{event: event}} = conn, %{"event" => event_params} = params) do
+    event
+    |> Events.update_event(event_params) 
+    |> case do
+      {:ok, event} -> 
+        conn
+        |> Plug.Conn.assign(:event, event)
+        |> put_flash(:info, "Eventet har blitt oppdatert.")
+        |> edit_event(params)
+      {:error,  changeset} ->
+        assigns = %{
+          changeset: changeset,
+          nav_data: construct_nav_data("Events", get_event_sub_pages(event.id), "Event info")
+        }
+        render(conn, "edit_event.html", assigns)
+    end
+  end
+  def update_event(conn, _params), do: PlugHelper.throw_404(conn)
+
   ##
   ## VIEW APPLICATIONS PAGE
   ##
@@ -160,7 +182,7 @@ defmodule GladosWeb.AdminController do
     |> Map.put("event_id", event_id)
     |> Products.create_product()   
     |> case do
-      {:ok, product} -> put_flash(conn, :info, "Produktet ble lagt til.")
+      {:ok, _product} -> put_flash(conn, :info, "Produktet ble lagt til.")
       {:error, _changeset} -> put_flash(conn, :error, "Produktet ble ikke lagt til.")
     end
     |> cafeteria(params)
