@@ -130,13 +130,6 @@ defmodule GladosWeb.Router do
     get("/eventer/:event_id/soknader", AdminController, :view_applications)
     get("/eventer/:event_id/soknader/:applicant_id", AdminController, :review_application)
   end
-  
-  scope "/admin/api", GladosWeb do
-    pipe_through [:api, :admin, :fetch_event]
-
-    post("/:event_id/toggle_applications", ApiController, :toggle_applications)
-  end
-
   # Logger Scope
   scope "/admin/controlpanel", GladosWeb do
     pipe_through [:browser, :admin]
