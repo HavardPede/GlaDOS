@@ -7,6 +7,7 @@ defmodule GladosWeb.Plugs.PlugHelper do
   import Phoenix.Controller
 
   alias GladosWeb.Router.Helpers, as: Routes
+  alias GladosWeb.Live.View.LoggerLive
   alias Glados.{Accounts}
 
   def redirect(conn) do
@@ -40,7 +41,7 @@ defmodule GladosWeb.Plugs.PlugHelper do
 
   defp redir("logger", conn) do
     conn
-    |> redirect(to: Routes.logger_path(conn, :logger_transactions))
+    |> redirect(to: Routes.live_path(conn, LoggerLive))
     |> halt()
   end
 

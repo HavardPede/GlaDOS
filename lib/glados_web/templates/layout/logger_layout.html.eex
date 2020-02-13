@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<%= render "head.html", conn: @conn %>
+
+<body>
+  <main role="main">
+    <div class="w-full flex content-around flex-col md:flex-row">
+      <%= render @view_module, @view_template, assigns %>
+      <div class="w-4/5 mx-auto"><%= render "alert.html", conn: @conn %></div>
+    </div>
+    </div>
+  </main>
+</body>
+
+</html>

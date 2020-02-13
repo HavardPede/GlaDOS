@@ -2,12 +2,14 @@ const _css = require("../css/app.css");
 import { Socket } from "phoenix";
 import "phoenix_html";
 import LiveSocket from "phoenix_live_view";
+import { adminInit } from "./admin"
 
 
 let liveSocket = new LiveSocket("/live", Socket);
 liveSocket.connect();
 
 window.onload = function () {
+  adminInit()
   const accountIcon = document.getElementById("accountIcon");
   if (accountIcon) {
     const accountArrow = document.getElementById("accountArrow");

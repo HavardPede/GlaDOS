@@ -25,7 +25,7 @@ defmodule Glados.Events do
     {:ok, %Event{}}
   """
   def create_event(%{} = attrs) do
-    %Event{allow_applications: false}
+    %Event{allow_applications: false, sales_system: false}
     |> Event.changeset(attrs)
     |> Repo.insert()
   end
@@ -95,6 +95,33 @@ defmodule Glados.Events do
     |> Repo.update()
   end
 
+  @doc """
+  Toggles the boolean to allow applications.
+
+  ## Examples
+
+      iex> toggle_applications(%Event{allow_applications: true})
+      {:ok, %Event{allow_applications: false}}
+  """
+  def toggle_applications(%Event{allow_applications: allow?} = event)  do
+    event
+    |>Event.changeset(%{allow_applications: !allow?})
+    |> Repo.update()
+  end
+
+  @doc """
+  Toggles the boolean to activate the sales system for this event.
+
+  ## Examples
+
+      iex> toggle_sales_system(%Event{sales_system: true})
+      {:ok, %Event{sales_system: false}}
+  """
+  def toggle_sales_system(%Event{sales_system: allow?} = event)  do
+    event
+    |>Event.changeset(%{sales_system: !allow?})
+    |> Repo.update()
+  end
   @doc """
   Fetches the current event. This goes as the following priority.
   1. Next event

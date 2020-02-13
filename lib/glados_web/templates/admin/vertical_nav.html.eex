@@ -9,7 +9,7 @@
     <%= if nav_text == @current_page do %>
     <%= for {sub_page, sub_page_link} <- @sub_pages do %>
     <a href="<%=  sub_page_link %>"
-      class="w-2/3 float-right text-left capitalize text-xs py-2 px-4 <%= if @current_sub_page == sub_page, do: "font-bold" %> cursor-pointer hover:text-cinderous">
+      class="w-2/3 float-right text-left capitalize text-xs py-2 px-4 <%= if @current_sub_page == sub_page, do: "font-bold text-cinderous" %> cursor-pointer hover:text-cinderous">
       <%= sub_page %>
     </a>
 

@@ -1,8 +1,12 @@
 defmodule GladosWeb.Router do
   use GladosWeb, :router
 
+
+  import Phoenix.LiveView.Router
   alias GladosWeb.Plugs.{Admin, Auth, FetchEvent, Guest, LoggerAuth, Member, Verify}
-  
+  alias Live.View.LoggerLive
+
+
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
@@ -36,6 +40,7 @@ defmodule GladosWeb.Router do
   pipeline :logger do
     plug(Auth)
     plug(LoggerAuth)
+    plug(:put_layout, {GladosWeb.LayoutView, "logger_layout.html"})
   end
 
   pipeline :admin do
@@ -64,15 +69,6 @@ defmodule GladosWeb.Router do
   scope "/", GladosWeb do
     pipe_through [:browser, :guest, :verify]
     get("/verifiser", AccountController, :verify_email)
-  end
-
-  # Scope for transaction logger account
-  scope "/logger", GladosWeb do
-    pipe_through [:browser, :logger]
-
-    get("/transactions", LoggerController, :logger_transactions)
-    post("/transactions", LoggerController, :create_transaction)
-    get("/delete/:id", LoggerController, :delete_transaction)
   end
 
   # Scope for verifying a new account
@@ -109,6 +105,14 @@ defmodule GladosWeb.Router do
 
   # Chief Scope
 
+
+  # Logger Scope
+  scope "/logger", GladosWeb do
+    pipe_through [:browser, :logger]
+
+    live "/", LoggerLive
+  end
+
   # Admin Scope
   scope "/admin/kontrollpanel", GladosWeb do
     pipe_through [:browser, :admin, :fetch_event]
@@ -124,22 +128,11 @@ defmodule GladosWeb.Router do
     post("/eventer/:event_id/crew", AdminController, :set_crew_id)
 
     get("/eventer/:event_id/cafeteria", AdminController, :cafeteria)
-    post("/eventer/:event_id/cafeteria", AdminController, :create_product)
+    post("/eventer/:event_id/cafeteria", AdminController, :handle_cafeteria_event)
     delete("/eventer/:event_id/cafeteria/:product_id/delete", AdminController, :delete_product)
 
     get("/eventer/:event_id/soknader", AdminController, :view_applications)
+    post("/eventer/:event_id/soknader", AdminController, :toggle_applications)
     get("/eventer/:event_id/soknader/:applicant_id", AdminController, :review_application)
-  end
-  # Logger Scope
-  scope "/admin/controlpanel", GladosWeb do
-    pipe_through [:browser, :admin]
-
-    get("/crew", LoggerController, :logger_crew)
-    post("/crew", LoggerController, :add_logger_crew)
-    get("/crew/delete/:id", LoggerController, :delete_logger_crew)
-
-    get("/transactions", LoggerController, :logger_transactions)
-    post("/transactions", LoggerController, :create_transaction)
-    get("/delete/:id", LoggerController, :delete_transaction)
   end
 end

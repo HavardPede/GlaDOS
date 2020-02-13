@@ -69,6 +69,7 @@ defmodule GladosWeb.AdminController do
 
     render(conn, "edit_event.html", assigns)
   end
+  
   ##
   ## VIEW APPLICATIONS PAGE
   ##
@@ -77,8 +78,21 @@ defmodule GladosWeb.AdminController do
     assigns = %{
       applicants: applicants,
       nav_data: construct_nav_data("Events", get_event_sub_pages(event_id), "Søknader"),
+      event_id: event_id
     }
     render(conn, "applicants.html", assigns)
+  end
+
+  ##
+  ## TOGGLE APPLICATIONS
+  ##
+  def toggle_applications(%{assigns: %{event: event}} = conn, params) do
+    Events.toggle_applications(event)    
+    |> case do
+      {:ok, event} -> Plug.Conn.assign(conn, :event, event)
+      _ -> conn
+    end
+    |> view_applications(params)
   end
 
   ##
@@ -129,7 +143,7 @@ defmodule GladosWeb.AdminController do
   ##
   def cafeteria(conn, %{"event_id" => event_id}) do
     assigns = %{
-      products: Products.get_products(),
+      products: Products.get_products(event_id),
       changeset: Products.change_product(),
       nav_data: construct_nav_data("Events", get_event_sub_pages(event_id), "Kantine"),
     }
@@ -137,19 +151,33 @@ defmodule GladosWeb.AdminController do
   end
 
   ##
-  ## CREATE PRODUCT
+  ## HANDLE CAFETERIA EVENT
   ##
-  def create_product(conn, %{"product" => product, "event_id" => event_id}) do
+  ## create product
+  ##
+  def handle_cafeteria_event(conn, %{"product" => product, "event_id" => event_id} = params) do
     product
     |> Map.put("event_id", event_id)
     |> Products.create_product()   
     |> case do
       {:ok, product} -> put_flash(conn, :info, "Produktet ble lagt til.")
-      {:error, _changeset} -> 
-        put_flash(conn, :error, "Produktet ble ikke lagt til.")
+      {:error, _changeset} -> put_flash(conn, :error, "Produktet ble ikke lagt til.")
     end
-    |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :cafeteria, event_id))
-    |> halt()
+    |> cafeteria(params)
+  end
+  
+  ##
+  ## HANDLE CAFETERIA EVENT
+  ##
+  ## toggle_sales_system
+  ##
+  def handle_cafeteria_event(%{assigns: %{event: event}} = conn, params) do
+    Events.toggle_sales_system(event) 
+    |> case do
+      {:ok, event} -> Plug.Conn.assign(conn, :event, event)
+      _ -> conn
+    end
+    |> cafeteria(params)
   end
 
   ##

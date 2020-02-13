@@ -15,15 +15,14 @@ defmodule Glados.Products do
 
   ## example
 
-    iex > get_products()
+    iex > get_products(event_id)
     [%Product{}, %Product{}]
 
     iex > get_products()
     []
   """
-  def get_products do
-    Repo.all(Product)
-    
+  def get_products(event_id) do
+    Repo.all(Product, event_id: event_id)
   end
 
   @doc """
