@@ -3,8 +3,10 @@ defmodule Glados.Products do
   Defines handlers for cafeteria products.
   """
 
+  import Ecto.Query, only: [from: 2]
   alias Glados.Products.Product
   alias Glados.Repo
+
   @doc """
   Greates a changeset for the given product.
   """
@@ -22,7 +24,9 @@ defmodule Glados.Products do
     []
   """
   def get_products(event_id) do
-    Repo.all(Product, event_id: event_id)
+    from(product in Product,
+    where: product.event_id == ^event_id)
+    |> Repo.all()
   end
 
   @doc """
