@@ -25,7 +25,7 @@ module.exports = (env, options) => ({
         paths: globAll.sync([
           "../lib/<APP_NAME>_web/templates/**/*.html.eex",
           "../lib/<APP_NAME>_web/views/**/*.ex",
-          "../assets/js/**/*.js"
+          "../assets/ts/**/*.ts"
         ]),
         extractors: [
           {
@@ -37,7 +37,7 @@ module.exports = (env, options) => ({
     ]
   },
   entry: {
-    "./js/app.js": glob.sync("./vendor/**/*.js").concat(["./js/app.js"])
+    "./js/app.ts": glob.sync("./vendor/**/*.js").concat(["./ts/app.ts"])
   },
   output: {
     filename: "app.js",
@@ -46,10 +46,10 @@ module.exports = (env, options) => ({
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: "ts-loader"
         }
       },
       {
@@ -58,6 +58,9 @@ module.exports = (env, options) => ({
         use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"]
       }
     ]
+  },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"]
   },
 
   plugins: [

@@ -1,37 +1,39 @@
-import css from "../css/app.css";
+const _css = require("../css/app.css");
 import { Socket } from "phoenix";
 import "phoenix_html";
 import LiveSocket from "phoenix_live_view";
 
+
 let liveSocket = new LiveSocket("/live", Socket);
 liveSocket.connect();
 
-window.onload = function() {
+window.onload = function () {
   const accountIcon = document.getElementById("accountIcon");
   if (accountIcon) {
-    const accountTab = document.getElementById("accountTab");
     const accountArrow = document.getElementById("accountArrow");
 
-    accountIcon.addEventListener("click", function(_e) {
+    accountIcon.addEventListener("click", function (_e) {
       toggleAccountTab();
     });
-    accountArrow.addEventListener("click", function(_e) {
+    accountArrow?.addEventListener("click", function (_e) {
       toggleAccountTab();
     });
   }
 
   function toggleAccountTab() {
-    console.log(accountTab.style.display);
+    const accountTab = document.getElementById("accountTab");
+    const accountArrow = document.getElementById("accountArrow");
+    if (!accountTab) return
     if (
-      accountTab.style.display === "none" ||
-      accountTab.style.display === ""
+      (accountTab.style.display === "none" ||
+        accountTab.style.display === "")
     ) {
       accountTab.style.display = "block";
     } else {
-      accountArrow.classList.add("rotatedImage");
-      setTimeout(function() {
+      accountArrow?.classList.add("rotatedImage");
+      setTimeout(function () {
         (accountTab.style.display = "none"),
-          accountArrow.classList.remove("rotatedImage");
+          accountArrow?.classList.remove("rotatedImage");
       }, 100);
     }
   }
