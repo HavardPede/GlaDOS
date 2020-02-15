@@ -54,9 +54,7 @@ defmodule GladosWeb.Plugs.PlugHelper do
   # Default
   defp redir(_, conn) do
     conn
-    |> put_status(:not_found)
-    |> put_view(GladosWeb.ErrorView)
-    |> render("404.html")
+    |> throw_404()
   end
 
   def get_current_user(conn) do
@@ -72,6 +70,7 @@ defmodule GladosWeb.Plugs.PlugHelper do
     conn
     |> put_status(:not_found)
     |> put_view(GladosWeb.ErrorView)
+  |> put_layout({GladosWeb.LayoutView, "error_layout.html"})
     |> render("404.html")
     |> halt()
   end
