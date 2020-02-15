@@ -1,6 +1,6 @@
 <div class="flex flex-row mr-8 w-1/3 pr-10 hidden md:block">
   <div class="w-full">
-    <div class="fixed">   
+    <div class="fixed">
       <a href="#profile_picture" class="flex flex-row items-center mb-3">
         <img class="w-6 ml-1 mr-2" src="<%= Routes.static_path(@conn, "/images/panda.png" ) %>">
         <span>Profil bilde</span>

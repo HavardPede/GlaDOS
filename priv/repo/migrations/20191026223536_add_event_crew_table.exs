@@ -9,7 +9,6 @@ defmodule Glados.Repo.Migrations.AddEventCrewTable do
       add(:user_id, references(:users, type: :binary_id, on_delete: :delete_all),
         primary_key: true
       )
-
       add(:event_id, references(:event, type: :integer, on_delete: :delete_all), primary_key: true)
 
       timestamps()

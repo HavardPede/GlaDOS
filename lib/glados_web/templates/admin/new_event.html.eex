@@ -1,6 +1,6 @@
 <div class="w-3/5 mx-auto mb-8 text-center min-w-0">
 
-  <%= form_for @changeset, "#", 
+  <%= form_for @changeset, "#",
   [class: "w-full, flex justify-around flex-col p-5 pb-8"], fn f -> %>
   <%= render("event_form.html", form: f) %>
   <%= submit "Lag event", class: "c-btn w-32 mx-auto mt-8" %>

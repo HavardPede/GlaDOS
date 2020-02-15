@@ -6,7 +6,6 @@ defmodule GladosWeb.Live.View.CrewApplication do
   use Phoenix.LiveView
   alias Glados.{CrewApplications, EventCrew}
 
-
   def render(assigns) do
     Phoenix.View.render(GladosWeb.MemberView, "crew_application.html", assigns)
   end

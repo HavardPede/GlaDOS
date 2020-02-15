@@ -11,7 +11,6 @@
   }
 </style>
 
-
 <div class="w-full pt-12 h-screen error404bg">
   <div class="max-w-2xl rounded-lg m-auto h-64 shadow-2xl error404Box">
     <div class="p-8">

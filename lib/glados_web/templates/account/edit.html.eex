@@ -2,10 +2,10 @@
 <%= render "navbar_edit_account.html", conn: @conn %>
 <div class="w-4/5 m-auto md:m-0 md:w-2/5">
   <%= render "profile_and_name.html", conn: @conn, user: @user %>
-  <%= render( 
-    "edit_account_info.html", 
+  <%= render(
+    "edit_account_info.html",
     user: @user,
-    conn: @conn, 
+    conn: @conn,
     changeset: @info_changeset
   ) %>
   <%= render "edit_password.html", conn: @conn, changeset: @password_changeset %>

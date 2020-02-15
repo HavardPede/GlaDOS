@@ -1,14 +1,15 @@
 <div class="flex flex-row items-center" id="profile_picture">
   <%= form_for @conn, Routes.account_path(@conn, :update_user), [multipart: true], fn f -> %>
-    <%= file_input f, :test, [id: "image_upload", class: "hidden"] %>
-    <label for="image_upload">
-      <div class="container relative rounded-full">
-        <img class="w-20 cursor-pointer c-edit_profile_image rounded-full" src="<%= Routes.static_path(@conn, "/images/panda.png" ) %>">
-        <div class="c-edit_profile_image__overlay rounded-full flex justify-center items-center">  
-          <div class="w-8 text-white fill-current"><%= render Icons, "upload.html" %></div>
-        </div>
+  <%= file_input f, :test, [id: "image_upload", class: "hidden"] %>
+  <label for="image_upload">
+    <div class="container relative rounded-full">
+      <img class="w-20 cursor-pointer c-edit_profile_image rounded-full"
+        src="<%= Routes.static_path(@conn, "/images/panda.png" ) %>">
+      <div class="c-edit_profile_image__overlay rounded-full flex justify-center items-center">
+        <div class="w-8 text-white fill-current"><%= render Icons, "upload.html" %></div>
       </div>
-    </label>
+    </div>
+  </label>
   <% end %>
   <div class="ml-4">
     <p class="font-bold mb-1"><%= @user.name %></p>

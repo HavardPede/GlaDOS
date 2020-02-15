@@ -4,11 +4,11 @@ defmodule Glados.Toolbox.List do
   """
 
   @doc """
-  given a list and a list element, this function will remove all elements in the list that 
+  given a list and a list element, this function will remove all elements in the list that
   has a higher index then the given element.
 
-  example: 
-    call: remove_trailing_elements([1, 2, 3], 2) 
+  example:
+    call: remove_trailing_elements([1, 2, 3], 2)
     return: [1, 2]
   OBS! if there are duplicate elements, this function will pick the latter one.
   """

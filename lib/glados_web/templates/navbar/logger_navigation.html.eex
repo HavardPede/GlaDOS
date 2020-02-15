@@ -1,16 +1,18 @@
 <html>
-  <body>
-    <div>
-      <nav class='navbar'>        
-      <ul class="float-right">
-          <li class="logout">
-            <%= link "Logg ut", to: Routes.session_path(@conn, :delete), method: "delete" %>
-          </li>
-        </ul>
-        <ul>
-        </ul>
 
-      </nav>
-    </div>
-  </body>
+<body>
+  <div>
+    <nav class='navbar'>
+      <ul class="float-right">
+        <li class="logout">
+          <%= link "Logg ut", to: Routes.session_path(@conn, :delete), method: "delete" %>
+        </li>
+      </ul>
+      <ul>
+      </ul>
+
+    </nav>
+  </div>
+</body>
+
 </html>

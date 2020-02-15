@@ -1,3 +1,21 @@
-<div>
-
+<div class="min-h-screen w-16 bg-payne flex flex-col justify-between">
+  <div class=="flex flex-col">
+    <img src="<%= Routes.static_path(GladosWeb.Endpoint, "/images/logo_alpha.png" ) %>"
+      class="h-12 mx-auto mt-5 mb-8" />
+    <div class="<%= if @page == :shop, do: "bg-apricot" %>  h-16 mt-8">
+      <div class="w-1/2 ml-3 fill-current text-white hover:text-azure pt-4 cursor-pointer" phx-click="change_page"
+        phx-value-page="shop">
+        <%= render Icons, "cart.html" %>
+      </div>
+    </div>
+    <div class="<%= if @page == :transactions, do: "bg-apricot" %> h-16">
+      <div class=" w-1/2 mx-auto fill-current text-white hover:text-azure pt-4 cursor-pointer" phx-click="change_page"
+        phx-value-page="transactions">
+        <%= render Icons, "transactions.html" %>
+      </div>
+    </div>
+  </div>
+  <div class="w-1/2 ml-3 fill-current text-white mb-4 hover:text-apricot">
+    <%= link render(Icons, "logout.html"), to: Routes.session_path(GladosWeb.Endpoint, :delete) %>
+  </div>
 </div>

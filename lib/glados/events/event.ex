@@ -6,6 +6,7 @@ defmodule Glados.Events.Event do
   use Ecto.Schema
 
   import Ecto.Changeset
+  alias Glados.Events.Product
   alias Glados.Accounts.User
 
   @primary_key {:id, :integer, auto_generate: false}
@@ -15,8 +16,9 @@ defmodule Glados.Events.Event do
     field(:end, :naive_datetime)
     field(:address, :string, null: false)
     field(:allow_applications, :boolean)
-    field(:sales_system, :boolean)
+    field(:shop, :boolean)
     many_to_many(:crew_members, User, join_through: "event_crew_members", on_replace: :delete)
+    has_many(:products, Product)
 
     timestamps()
   end
@@ -24,9 +26,9 @@ defmodule Glados.Events.Event do
   @doc false
   def changeset(event, attrs) do
     event
-    |> cast(attrs, [:id, :name, :start, :end, :address, :allow_applications, :sales_system])
+    |> cast(attrs, [:id, :name, :start, :end, :address, :allow_applications, :shop])
     |> validate_required(
-      [:id, :name, :start, :end, :address, :allow_applications, :sales_system],
+      [:id, :name, :start, :end, :address, :allow_applications, :shop],
       message: "Du må fylle inn dette feltet."
     )
     |> validate_dates()

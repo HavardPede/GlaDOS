@@ -1,7 +1,7 @@
 defmodule Glados.Events.EventCrewMember do
   @moduledoc """
   Schema representing the many to many relationship between a user and a event.
-  This will contain a users application for an event and the role the user held, 
+  This will contain a users application for an event and the role the user held,
   as well as a reference to both the user and the event entities (duh).
   """
 

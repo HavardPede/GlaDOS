@@ -26,7 +26,7 @@ defmodule GladosWeb.AdminController do
   end
 
   ##
-  ## NEW EVENT 
+  ## NEW EVENT
   ##
   def new_event(conn, _params) do
     assigns = %{
@@ -58,7 +58,7 @@ defmodule GladosWeb.AdminController do
 
   def create_event(conn, _), do: PlugHelper.throw_404(conn)
 
-  ## 
+  ##
   ## EDIT EVENT PAGE
   ##
   def edit_event(conn, %{"event_id" => event_id}) do
@@ -75,9 +75,9 @@ defmodule GladosWeb.AdminController do
   ##
   def update_event(%{assigns: %{event: event}} = conn, %{"event" => event_params} = params) do
     event
-    |> Events.update_event(event_params) 
+    |> Events.update_event(event_params)
     |> case do
-      {:ok, event} -> 
+      {:ok, event} ->
         conn
         |> Plug.Conn.assign(:event, event)
         |> put_flash(:info, "Eventet har blitt oppdatert.")
@@ -109,7 +109,7 @@ defmodule GladosWeb.AdminController do
   ## TOGGLE APPLICATIONS
   ##
   def toggle_applications(%{assigns: %{event: event}} = conn, params) do
-    Events.toggle_applications(event)    
+    Events.toggle_applications(event)   
     |> case do
       {:ok, event} -> Plug.Conn.assign(conn, :event, event)
       _ -> conn
@@ -125,7 +125,7 @@ defmodule GladosWeb.AdminController do
    applicant  =
    EventCrew.get_applicants(event_id)
    ~>> Enum.find(fn applicant -> applicant.user_id == applicant_id end)
-    
+   
    assigns = %{
       applicant: applicant,
       nav_data: construct_nav_data("Events", get_event_sub_pages(event_id), "Søknader"),
@@ -180,21 +180,21 @@ defmodule GladosWeb.AdminController do
   def handle_cafeteria_event(conn, %{"product" => product, "event_id" => event_id} = params) do
     product
     |> Map.put("event_id", event_id)
-    |> Products.create_product()   
+    |> Products.create_product()  
     |> case do
       {:ok, _product} -> put_flash(conn, :info, "Produktet ble lagt til.")
       {:error, _changeset} -> put_flash(conn, :error, "Produktet ble ikke lagt til.")
     end
     |> cafeteria(params)
   end
-  
+ 
   ##
   ## HANDLE CAFETERIA EVENT
   ##
-  ## toggle_sales_system
+  ## toggle_shop
   ##
   def handle_cafeteria_event(%{assigns: %{event: event}} = conn, params) do
-    Events.toggle_sales_system(event) 
+    Events.toggle_shop(event)
     |> case do
       {:ok, event} -> Plug.Conn.assign(conn, :event, event)
       _ -> conn
@@ -218,7 +218,7 @@ defmodule GladosWeb.AdminController do
 
   ## ------ Private Functions ------ ##
 
-  def construct_nav_data(current_page, sub_pages \\ %{}, current_sub_page \\ []) 
+  def construct_nav_data(current_page, sub_pages \\ %{}, current_sub_page \\ [])
   def construct_nav_data(current_page, sub_pages, current_sub_page) do
     if current_page in Map.keys(get_nav_elements()) and is_map(sub_pages) do
       %{pages: get_nav_elements(), current_page: current_page, sub_pages: sub_pages, current_sub_page: current_sub_page}

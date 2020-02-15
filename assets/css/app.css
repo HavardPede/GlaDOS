@@ -65,7 +65,6 @@
   @apply border px-2 py-2 text-center text-sm;
 }
 
-
 .c-standard_table tr:nth-child(even) {
   @apply bg-azure;
 }
@@ -94,7 +93,6 @@
   outline-color: #fdad5c;
 }
 
-
 .c-btn {
   @apply h-8 text-center rounded-lg text-white bg-cinderous shadow-md cursor-pointer text-sm px-4 py-2;
 }
@@ -118,7 +116,6 @@
   @apply .text-moss border-moss bg-transparent;
 }
 
-
 .c-btn--orange {
   @apply .bg-orange-500
 }
@@ -130,7 +127,6 @@
 .c-btn--orange:focus {
   @apply .bg-transparent .text-orange-500;
 }
-
 
 /****** END OF TAILWIND COMPONENTS ******/
 
@@ -153,7 +149,6 @@
 .help-block {
   color: #dc3545 !important;
 }
-
 
 form,
 label,

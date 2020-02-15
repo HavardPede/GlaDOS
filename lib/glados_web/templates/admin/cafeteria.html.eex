@@ -5,20 +5,20 @@
         <form method="post">
           <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token() %>">
           <label class="switch">
-            <input type="checkbox" class="js-switch" <%= if @event.sales_system, do: "checked", else: "" %>>
+            <input type="checkbox" class="js-switch" <%= if @event.shop, do: "checked", else: "" %>>
             <div>
               <span></span>
             </div>
           </label>
         </form>
-        <span
-          class="ml-4"><%= if @event.sales_system, do: "Kasse-systemet er aktivert.", else: "Kasse-systemet er stengt." %></span>
+        <span class="ml-4"><%= if @event.shop, do: "Butikken er åpen.", else: "Butikken er stengt." %></span>
       </div>
     </div>
     <table class="c-standard_table my_12">
       <tr>
         <th>Produkt navn</th>
         <th>Strek kode</th>
+        <th>Pris</th>
         <th></th>
       </tr>
       <tr>
@@ -27,6 +27,8 @@
         placeholder: "PRODUKT NAVN", autofocus: true] %></td>
         <td><%= text_input f, :barcode, [class: "mx-auto w-full h-full leading-loose text-center bg-transparent text-sm md:text-md",
         placeholder: "STREK KODE"] %></td>
+        <td><%= number_input f, :price, [class: "mx-auto w-full h-full leading-loose text-center bg-transparent text-sm md:text-md",
+                placeholder: "99.99", step: "0.01"] %></td>
         <td><%= submit "lag produkt", class: "c-btn" %></td>
         <% end %>
       </tr>
@@ -34,6 +36,7 @@
       <tr class="c-standard_table leading-loose">
         <td><%= product.name %></td>
         <td><%= product.barcode %></td>
+        <td><%= product.price %></td>
         <td>
           <%= link "slett", to: Routes.admin_path(GladosWeb.Endpoint, :delete_product, @event.id, product.id),
         method: :delete, class: "c-btn c-btn--hollow" %>

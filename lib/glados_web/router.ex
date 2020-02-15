@@ -1,11 +1,9 @@
 defmodule GladosWeb.Router do
   use GladosWeb, :router
 
-
   import Phoenix.LiveView.Router
   alias GladosWeb.Plugs.{Admin, Auth, FetchEvent, Guest, LoggerAuth, Member, Verify}
   alias Live.View.LoggerLive
-
 
   pipeline :browser do
     plug(:accepts, ["html"])
@@ -100,11 +98,6 @@ defmodule GladosWeb.Router do
     get("/forside", MemberController, :event_landing)
     get("/søknad", MemberController, :crew_application)
   end
-
-  # Crew Scope
-
-  # Chief Scope
-
 
   # Logger Scope
   scope "/logger", GladosWeb do

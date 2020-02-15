@@ -4,7 +4,7 @@ defmodule Glados.Products do
   """
 
   import Ecto.Query, only: [from: 2]
-  alias Glados.Products.Product
+  alias Glados.Events.Product
   alias Glados.Repo
 
   @doc """
@@ -31,7 +31,7 @@ defmodule Glados.Products do
 
   @doc """
   Returns a product in a result tuple
-  
+ 
   ## example
 
     iex > get_product(id)
@@ -52,7 +52,7 @@ defmodule Glados.Products do
 
     iex > create_product(:invalid)
     {:error, %Prooduct{}}
-    
+   
     iex > create_Prooduct(:valid)
     {:ok, %product{}}
   """

@@ -5,6 +5,7 @@ defmodule Glados.Events do
 
   alias Glados.Events.Event
   alias Glados.Repo
+  import Ecto.Query, only: [from: 2]
 
   @doc """
   Returns a changeset for a specific event.
@@ -20,12 +21,12 @@ defmodule Glados.Events do
 
     iex > create_event(:invalid)
     {:error, %Event{}}
-    
+   
     iex > create_event(:valid)
     {:ok, %Event{}}
   """
   def create_event(%{} = attrs) do
-    %Event{allow_applications: false, sales_system: false}
+    %Event{allow_applications: false, shop: false}
     |> Event.changeset(attrs)
     |> Repo.insert()
   end
@@ -42,11 +43,15 @@ defmodule Glados.Events do
     []
   """
   def get_events do
-    Repo.all(Event)
+    from(
+      event in Event,
+      order_by: [desc: event.start]
+    )
+    |> Repo.all()
   end
 
   @doc """
-  Fetches an event when given an id. 
+  Fetches an event when given an id.
 
   ## example
 
@@ -62,7 +67,7 @@ defmodule Glados.Events do
   end
 
   @doc """
-  Fetches an event when given an id, and preloads the crew members. 
+  Fetches an event when given an id, and preloads the crew members.
 
   ## example
 
@@ -114,12 +119,12 @@ defmodule Glados.Events do
 
   ## Examples
 
-      iex> toggle_sales_system(%Event{sales_system: true})
-      {:ok, %Event{sales_system: false}}
+      iex> toggle_shop(%Event{shop: true})
+      {:ok, %Event{shop: false}}
   """
-  def toggle_sales_system(%Event{sales_system: allow?} = event)  do
+  def toggle_shop(%Event{shop: allow?} = event)  do
     event
-    |>Event.changeset(%{sales_system: !allow?})
+    |>Event.changeset(%{shop: !allow?})
     |> Repo.update()
   end
   @doc """
@@ -160,5 +165,16 @@ defmodule Glados.Events do
       Enum.max_by(previous_events, & &1.end)
       |> OK.wrap()
     end
+  end
+
+  @doc """
+  Searches for an event that has shop set to true
+  """
+  def get_event_with_active_shop do
+    from(event in Event,
+      where: event.shop)
+    |> Repo.one()
+    |> Repo.preload([:products, :crew_members])
+    |> OK.required(:no_shops_open)
   end
 end

@@ -9,4 +9,3 @@
 Tildel plass:
 <%= select f, :crew, @crew_list, selected: @applicant.crew %>
 </form>
-<% IO.inspect @applicant |> Map.keys %>

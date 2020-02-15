@@ -10,8 +10,7 @@ defmodule Helpers.EventHelper do
     name: "Lanmine test",
     start: ~U[2120-01-11 21:21:21.210510Z],
     end: ~U[2120-01-11 22:22:22.210510Z],
-    address: "Fobarville",
-    active: false
+    address: "Fobarville"
   }
 
   @valid_inputs_2 %{
@@ -19,8 +18,7 @@ defmodule Helpers.EventHelper do
     name: "Lanmine test 2",
     start: ~U[2019-01-11 23:22:22.210510Z],
     end: ~U[2019-01-11 23:23:22.210510Z],
-    address: "BarFooVille",
-    active: false
+    address: "BarFooVille"
   }
 
   @doc """

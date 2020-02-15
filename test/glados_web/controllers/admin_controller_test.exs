@@ -65,7 +65,7 @@ defmodule GladosWeb.AdminControllerTest do
       conn =
         conn
         |> post(Routes.admin_path(conn, :create_event), event: EventHelper.get_event_data())
-      
+     
       events = Events.get_events()
       event = hd(events)
 
@@ -136,7 +136,7 @@ defmodule GladosWeb.AdminControllerTest do
       )
       |> html_response(404)
       |> assert
-      
+     
     end
 
     test "throws when given invalid new data", %{conn: conn, event: event} do

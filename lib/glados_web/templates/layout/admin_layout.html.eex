@@ -7,12 +7,12 @@
     <div class="w-full flex content-around flex-col md:flex-row">
       <%= if :nav_data in Map.keys(@conn.assigns) do %>
       <div class="h-full w-48">
-        <%= GladosWeb.AdminView.render(
-          "vertical_nav.html", 
-          pages: @nav_data.pages, 
-          current_page: @nav_data.current_page, 
-          sub_pages: @nav_data.sub_pages, 
-          current_sub_page: @nav_data.current_sub_page) 
+        <%= GladosWeb.CommonView.render(
+          "vertical_nav.html",
+          pages: @nav_data.pages,
+          current_page: @nav_data.current_page,
+          sub_pages: @nav_data.sub_pages,
+          current_sub_page: @nav_data.current_sub_page)
         %>
         <% end %>
       </div>

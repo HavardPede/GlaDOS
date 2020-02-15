@@ -11,7 +11,6 @@
       <th></th>
     </tr>
 
-
     <%= for crew_member <- @crew do %>
     <tr class="leading-loose">
       <td><%= crew_member.user.name %></td>

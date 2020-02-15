@@ -20,7 +20,6 @@ defmodule Glados.EventCrew do
   """
   def get_crew_list, do: @crew
 
-
   @doc """
   Returns the changeset for the given user
   """

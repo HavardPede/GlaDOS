@@ -1,15 +1,15 @@
-defmodule Glados.Repo.Migrations.AddSalesSystemToEvent do
+defmodule Glados.Repo.Migrations.AddShopToEvent do
   use Ecto.Migration
 
  def up do
     alter table(:event) do
-      add(:sales_system, :boolean)
+      add(:shop, :boolean)
     end
   end
 
   def down do
     alter table(:event) do
-      remove(:sales_system)
+      remove(:shop)
     end
   end
 end

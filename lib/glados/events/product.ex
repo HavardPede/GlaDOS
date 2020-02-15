@@ -1,4 +1,4 @@
-defmodule Glados.Products.Product do
+defmodule Glados.Events.Product do
   @moduledoc """
   Schema declaration for a cafeteria product.
   """
@@ -10,6 +10,7 @@ defmodule Glados.Products.Product do
   schema "products" do
     field(:name, :string, null: false)
     field(:barcode, :string, null: false)
+    field(:price, :float, null: false)
     belongs_to(:event, Event)
 
     timestamps()
@@ -18,9 +19,8 @@ defmodule Glados.Products.Product do
   @doc false
   def changeset(event, attrs) do
     event
-    |> cast(attrs, [:name, :barcode, :event_id])
-    |> validate_required(
-      [:name, :barcode, :event_id],
+    |> cast(attrs, [:name, :barcode, :price, :event_id])
+    |> validate_required([:name, :barcode, :price, :event_id],
       message: "Du må fylle inn dette feltet."
     )
     |> unique_constraint(:barcode, message: "Strekkoden finnes allerede")
