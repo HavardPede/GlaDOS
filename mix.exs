@@ -61,7 +61,6 @@ defmodule Glados.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 1.0"},
-      {:comeonin, "~> 5.2"},
       {:bcrypt_elixir, "~> 2.1"},
       {:bamboo, "~> 1.3"},
       {:bamboo_smtp, "~> 2.0.0"},

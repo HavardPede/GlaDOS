@@ -9,7 +9,7 @@ defmodule Glados.Accounts.Encryption do
   Given a password, hash it, using a salt.
   """
   def hash_password(password) do
-    Comeonin.Bcrypt.hashpwsalt(password)
+    Bcrypt.hash_pwd_salt(password)
   end
 
   @doc """
