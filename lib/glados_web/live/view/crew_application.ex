@@ -1,12 +1,10 @@
-defmodule GladosWeb.LiveView.CrewApplication do
+defmodule GladosWeb.Live.View.CrewApplication do
   @moduledoc """
   The liveview session handler for the application page.
   """
 
   use Phoenix.LiveView
-  alias Glados.{CrewApplications, EventCrewMembers}
-
-  @crew ["Kantine", "Security", "Info", "Scene", "Compo", "Ryddecrew"]
+  alias Glados.{CrewApplications, EventCrew}
 
   def render(assigns) do
     Phoenix.View.render(GladosWeb.MemberView, "crew_application.html", assigns)
@@ -26,7 +24,7 @@ defmodule GladosWeb.LiveView.CrewApplication do
       |> assign(:page_order, page_order)
       |> assign(:questions, pages[page])
       |> assign(:answers, application)
-      |> assign(:crew, @crew)
+      |> assign(:crew, EventCrew.get_crew_list())
       |> assign(:selected_crew, %{})
       |> assign(:event_id, event_id)
       |> assign(:user_id, user_id)
@@ -105,7 +103,7 @@ defmodule GladosWeb.LiveView.CrewApplication do
           }
         } = socket
       ) do
-    EventCrewMembers.send_application(user_id, event_id, answers)
+    EventCrew.send_application(user_id, event_id, answers)
     {:noreply, socket}
   end
 

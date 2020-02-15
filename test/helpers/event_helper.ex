@@ -10,8 +10,7 @@ defmodule Helpers.EventHelper do
     name: "Lanmine test",
     start: ~U[2120-01-11 21:21:21.210510Z],
     end: ~U[2120-01-11 22:22:22.210510Z],
-    address: "Fobarville",
-    active: false
+    address: "Fobarville"
   }
 
   @valid_inputs_2 %{
@@ -19,8 +18,7 @@ defmodule Helpers.EventHelper do
     name: "Lanmine test 2",
     start: ~U[2019-01-11 23:22:22.210510Z],
     end: ~U[2019-01-11 23:23:22.210510Z],
-    address: "BarFooVille",
-    active: false
+    address: "BarFooVille"
   }
 
   @doc """
@@ -29,18 +27,6 @@ defmodule Helpers.EventHelper do
   def create_event do
     {:ok, event} =
       @valid_inputs
-      |> Events.create_event()
-
-    {:ok, event_id: @valid_inputs.id, event: event}
-  end
-
-  @doc """
-  Creates an event that is set to active.
-  """
-  def create_active_event do
-    {:ok, event} =
-      @valid_inputs
-      |> Map.put(:active, true)
       |> Events.create_event()
 
     {:ok, event_id: @valid_inputs.id, event: event}

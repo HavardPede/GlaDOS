@@ -3,14 +3,13 @@ defmodule Glados.Accounts.Encryption do
   Handles password encryption and validation.
   """
 
-  alias Comeonin.Bcrypt
   alias Glados.Accounts.User
 
   @doc """
   Given a password, hash it, using a salt.
   """
   def hash_password(password) do
-    Bcrypt.hashpwsalt(password)
+    Comeonin.Bcrypt.hashpwsalt(password)
   end
 
   @doc """

@@ -28,6 +28,6 @@ defmodule GladosWeb.Plugs.Verify do
 
   # If no unverified session, redirect
   def call(conn, _opts) do
-    PlugHelper.render_404(conn)
+    PlugHelper.throw_404(conn)
   end
 end

@@ -1,0 +1,39 @@
+<input type="hidden" value="<%= @event_id %>" class="js-event_id">
+<div class="w-4/5 mx-auto">
+  <div class="">
+    <div class="mr-4 flex flex-row items-center">
+      <form method="post">
+        <input type="hidden" name="_csrf_token" value="<%= Phoenix.Controller.get_csrf_token() %>">
+        <label class="switch">
+          <input type="checkbox" class="js-switch" <%= if @event.allow_applications, do: "checked", else: "" %>>
+          <div>
+            <span></span>
+          </div>
+        </label>
+      </form>
+      <span class="ml-4"><%= if @event.allow_applications, do: "Søknader åpent.", else: "Søknader stengt." %></span>
+    </div>
+  </div>
+  <%= if Enum.empty?(@applicants) do %>
+  <div class="bg-cinderous p-4 mt-12 text-center text-white font-bold mt-4">
+    <h3>Det er ingen ubehandlede søknader for dette eventet enda.</h3>
+  </div>
+  <% else %>
+  <table class="w-4/5 mx-auto c-standard_table mt-12 ">
+    <tr>
+      <th>Navn</th>
+      <th></th>
+    </tr>
+    <%= for applicant <- @applicants do %>
+    <tr class="c-standard_table leading-loose">
+      <td><%= applicant.user.name %></td>
+      <td>
+        <a href="<%= Routes.admin_path(GladosWeb.Endpoint, :review_application, @event.id, applicant.user.id) %> "
+          class="c-btn c-btn--hollow">
+          Se Søknad</a>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+  <% end %>
+</div>

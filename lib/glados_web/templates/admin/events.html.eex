@@ -4,20 +4,20 @@
       <th>Event navn</th>
       <th>start</th>
       <th>Slutt</th>
-      <th>Status</th>
       <th></th>
     </tr>
     <%= for event <- @events do %>
-      <tr class="c-standard_table leading-loose <%= if event.active, do: "c-standard_table--green" %>">
-        <td><%= event.name %></td>
-        <td><%= event.start %></td>
-        <td><%= event.end %></td>
-        <td><%= event.active %></td>
-        <td ><%= link "endre", to: Routes.admin_path(@conn, :edit_event, event.id), class: "c-btn--hollow" %></td>
-      </tr>
+    <tr class="c-standard_table leading-loose">
+      <td><%= event.name %></td>
+      <td><%= "#{event.start.day}.#{event.start.month}.#{event.start.year}" %></td>
+      <td><%= "#{event.end.day}.#{event.end.month}.#{event.end.year}" %></td>
+      <td>
+        <a href="<%= admin_path(@conn, :edit_event, event.id) %>" class="c-btn c-btn--hollow">Endre</a>
+      </td>
+    </tr>
     <% end %>
   </table>
   <div class="w-4/5 mx-auto mt-4 flex justify-end">
-    <%= link "Nytt arrangement", to: Routes.admin_path(@conn, :new_event), class: "c-btn c-btn--orange newUserBtn mt-0 py-2 h-8", method: :get %>
+    <a href="<%= Routes.admin_path(@conn, :new_event) %>" class="c-btn mt-0 py-2 h-8">Nytt arrangement</a>
   </div>
 </div>

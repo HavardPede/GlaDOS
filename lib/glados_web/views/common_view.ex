@@ -1,6 +1,8 @@
 defmodule GladosWeb.CommonView do
   use GladosWeb, :view
 
+  import GladosWeb.Router.Helpers
+  alias GladosWeb.Endpoint
   alias Glados.Toolbox
 
   def get_nav_elements(5) do

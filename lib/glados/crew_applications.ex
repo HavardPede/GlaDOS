@@ -3,7 +3,7 @@ defmodule Glados.CrewApplications do
   Defines higher order logic for crew applications.
   """
   alias Glados.Toolbox
-  alias Glados.EventCrewMembers
+  alias Glados.EventCrew
 
   @questions_path "./priv/yaml/crew_application.yaml"
 
@@ -44,7 +44,7 @@ defmodule Glados.CrewApplications do
   Creates a map where each question maps to an empty value.
   """
   def create_answers_map(user_id, event_id) do
-    EventCrewMembers.get_event_crew_member(user_id, event_id)
+    EventCrew.get_event_crew_member(user_id, event_id)
     |> case do
       {:ok, member} ->
         member.application

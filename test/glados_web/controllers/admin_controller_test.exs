@@ -37,12 +37,12 @@ defmodule GladosWeb.AdminControllerTest do
     test "shows a list of all events", %{conn: conn, event: event, event2: event2} do
       conn =
         conn
-        |> get(Routes.admin_path(conn, :events))
+        |> get(Routes.admin_path(conn, :index))
 
       assert html_response(conn, 200) =~ "Event navn"
       assert html_response(conn, 200) =~ event.name
       assert html_response(conn, 200) =~ event2.name
-      assert html_response(conn, 200) =~ "endre"
+      assert html_response(conn, 200) =~ "Endre"
     end
   end
 
@@ -54,19 +54,7 @@ defmodule GladosWeb.AdminControllerTest do
         conn
         |> get(Routes.admin_path(conn, :new_event))
 
-      assert html_response(conn, 200) =~ "Lag et nytt event!"
-      assert html_response(conn, 200) =~ "Er dette lanet aktivt?"
-    end
-
-    test "does not let you set active event if there exist an active one already", %{conn: conn} do
-      create_active_event(:something)
-
-      conn =
-        conn
-        |> get(Routes.admin_path(conn, :new_event))
-
-      assert html_response(conn, 200) =~ "Lag et nytt event!"
-      assert html_response(conn, 200) =~ "Lanet kan ikke settes aktivt"
+      assert html_response(conn, 200) =~ "Lag event"
     end
   end
 
@@ -77,9 +65,12 @@ defmodule GladosWeb.AdminControllerTest do
       conn =
         conn
         |> post(Routes.admin_path(conn, :create_event), event: EventHelper.get_event_data())
+     
+      events = Events.get_events()
+      event = hd(events)
 
-      assert Routes.admin_path(conn, :events) == redirected_to(conn, 302)
-      assert 1 == length(Events.get_events())
+      assert 1 == length(events)
+      assert Routes.admin_path(conn, :edit_event, event.id) == redirected_to(conn, 302)
     end
 
     test "does not create a new event when given invalid paramters", %{conn: conn} do
@@ -108,19 +99,15 @@ defmodule GladosWeb.AdminControllerTest do
         conn
         |> get(Routes.admin_path(conn, :edit_event, event.id))
 
-      assert html_response(conn, 200) =~ "Oppdater eventet!"
+      assert html_response(conn, 200) =~ "Start dato"
       assert html_response(conn, 200) =~ event.name
     end
 
     test "redirects if there is no event with the given id", %{conn: conn} do
-      conn =
         conn
         |> get(Routes.admin_path(conn, :edit_event, 1997))
-
-      redirected_path = redirected_to(conn, 302)
-      conn = get(recycle(conn), redirected_path)
-
-      assert html_response(conn, 200) =~ "Oops, vi klarte ikke å finne dette eventet."
+        |> html_response(404)
+        |> assert
     end
   end
 
@@ -136,9 +123,6 @@ defmodule GladosWeb.AdminControllerTest do
 
       {:ok, updated_event} = Events.get_event(event.id)
 
-      redirected_path = redirected_to(conn, 302)
-      conn = get(recycle(conn), redirected_path)
-
       assert html_response(conn, 200) =~ "Eventet har blitt oppdatert."
       assert "new name" == updated_event.name
     end
@@ -146,16 +130,13 @@ defmodule GladosWeb.AdminControllerTest do
     test "throws when given invalid id", %{conn: conn} do
       invalid_event_id = 123
 
-      conn =
-        conn
-        |> put(Routes.admin_path(conn, :update_event, invalid_event_id),
-          event: %{name: "new name"}
-        )
-
-      redirected_path = redirected_to(conn, 302)
-      conn = get(recycle(conn), redirected_path)
-
-      assert html_response(conn, 200) =~ "En feil oppstod. Eventet har ikke blitt oppdatert."
+      conn
+      |> put(Routes.admin_path(conn, :update_event, invalid_event_id),
+        event: %{name: "new name"}
+      )
+      |> html_response(404)
+      |> assert
+     
     end
 
     test "throws when given invalid new data", %{conn: conn, event: event} do
@@ -170,11 +151,10 @@ defmodule GladosWeb.AdminControllerTest do
     end
 
     test "throws 404 when missing paramters", %{conn: conn, event: event} do
-      conn =
         conn
         |> put(Routes.admin_path(conn, :update_event, event.id))
-
-      assert html_response(conn, 404)
+        |> html_response(404)
+        |> assert
     end
   end
 
@@ -182,6 +162,5 @@ defmodule GladosWeb.AdminControllerTest do
   defp create_user(params), do: AccountHelper.create_user(params)
   defp login_user(params), do: AccountHelper.login_user(params)
   defp create_event(_params), do: EventHelper.create_event()
-  defp create_active_event(_params), do: EventHelper.create_active_event()
   defp create_second_event(_params), do: EventHelper.create_second_event()
 end
