@@ -17,5 +17,11 @@ config :glados, GladosWeb.Endpoint,
 config :glados,
   password_encryption: Glados.Accounts.MockEncryption
 
+# Configure the database for GitHub Actions
+if System.get_env("GITHUB_ACTIONS") do
+  config :app, Glados.Repo,
+    username: "postgres",
+    password: "postgres"
+end
 # Print only warnings and errors during test
 config :logger, level: :warn
