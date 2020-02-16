@@ -153,7 +153,7 @@ defmodule GladosWeb.AdminController do
     user_id
     |> EventCrew.get_event_crew_member(event_id)
     ~>> EventCrew.set_role()
-    ~>> EventCrew.set_crew(%{crew: value})
+    ~>> EventCrew.set_crew(value)
     |> case do
       {:ok, _updated_applicant} -> put_flash(conn, :info, "Rollen har blitt satt.")
       {:error, _reason} -> put_flash(conn, :error, "En feil oppstod.")

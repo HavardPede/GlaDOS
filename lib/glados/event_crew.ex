@@ -89,12 +89,11 @@ defmodule Glados.EventCrew do
   end
 
   @doc """
-  Given a crew member and a crew map %{crew => "Info"} assign the member to that crew.
+  Given a crew member and a crew assign the member to that crew.
+  Returns a result type.
   """
 
-  def set_crew(%EventCrewMember{} = crew_member, crew_map) do
-    crew = Map.get(crew_map, :crew)
-
+  def set_crew(%EventCrewMember{} = crew_member, crew) do
     if crew in get_crew_list() do
       crew_member
       |> Changeset.change(crew: crew)
