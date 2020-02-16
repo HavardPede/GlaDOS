@@ -17,7 +17,18 @@ defmodule Glados.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "Glados",
+      source_url: "https://github.com/HavardPede/GlaDOS",
+      homepage_url: "localhost:4001",
+      docs: [
+        # The main page in the docs
+        main: "glados",
+        logo: "assets/static/images/logo_alpha.png",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -48,15 +59,21 @@ defmodule Glados.MixProject do
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 1.0"},
-      {:comeonin, "~> 5.1"},
-      {:bcrypt_elixir, "~> 2.0"},
+      {:bcrypt_elixir, "~> 2.1"},
       {:bamboo, "~> 1.3"},
       {:bamboo_smtp, "~> 2.0.0"},
       {:timex, "~> 3.5"},
       {:credo, "~>1.1", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.10", only: :test}
+      {:excoveralls, "~> 0.10", only: :test},
+      {:phoenix_live_view, "~> 0.4.0"},
+      {:floki, ">= 0.0.0", only: :test},
+      {:yaml_elixir, "~> 2.4"},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
+      {:ok, git: "https://github.com/CrowdHailer/OK/"},
+      {:navigation_history, "~> 0.3"},
+      {:sentry, "~> 7.0"},
+      {:jason, "~> 1.1"}
     ]
   end
 

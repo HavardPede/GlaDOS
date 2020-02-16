@@ -7,12 +7,13 @@ defmodule GladosWeb.Plugs.PlugHelper do
   import Phoenix.Controller
 
   alias GladosWeb.Router.Helpers, as: Routes
-  alias Glados.{Accounts, Utils}
+  alias GladosWeb.Live.View.LoggerLive
+  alias Glados.{Accounts}
 
   def redirect(conn) do
     conn
     |> get_session(:current_user_id)
-    |> Utils.nillable()
+    |> OK.required()
     |> case do
       {:ok, user_id} -> redirect_user(conn, user_id)
       {:error, _} -> redirect_guest(conn)
@@ -40,7 +41,7 @@ defmodule GladosWeb.Plugs.PlugHelper do
 
   defp redir("logger", conn) do
     conn
-    |> redirect(to: Routes.logger_path(conn, :logger_transactions))
+    |> redirect(to: Routes.live_path(conn, LoggerLive))
     |> halt()
   end
 
@@ -53,9 +54,7 @@ defmodule GladosWeb.Plugs.PlugHelper do
   # Default
   defp redir(_, conn) do
     conn
-    |> put_status(:not_found)
-    |> put_view(GladosWeb.ErrorView)
-    |> render("404.html")
+    |> throw_404()
   end
 
   def get_current_user(conn) do
@@ -67,10 +66,11 @@ defmodule GladosWeb.Plugs.PlugHelper do
   @doc """
   Given a connection, redirect to a 404 page.
   """
-  def render_404(conn) do
+  def throw_404(conn) do
     conn
     |> put_status(:not_found)
     |> put_view(GladosWeb.ErrorView)
+  |> put_layout({GladosWeb.LayoutView, "error_layout.html"})
     |> render("404.html")
     |> halt()
   end

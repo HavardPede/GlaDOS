@@ -1,50 +1,77 @@
-const path = require('path');
-const glob = require('glob');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require("path");
+const glob = require("glob");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const PurgecssPlugin = require("purgecss-webpack-plugin");
+const globAll = require("glob-all");
+
+// Custom PurgeCSS extractor for Tailwind that allows special characters in
+// class names.
+//
+// https://github.com/FullHuman/purgecss#extractor
+class TailwindExtractor {
+  static extract(content) {
+    return content.match(/[A-Za-z0-9-_:\/]/g) || [];
+  }
+}
 
 module.exports = (env, options) => ({
   optimization: {
     minimizer: [
-      new OptimizeCSSAssetsPlugin({})
+      new OptimizeCSSAssetsPlugin({}),
+      new PurgecssPlugin({
+        paths: globAll.sync([
+          "../lib/<APP_NAME>_web/templates/**/*.html.eex",
+          "../lib/<APP_NAME>_web/views/**/*.ex",
+          "../assets/ts/**/*.ts"
+        ]),
+        extractors: [
+          {
+            extractor: TailwindExtractor,
+            extensions: ["html", "js", "eex", "ex"]
+          }
+        ]
+      })
     ]
   },
   entry: {
-    './js/app.js': glob.sync('./vendor/**/*.js').concat(['./js/app.js'])
+    "./js/app.ts": glob.sync("./vendor/**/*.js").concat(["./ts/app.ts"])
   },
   output: {
-    filename: 'app.js',
-    path: path.resolve(__dirname, '../priv/static/js')
+    filename: "app.js",
+    path: path.resolve(__dirname, "../priv/static/js")
   },
   module: {
-    rules: [{
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader'
+    rules: [
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "ts-loader"
+        }
+      },
+      {
+        test: /\.css$/,
+        // Use the postcss-loader
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"]
       }
-    },
-    {
-      test: /\.css$/,
-      // Use the postcss-loader
-      use: [
-        MiniCssExtractPlugin.loader,
-        'css-loader',
-        'postcss-loader'
-      ]
-    }
     ]
+  },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"]
   },
 
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '../css/app.css'
+      filename: "../css/app.css"
     }),
-    new CopyWebpackPlugin([{
-      from: 'static/',
-      to: '../'
-    }])
+    new CopyWebpackPlugin([
+      {
+        from: "static/",
+        to: "../"
+      }
+    ])
   ]
 });

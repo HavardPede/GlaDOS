@@ -1,0 +1,12 @@
+<div class="w-4/5 mx-auto text-center">
+  <h2 class="text-2xl mb-2">Velkommen til crew!</h2>
+  <img src="<%= Routes.static_path(@conn, "/images/lanmine29.jpg" ) %>" class=" w-4/5 mx-auto rounded-lg mb-8">
+  <div class="mb-4">
+    For neste lan vil denne siden være fylt med informasjon om det oppkommende eventet, samt
+    et forum for kommunikasjon før, under og etter eventet.
+  </div>
+  <div>
+    Lykke til med LanMine 30, Generations.
+  </div>
+  <div class="text-orange-500">Hilsen ESLG Glados</div>
+</div>

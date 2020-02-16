@@ -1,0 +1,25 @@
+<%= case @page do %>
+<% :shop -> %>
+<div class="flex flex-row bg-azure w-full">
+  <%= render("logger_nav.html", page: @page) %>
+  <div class="w-2/3 mx-auto flex flex-col m-8 pb-32">
+    <%= render("shop.html", search_term: @search_term, total: @total, cart: @cart, customer: @customer) %>
+  </div>
+</div>
+<% :transactions -> %>
+<div class="flex flex-row bg-azure w-full">
+  <%= render("logger_nav.html", page: @page) %>
+  <div class="flex flex-col w-full m-8 pb-32">
+    <%= render("transactions.html", transactions: @transactions) %>
+  </div>
+</div>
+<% :closed -> %>
+<div class="w-screen h-screen bg-azure pt-12 text-center">
+  <div class="w-32 mx-auto mb-6"><img src="<%= Routes.static_path(GladosWeb.Endpoint, "/images/logo_alpha.png" ) %>">
+  </div>
+  <h2 class="mb-6">Det ser ut til at butikken er
+    stengt. <br />Hvis dette er en feil, Snakk med Håvard.</h2>
+  <%= link "Logg ut", to: Routes.session_path(GladosWeb.Endpoint, :delete), class: "c-btn" %>
+</div>
+<% end %>
+<%= render(GladosWeb.CommonView, "footer.html") %>

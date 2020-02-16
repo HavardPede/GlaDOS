@@ -1,0 +1,1 @@
+<textarea rows="4" name="<%= @name %>" cols="50" class="bg-azure resize-none mt-3 mb-0 p-2 rounded shadow-md"><%= @answer %></textarea>

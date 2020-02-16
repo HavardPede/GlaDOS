@@ -1,0 +1,53 @@
+<div class="flex flex-col px-4 mx-auto text-center">
+  <img src="<%= Routes.static_path(@conn, "/images/lanmine29.jpg" ) %>" class=" w-4/5 mx-auto rounded-lg">
+  <div class="flex flex-row flex-wrap justify-center md:justify-around md:text-lg px-4">
+    <div class="mt-4">
+      Start dato:
+      </br>
+      <div class="mt-2 flex justify-center text-lg mr-4">
+        <span
+          class="border-2 border-aqua bg-aqua text-white p-2 px-3 rounded-lg mr-1 leading-tight"><%= @event.start.day %></span>
+        <span
+          class="border-2 border-aqua bg-aqua text-white p-2 px-3 rounded-lg mr-1 leading-tight"><%= @event.start.month %></span>
+        <span
+          class="border-2 border-aqua bg-aqua text-white p-2 px-3 rounded-lg leading-tight"><%= @event.start.year %></span>
+      </div>
+    </div>
+    <div class="mt-4">
+      Slutt dato:
+      </br>
+      <div class="mt-2 flex justify-center text-lg">
+        <span
+          class="border-2 border-payne text-payne p-2 px-3 rounded-lg mr-1 leading-tight"><%= @event.end.day %></span>
+        <span
+          class=" border-2 border-payne text-payne p-2 px-3 rounded-lg mr-1 leading-tight"><%= @event.end.month %></span>
+        <span class=" border-2 border-payne text-payne p-2 px-3 rounded-lg leading-tight"><%= @event.end.year %></span>
+      </div>
+    </div>
+  </div>
+  <%= if @page == :no_application do %>
+  <div class="mt-4 w-4/5 md:w-4/6 mx-auto">
+    <div class="mb-4">Vi er veldig stolte av å kunne invitere dere alle til vårt LAN nummer 30.</div> Med 10 års LAN
+    erfaring i
+    sekken, kan vi
+    garantere tidenes LAN fest i Hvalerhallen. Denne gangen skal vi ha Pokémon som tema, og vi har gått "all in". Vi har
+    laget vårt helt eget "Pokémonkort spill" og trykt opp over 1200 kort. Deltagerne kan duellere mot hverandre og
+    utfordre crew for å vinne flotte premier!
+    </br>
+    <div>Vi har også økt premiepotten i CS:GO til 20 000kr! Dette blir moro!</div>
+  </div>
+  <% else %>
+  <div class='text-gondola text-2xl my-4'>
+    Søknaden din venter på håndtering
+  </div>
+  <div class='my-4 w-4/5 md:w-4/6 mx-auto'>
+    Din søknad venter på behandling. Vi sender deg en email med svar når den har blitt behandlet.
+    Du kan også endre søknaden din, hvis du ønsker.
+  </div>
+  <% end %>
+
+  <%= text = if @page == :no_application, do: "Send Søknad", else: "Endre Søknad" %>
+  <%= button(text, to: Routes.member_path(@conn, :crew_application, @event.id), method: "get", class: "c-btn bg-aqua my-8
+  w-1/2 mx-auto text-center") %>
+
+</div>

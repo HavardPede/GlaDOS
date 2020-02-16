@@ -6,8 +6,7 @@ defmodule Glados.Accounts.User do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import Kernel
-  alias Glados.Events.{Event, EventCrew}
+  alias Glados.Events.Event
 
   @encryption Application.get_env(:glados, :password_encryption)
   @missing_field "Du må fylle inn dette feltet."
@@ -33,7 +32,7 @@ defmodule Glados.Accounts.User do
     field(:year, :string, virtual: true)
     field(:dob, :date)
 
-    many_to_many(:event, Event, join_through: EventCrew, on_replace: :delete)
+    many_to_many(:events, Event, join_through: "event_crew_members", on_replace: :delete)
 
     timestamps()
   end
@@ -118,21 +117,22 @@ defmodule Glados.Accounts.User do
     |> validate_postcode()
   end
 
-  # Password validation
+  # ----- Private functions ----- #
+
   defp validate_password(%{changes: %{password: password}} = changeset) do
-    # Check length and content and return only 1 error even if both fails. If all is fine, return changeset
+    # Check length and content and return only 1 error even if both fails.
     length = String.length(password) > 7
     content = String.match?(password, ~r/(?=.*[a-å])(?=.*[A-Å])(?=.*[0-9])/)
 
     case {length, content} do
       {false, _} ->
-        add_error(changeset, :password, "Passordet må være minst 8 karakterer langt.")
+        add_error(changeset, :password, "Minst 8 karakterer.")
 
       {_, false} ->
         add_error(
           changeset,
           :password,
-          "Passordet må inneholde minst 1 liten og stor bokstav, og ett tall."
+          "Minst en liten og stor bokstav, og ett tall."
         )
 
       {true, true} ->

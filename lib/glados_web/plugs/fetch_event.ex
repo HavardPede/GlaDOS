@@ -11,18 +11,16 @@ defmodule GladosWeb.Plugs.FetchEvent do
 
   def call(%{params: %{"event_id" => event_id}} = conn, _opts) do
     event_id
-    |> Events.get_event()
+    |> Events.get_preloaded_event()
     |> case do
       {:ok, event} ->
         conn
         |> assign(:event, event)
 
       {:error, _} ->
-        PlugHelper.render_404(conn)
+        PlugHelper.throw_404(conn)
     end
   end
 
-  def call(conn, _opts) do
-    PlugHelper.render_404(conn)
-  end
+  def call(conn, _opts), do: conn
 end

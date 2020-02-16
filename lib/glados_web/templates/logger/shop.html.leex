@@ -1,0 +1,56 @@
+<div class="w-full shadow-xl rounded-sm h-16 bg-white flex flex-row items-center justify-between">
+  <form phx-submit="search" class="flex flex-row">
+    <input type="text" name="search_term"
+      class="ml-6 h-8 md:w-64 pl-4 border text-xs <%= if @search_term, do: "border-red-600", else: "border-azure"  %>"
+      placeholder="strekkode eller crew ID" value="<%= @search_term %>" autofocus />
+    <label for="submit_form" class="cursor-pointer">
+      <div class="w-8 h-8 p-2 fill-current bg-aqua text-payne hover:text-apricot">
+        <%= render Icons, "search.html" %>
+      </div>
+      <input type="submit" id="submit_form" class="hidden" />
+    </label>
+  </form>
+  <div class="w-48 flex flex-row justify-between mr-6">
+    <h3>Totalt:</h3>
+    <h2><%= @total |> Float.ceil(2) %> kr</h2>
+  </div>
+</div>
+<div class="w-full h-full bg-white mt-8 shadow-xl rounded overflow-hidden">
+  <table class="w-full text-sm text-center">
+    <tr class="h-12 text-xs capitalize">
+      <th class="bg-aqua rounded-tl">produkt</th>
+      <th class="bg-aqua">pris</th>
+      <th class="bg-aqua">antall</th>
+      <th class="bg-aqua">Subtotal</th>
+      <th class="bg-aqua rounded-tr"></th>
+    </tr>
+    <%= for {barcode, product} <- @cart do %>
+    <tr class="h-12 border-b border-azure">
+      <td><%= product.name %></td>
+      <td><%= product.price %> kr</td>
+      <td><%= product.count %></td>
+      <td><%= product.count * product.price |> Float.ceil(2) %> kr</td>
+      <td>
+        <div class="w-5 text-red-600 fill-current mx-auto cursor-pointer" phx-click="remove_from_cart"
+          phx-value-barcode="<%= barcode %>"><%= render Icons, "trashcan.html" %></div>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+</div>
+<div class="flex flex-row justify-between mt-4">
+  <div class="flex flex-row">
+    <button class="self-start c-btn bg-aqua text-white hover:bg-aqua hover:text-red-300" phx-click="save_transaction"
+      <%= unless @customer, do: "disabled" %>>LEGG
+      TIL</button>
+
+    <%= if @customer do %>
+    <div class="ml-2 rounded bg-white text-sm text-aqua p-2 fill-current h-8">
+      <span class="flex flex-row items-center"><%= @customer.user.name %> <span class="ml-4 cursor-pointer"
+          phx-click="remove_customer">x</span>
+    </div>
+    <% end %>
+  </div>
+  <button class="self-start c-btn bg-red-600 text-white hover:bg-red-600 hover:text-red-300 cursor-pointer"
+    phx-click="reset_state">AVBRYT</button>
+</div>

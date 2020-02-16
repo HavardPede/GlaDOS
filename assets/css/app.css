@@ -3,14 +3,16 @@
 @import "./new_user.css";
 @import "./verify.css";
 @import "./logger.css";
-@import "./admin.css";
-@import "./error.css";
 @import "./edit.css";
-
+@import "./switch.css";
 @tailwind base;
 @tailwind components;
 
 /****** START OF TAILWIND COMPONENTS ******/
+
+.error404bg {
+  @apply bg-payne;
+}
 
 /* .lg */
 @media only screen and (min-width: 1024px) {
@@ -31,16 +33,8 @@
   @apply .cursor-pointer .py-2 .px-4 my-1 .text-center .rounded-lg .shadow-md;
 }
 
-.c-btn--hollow:hover {
-  @apply .text-orange-500 .border-orange-500;
-}
-
-.c-btn--hollow {
-  @apply .py-2 .px-3 .my-1 .text-center .rounded-lg .text-grue .border .border-grue .shadow-md .bg-transparent;
-}
-
 .c-guest_nav_elem {
-  @apply .w-1/3 .h-8 .p-2 .bg-white .rounded-t-lg .flex .justify-center;
+  @apply w-1/3 h-8 p-2 bg-white rounded-t-lg text-center text-xs;
 }
 
 .c-guest_nav_elem:hover {
@@ -52,7 +46,7 @@
 }
 
 .c-guest_nav_elem--selected {
-  @apply .border-none .h-12 .items-center text-orange-500;
+  @apply .border-none .h-10 .items-center text-orange-500;
 }
 
 .c-standard_input {
@@ -64,15 +58,15 @@
 }
 
 .c-standard_table th {
-  @apply uppercase border border-gray-300 px-4 py-2 text-xs;
+  @apply uppercase px-4 py-2 text-sm;
 }
 
 .c-standard_table td {
   @apply border px-2 py-2 text-center text-sm;
 }
 
-.c-standard_table--green td {
-  @apply bg-green-200 font-semibold;
+.c-standard_table tr:nth-child(even) {
+  @apply bg-azure;
 }
 
 .c-field_container {
@@ -99,6 +93,41 @@
   outline-color: #fdad5c;
 }
 
+.c-btn {
+  @apply text-center rounded-lg text-white bg-cinderous shadow-md cursor-pointer text-sm px-4 py-2;
+}
+
+.c-btn:focus {
+  @apply text-azure outline-none bg-moss;
+}
+.c-btn:hover {
+  @apply text-azure bg-moss;
+}
+
+.c-btn:disabled {
+  @apply bg-disabled text-azure border-none;
+}
+
+.c-btn--hollow {
+  @apply .my-1 .text-payne .border .border-payne .bg-transparent;
+}
+
+.c-btn--hollow:hover {
+  @apply .text-moss border-moss bg-transparent;
+}
+
+.c-btn--orange {
+  @apply .bg-orange-500
+}
+
+.c-btn--orange:hover {
+  @apply bg-transparent text-orange-500 border border-azure;
+}
+
+.c-btn--orange:focus {
+  @apply .bg-transparent .text-orange-500;
+}
+
 /****** END OF TAILWIND COMPONENTS ******/
 
 @tailwind utilities;
@@ -109,7 +138,8 @@
 
 :root {
   --main-orange: #eba134;
-  --dark-blue: #606c76;
+  --payne: #606c76;
+  --azure: #e2e8f0;
 }
 
 .danger {
@@ -120,22 +150,6 @@
   color: #dc3545 !important;
 }
 
-.bg-grue {
-  background-color: var(--dark-blue);
-}
-
-.bg-grue-hover:hover {
-  background-color: var(--dark-blue) !important;
-}
-
-.text-grue {
-  color: var(--dark-blue);
-}
-
-.border-grue {
-  border-color: var(--dark-blue);
-}
-
 form,
 label,
 h5 {
@@ -143,5 +157,14 @@ h5 {
 }
 
 html {
-  font-family: "Fira Code", monospace;
+  font-family: "Courier Prime", monospace;
+}
+
+.phx-connected,
+.phx-disconnected {
+  width: 100%;
+}
+
+.c-application_question:last-of-type {
+  margin-bottom: 0px;
 }

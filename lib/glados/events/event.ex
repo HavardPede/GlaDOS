@@ -6,9 +6,8 @@ defmodule Glados.Events.Event do
   use Ecto.Schema
 
   import Ecto.Changeset
+  alias Glados.Events.Product
   alias Glados.Accounts.User
-  alias Glados.Events
-  alias Glados.Events.EventCrew
 
   @primary_key {:id, :integer, auto_generate: false}
   schema "event" do
@@ -16,9 +15,10 @@ defmodule Glados.Events.Event do
     field(:start, :naive_datetime)
     field(:end, :naive_datetime)
     field(:address, :string, null: false)
-    field(:active, :boolean)
-
-    many_to_many(:crew_member, User, join_through: EventCrew, on_replace: :delete)
+    field(:allow_applications, :boolean)
+    field(:shop, :boolean)
+    many_to_many(:crew_members, User, join_through: "event_crew_members", on_replace: :delete)
+    has_many(:products, Product)
 
     timestamps()
   end
@@ -26,13 +26,12 @@ defmodule Glados.Events.Event do
   @doc false
   def changeset(event, attrs) do
     event
-    |> cast(attrs, [:id, :name, :start, :end, :address, :active])
+    |> cast(attrs, [:id, :name, :start, :end, :address, :allow_applications, :shop])
     |> validate_required(
-      [:id, :name, :start, :end, :address, :active],
+      [:id, :name, :start, :end, :address, :allow_applications, :shop],
       message: "Du må fylle inn dette feltet."
     )
     |> validate_dates()
-    |> validate_active()
   end
 
   defp validate_dates(%{changes: %{start: start_date, end: end_date}} = changeset) do
@@ -61,22 +60,4 @@ defmodule Glados.Events.Event do
     end
   end
 
-  defp validate_active(%{changes: %{active: true}, data: %{id: id}} = changeset) do
-    case Events.get_active_event() do
-      {:error, :nil_value} ->
-        changeset
-
-      {:ok, %{id: ^id}} ->
-        changeset
-
-      _ ->
-        add_error(
-          changeset,
-          :active,
-          "Det finnes allerede et aktivt event."
-        )
-    end
-  end
-
-  defp validate_active(changeset), do: changeset
 end

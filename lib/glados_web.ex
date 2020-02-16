@@ -20,8 +20,9 @@ defmodule GladosWeb do
   def controller do
     quote do
       use Phoenix.Controller, namespace: GladosWeb
-
+      use OK.Pipe
       import Plug.Conn
+      import Phoenix.LiveView.Controller
       alias GladosWeb.Router.Helpers, as: Routes
     end
   end
@@ -34,12 +35,23 @@ defmodule GladosWeb do
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
-      import Glados.Accounts.Auth, only: [signed_in?: 1]
 
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
       import GladosWeb.ErrorHelpers
+
+      import Phoenix.LiveView,
+        only: [
+          live_render: 2,
+          live_render: 3,
+          live_link: 1,
+          live_link: 2,
+          live_component: 2,
+          live_component: 3,
+          live_component: 4
+        ]
+
       alias GladosWeb.IconsView, as: Icons
       alias GladosWeb.Router.Helpers, as: Routes
     end
@@ -50,6 +62,7 @@ defmodule GladosWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
+      import Phoenix.LiveView.Router
     end
   end
 

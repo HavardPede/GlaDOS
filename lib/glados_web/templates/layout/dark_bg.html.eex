@@ -1,29 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Glados · ESLG crew portal</title>
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-  </head>
+<%= render "head.html", conn: @conn %>
 
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-  <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
-  <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
-  <link href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet">
-
-  <body class="login_bg ">
-    <main role="main">
-      <div class="max-w-2xl m-auto mt-8 lg:mt-24 shadow-2xl">
-        <%= render(GladosWeb.CommonView, "guest_bar.html", conn: @conn, current_path: :login) %> 
+<body class="bg-payne w-full min-h-screen relative">
+  <main role="main" class="pt-8 lg:pt-24 pb-20">
+    <div class="max-w-2xl m-auto shadow-2xl">
+      <%= render(GladosWeb.CommonView, "guest_bar.html", conn: @conn,
+        current_path: :login) %>
+      <div class="rounded-b-lg pb-4 bg-white w-11/12 md:w-full mx-auto">
         <%= render @view_module, @view_template, assigns %>
       </div>
-      <br>
-      <div class="login_alert_container">
-        <p class="alert bg-blue-400 text-blue-900 p-3 shadow-xl rounded relative max-w-2xl m-auto" role="alert"><%= get_flash(@conn, :info) %></p>
-        <p class="alert bg-red-400 text-red-900 p-3  shadow-xl rounded relative max-w-2xl m-auto" role="alert"><%= get_flash(@conn, :error) %></p>
-      </div>
-    </main>
-  </body>
+    </div>
+    <br />
+    <div class="w-11/12 md:w-full mx-auto"><%= render "alert.html", conn: @conn %></div>
+  </main>
+  <div class="text-white">
+    <%= render(GladosWeb.CommonView, "footer.html") %>
+  </div>
+</body>
+
 </html>

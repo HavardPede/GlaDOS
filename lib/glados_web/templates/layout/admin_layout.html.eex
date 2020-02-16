@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<%= render "head.html", conn: @conn %>
+
+<body class="h-screen relative">
+  <main role="main">
+    <div class="w-full flex content-around flex-col md:flex-row">
+      <%= if :nav_data in Map.keys(@conn.assigns) do %>
+      <div class="h-full w-48">
+        <%= GladosWeb.CommonView.render(
+          "vertical_nav.html",
+          pages: @nav_data.pages,
+          current_page: @nav_data.current_page,
+          sub_pages: @nav_data.sub_pages,
+          current_sub_page: @nav_data.current_sub_page)
+        %>
+        <% end %>
+      </div>
+      <div class="flex flex-col w-5/6 mx-auto mt-12">
+        <%= render @view_module, @view_template, assigns %>
+        <div class="w-4/5 mx-auto"><%= render "alert.html", conn: @conn %></div>
+      </div>
+    </div>
+    </div>
+  </main>
+  <%= render(GladosWeb.CommonView, "footer.html") %>
+</body>
+
+</html>

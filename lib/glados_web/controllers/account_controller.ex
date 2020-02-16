@@ -44,7 +44,7 @@ defmodule GladosWeb.AccountController do
     |> get_session(:unverified_user)
     |> case do
       nil ->
-        PlugHelper.render_404(conn)
+        PlugHelper.throw_404(conn)
 
       user_id ->
         user_id
@@ -80,7 +80,7 @@ defmodule GladosWeb.AccountController do
   Path to verify user when there is no token passed in
   """
   def verify_email(conn, _) do
-    PlugHelper.render_404(conn)
+    PlugHelper.throw_404(conn)
   end
 
   @doc """
@@ -100,7 +100,7 @@ defmodule GladosWeb.AccountController do
         |> redirect(to: Routes.account_path(Endpoint, :forgotten_password))
         |> halt()
 
-      {:error, :nil_value} ->
+      {:error, :missing_user} ->
         conn
         |> put_flash(:error, "Fant ingen bruker med denne epost addressen.")
         |> redirect(to: Routes.account_path(Endpoint, :forgotten_password))
@@ -124,7 +124,8 @@ defmodule GladosWeb.AccountController do
       render(conn, "new_password.html",
         layout: {GladosWeb.LayoutView, "dark_bg.html"},
         changeset: changeset,
-        user_id: user.id
+        user_id: user.id,
+        token: token
       )
     else
       {:error, :invalid} ->
@@ -132,15 +133,19 @@ defmodule GladosWeb.AccountController do
         |> put_flash(:error, "Lenken er ikke gyldig.")
         |> redirect(to: Routes.session_path(conn, :new))
         |> halt()
+      {:error, :expired} ->
+        conn
+        |> put_flash(:error, "Lenken har utgått.")
+        |> redirect(to: Routes.session_path(conn, :new))
+        |> halt()
     end
   end
 
-  def change_password(conn, _params), do: PlugHelper.render_404(conn)
+  def change_password(conn, _params), do: PlugHelper.throw_404(conn)
 
   @doc """
   Post path for changing password
   """
-
   def set_new_password(conn, %{"user" => user_params, "token" => token}) do
     with {:ok, user_id} <- Glados.Token.set_new_password_token(token),
          %User{} = user <- Glados.Accounts.get_user!(user_id) do
@@ -158,7 +163,8 @@ defmodule GladosWeb.AccountController do
           |> render("new_password.html",
             layout: {GladosWeb.LayoutView, "dark_bg.html"},
             changeset: changeset,
-            user_id: changeset.data.id
+            user_id: changeset.data.id,
+            token:  token
           )
       end
     else
@@ -170,7 +176,7 @@ defmodule GladosWeb.AccountController do
     end
   end
 
-  def set_new_password(conn, _), do: PlugHelper.render_404(conn)
+  def set_new_password(conn, _), do: PlugHelper.throw_404(conn)
 
   @doc """
   Path to display form for editing a user

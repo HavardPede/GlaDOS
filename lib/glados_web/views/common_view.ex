@@ -1,7 +1,9 @@
 defmodule GladosWeb.CommonView do
   use GladosWeb, :view
 
-  alias Glados.Helper
+  import GladosWeb.Router.Helpers
+  alias GladosWeb.Endpoint
+  alias Glados.Toolbox
 
   def get_nav_elements(5) do
     %{
@@ -28,7 +30,7 @@ defmodule GladosWeb.CommonView do
       "/" <>
       (conn.request_path
        |> get_paths()
-       |> Helper.remove_trailing_elements(path)
+       |> Toolbox.List.remove_trailing_elements(path)
        |> Enum.join("/"))
   end
 end

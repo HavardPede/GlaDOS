@@ -1,0 +1,36 @@
+<%= for {_inserted, transactions} <- @transactions do %>
+<%
+transaction = List.first(transactions)
+transaction_time = transaction.inserted_at
+unique_and_counted_transactions = Enum.reduce(transactions, %{},
+  fn %{product: %{id: product_id } = product}, buffer ->
+    if product_id in Map.keys(buffer) do
+        {_product, count} = Map.get(buffer, product_id)
+        Map.put(buffer, product_id, {product, count + 1})
+      else
+        Map.put(buffer, product_id, {product, 1})
+      end
+  end)
+%>
+<div class="w-2/5 mx-auto shadow-xl rounded-sm bg-white flex flex-col mb-8">
+  <div class="p-2 flex flex-row items-center justify-between bg-aqua">
+    <span><%= transaction.customer %> (<%= transaction.crew %>)</span>
+    <span><%= String.pad_leading("#{transaction_time.hour}", 2, "0") %>:<%= String.pad_leading("#{transaction_time.minute}", 2, "0") %></span>
+  </div>
+  <table>
+    <%= for {_product_id, {product, count}} <- unique_and_counted_transactions do %>
+    <tr class="border-t border-black">
+      <td class="py-2 pl-4">
+        <%= product.name %>
+      </td>
+      <td class="py-2 float-right pr-4">
+        <div class="flex flex-row justify-between w-32">
+          <div><%= count %> x</div>
+          <div><%= product.price %> kr</div>
+        </div>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+</div>
+<% end %>

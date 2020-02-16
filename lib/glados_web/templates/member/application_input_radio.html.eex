@@ -1,0 +1,4 @@
+<div class="mt-3">
+  <input type="radio" name="<%= @name %>" value="yes" <%= if @answer == "yes", do: "checked" %>> Ja
+  <input type="radio" name="<%= @name %>" value="no" <%= if @answer == "no", do: "checked" %>> Nei
+</div>

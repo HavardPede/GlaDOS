@@ -1,0 +1,13 @@
+<div class="login_alert_container">
+  <%= if get_flash(@conn, :info) do %>
+  <p class="alert bg-blue-400 text-blue-900 p-3 shadow-xl rounded relative max-w-2xl m-auto" role="alert">
+    <%= get_flash(@conn, :info) %>
+  </p>
+  <% end %>
+
+  <%= if get_flash(@conn, :error) do %>
+  <p class="alert bg-red-400 text-red-900 p-3  shadow-xl rounded relative max-w-2xl m-auto" role="alert">
+    <%= get_flash(@conn, :error) %>
+  </p>
+  <% end %>
+</div>

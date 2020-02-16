@@ -1,47 +1,56 @@
 defmodule GladosWeb.Router do
   use GladosWeb, :router
+  use Plug.ErrorHandler
+  use Sentry.Plug
+
+  import Phoenix.LiveView.Router
+  alias GladosWeb.Plugs.{Admin, Auth, FetchEvent, Guest, LoggerAuth, Member, Verify}
+  alias Live.View.LoggerLive
 
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
     plug(:fetch_flash)
+    plug Phoenix.LiveView.Flash
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+    plug(NavigationHistory.Tracker)
   end
 
   pipeline :api do
     plug(:accepts, ["json"])
   end
 
-  pipeline :fetch_event do
-    plug(GladosWeb.Plugs.FetchEvent)
-  end
-
   pipeline :auth do
-    plug(GladosWeb.Plugs.Auth)
+    plug(Auth)
   end
 
   pipeline :verify do
-    plug(GladosWeb.Plugs.Verify)
+    plug(Verify)
   end
 
   pipeline :guest do
-    plug(GladosWeb.Plugs.Guest)
+    plug(Guest)
   end
 
   pipeline :member do
-    plug(GladosWeb.Plugs.Auth)
-    plug(GladosWeb.Plugs.Member)
+    plug(Auth)
+    plug(Member)
   end
 
   pipeline :logger do
-    plug(GladosWeb.Plugs.Auth)
-    plug(GladosWeb.Plugs.LoggerAuth)
+    plug(Auth)
+    plug(LoggerAuth)
+    plug(:put_layout, {GladosWeb.LayoutView, "logger_layout.html"})
   end
 
   pipeline :admin do
-    plug(GladosWeb.Plugs.Auth)
-    plug(GladosWeb.Plugs.Admin)
+    plug(Auth)
+    plug(Admin)
+  end
+
+  pipeline :fetch_event do
+    plug(FetchEvent)
   end
 
   # Scope for login page
@@ -63,20 +72,12 @@ defmodule GladosWeb.Router do
     get("/verifiser", AccountController, :verify_email)
   end
 
-  # Scope for transaction logger account
-  scope "/logger", GladosWeb do
-    pipe_through [:browser, :logger]
-
-    get("/transactions", LoggerController, :logger_transactions)
-    post("/transactions", LoggerController, :create_transaction)
-    get("/delete/:id", LoggerController, :delete_transaction)
-  end
-
   # Scope for verifying a new account
   scope "/", GladosWeb do
     pipe_through [:browser]
 
     get("/verifikasjonsendt", AccountController, :send_email_verification)
+    get("/brukervilkar", TermsController, :terms_and_conditions)
   end
 
   # Log out scope
@@ -99,30 +100,37 @@ defmodule GladosWeb.Router do
     pipe_through [:browser, :member, :fetch_event]
 
     get("/forside", MemberController, :event_landing)
+    get("/soknad", MemberController, :crew_application)
   end
 
-  # Crew Scope
+  # Logger Scope
+  scope "/logger", GladosWeb do
+    pipe_through [:browser, :logger]
 
-  # Chief Scope
+    live "/", LoggerLive
+  end
 
   # Admin Scope
-  scope "/admin", GladosWeb do
-    pipe_through [:browser, :admin]
+  scope "/admin/kontrollpanel", GladosWeb do
+    pipe_through [:browser, :admin, :fetch_event]
 
-    get("/", AdminController, :index)
+    get("/eventer", AdminController, :index)
+    get("/eventer/nytt", AdminController, :new_event)
+    post("/eventer/nytt", AdminController, :create_event)
 
-    get("/crew", LoggerController, :logger_crew)
-    post("/crew", LoggerController, :add_logger_crew)
-    get("/crew/delete/:id", LoggerController, :delete_logger_crew)
-
-    get("/transactions", LoggerController, :logger_transactions)
-    post("/transactions", LoggerController, :create_transaction)
-    get("/delete/:id", LoggerController, :delete_transaction)
-
-    get("/eventer", AdminController, :events)
-    get("/eventer/new", AdminController, :new_event)
-    post("/eventer/new", AdminController, :create_event)
     get("/eventer/:event_id/rediger", AdminController, :edit_event)
     put("/eventer/:event_id/rediger", AdminController, :update_event)
+
+    get("/eventer/:event_id/crew", AdminController, :view_crew)
+    post("/eventer/:event_id/crew", AdminController, :set_crew_id)
+
+    get("/eventer/:event_id/cafeteria", AdminController, :cafeteria)
+    post("/eventer/:event_id/cafeteria", AdminController, :handle_cafeteria_event)
+    delete("/eventer/:event_id/cafeteria/:product_id/delete", AdminController, :delete_product)
+
+    get("/eventer/:event_id/soknader", AdminController, :view_applications)
+    post("/eventer/:event_id/soknader", AdminController, :toggle_applications)
+    get("/eventer/:event_id/soknader/:applicant_id", AdminController, :review_application)
+    post("/eventer/:event_id/soknader/:applicant_id", AdminController, :handle_application)
   end
 end
