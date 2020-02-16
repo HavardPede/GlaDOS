@@ -1,4 +1,4 @@
-<div class="rounded-b-lg bg-white pb-4">
+<div class="rounded-b-lg bg-white pb-4 w-11/12 md:w-full mx-auto">
   <div class="pt-8 lg:pl-8 text-center lg:text-left lg:w-2/5">
     <h2 class="black_h2">Velkommen til</h2>
     <h2 class="orange_h2">Glados</h2>

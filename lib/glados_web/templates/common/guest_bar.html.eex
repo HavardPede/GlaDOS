@@ -5,7 +5,7 @@
 	current_page = @conn.request_path
 %>
 
-<div class="w-full">
+<div class="mx-auto w-11/12 md:w-full">
 	<nav class="flex flex-row justify-between items-end">
 		<a href="<%= login_path %>"
 			class="c-guest_nav_elem <%= if current_page == login_path, do: "c-guest_nav_elem--selected" %>">

@@ -1,0 +1,7 @@
+<div class="absolute bottom-0 w-full text-center mb-4 text-sm">
+  <a href="<%= Routes.terms_path(GladosWeb.Endpoint, :terms_and_conditions) %>" class="cursor-pointer">Brukervilkår</a>
+  | © <%= Timex.now.year %>
+  <a href="https://www.eslg.no" class="cursor-pointer">ESLG.no</a> &
+  <a href="https://www.github.com/HavardPede" class="cursor-pointer">HavardPede</a>
+  | Alle Rettigheter Reservert
+</div>

@@ -12,7 +12,7 @@ unique_and_counted_transactions = Enum.reduce(transactions, %{},
       end
   end)
 %>
-<div class="w-2/3 mx-auto shadow-xl rounded-sm bg-white flex flex-col mb-8">
+<div class="w-2/5 mx-auto shadow-xl rounded-sm bg-white flex flex-col mb-8">
   <div class="p-2 flex flex-row items-center justify-between bg-aqua">
     <span><%= transaction.customer %> (<%= transaction.crew %>)</span>
     <span><%= String.pad_leading("#{transaction_time.hour}", 2, "0") %>:<%= String.pad_leading("#{transaction_time.minute}", 2, "0") %></span>

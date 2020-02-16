@@ -2,14 +2,15 @@
 <html lang="en">
 <%= render "head.html", conn: @conn %>
 
-<body>
-  <main role="main">
-    <div class="w-screen h-screen bg-payne">
+<body class="w-full h-screen absolute bg-payne">
+  <main role="main" class="py-20">
+    <div>
       <%= render @view_module, @view_template, assigns %>
     </div>
-    </div>
-    </div>
   </main>
+  <div class="text-white">
+    <%= render(GladosWeb.CommonView, "footer.html") %>
+  </div>
 </body>
 
 </html>

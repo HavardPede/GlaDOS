@@ -2,7 +2,7 @@
 <html lang="en">
 <%= render "head.html", conn: @conn %>
 
-<body>
+<body class="min-h-screen relative">
   <main role="main">
     <div class="w-full">
       <%= render @view_module, @view_template, assigns %>
