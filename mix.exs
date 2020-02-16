@@ -71,7 +71,8 @@ defmodule Glados.MixProject do
       {:floki, ">= 0.0.0", only: :test},
       {:yaml_elixir, "~> 2.4"},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:ok, git: "https://github.com/CrowdHailer/OK/"}
+      {:ok, git: "https://github.com/CrowdHailer/OK/"},
+      {:navigation_history, "~> 0.3"}
     ]
   end
 

@@ -34,7 +34,7 @@
 }
 
 .c-guest_nav_elem {
-  @apply .w-1/3 .h-8 .p-2 .bg-white .rounded-t-lg .flex .justify-center;
+  @apply w-1/3 h-8 p-2 bg-white rounded-t-lg text-center text-xs;
 }
 
 .c-guest_nav_elem:hover {
@@ -46,7 +46,7 @@
 }
 
 .c-guest_nav_elem--selected {
-  @apply .border-none .h-12 .items-center text-orange-500;
+  @apply .border-none .h-10 .items-center text-orange-500;
 }
 
 .c-standard_input {
@@ -94,7 +94,7 @@
 }
 
 .c-btn {
-  @apply h-8 text-center rounded-lg text-white bg-cinderous shadow-md cursor-pointer text-sm px-4 py-2;
+  @apply text-center rounded-lg text-white bg-cinderous shadow-md cursor-pointer text-sm px-4 py-2;
 }
 
 .c-btn:focus {

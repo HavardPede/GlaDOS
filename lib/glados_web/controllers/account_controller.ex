@@ -163,7 +163,8 @@ defmodule GladosWeb.AccountController do
           |> render("new_password.html",
             layout: {GladosWeb.LayoutView, "dark_bg.html"},
             changeset: changeset,
-            user_id: changeset.data.id
+            user_id: changeset.data.id,
+            token:  token
           )
       end
     else

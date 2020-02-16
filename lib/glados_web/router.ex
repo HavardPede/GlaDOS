@@ -12,6 +12,7 @@ defmodule GladosWeb.Router do
     plug Phoenix.LiveView.Flash
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+    plug(NavigationHistory.Tracker)
   end
 
   pipeline :api do
@@ -74,6 +75,7 @@ defmodule GladosWeb.Router do
     pipe_through [:browser]
 
     get("/verifikasjonsendt", AccountController, :send_email_verification)
+    get("/brukervilkar", TermsController, :terms_and_conditions)
   end
 
   # Log out scope

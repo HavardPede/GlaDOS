@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<%= render "head.html", conn: @conn %>
+
+<body class="bg-payne w-full min-h-screen relative">
+  <main role="main" class="pt-8 lg:pt-14 pb-20">
+    <div class="ml-8 mb-4 w-5 text-azure hover:text-apricot">
+      <a href="<%= NavigationHistory.last_path(@conn, 1, default: "/") %>"
+        class="fill-current"><%= render Icons, "back_arrow.html" %></a>
+    </div>
+    <div class="max-w-2xl m-auto">
+      <%= render @view_module, @view_template, assigns %>
+    </div>
+  </main>
+  <span class="text-white"><%= render(GladosWeb.CommonView, "footer.html") %></span>
+</body>
+
+</html>
