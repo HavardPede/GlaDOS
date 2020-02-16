@@ -72,7 +72,9 @@ defmodule Glados.MixProject do
       {:yaml_elixir, "~> 2.4"},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:ok, git: "https://github.com/CrowdHailer/OK/"},
-      {:navigation_history, "~> 0.3"}
+      {:navigation_history, "~> 0.3"},
+      {:sentry, "~> 7.0"},
+      {:jason, "~> 1.1"}
     ]
   end
 
