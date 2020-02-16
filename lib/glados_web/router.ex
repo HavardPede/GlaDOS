@@ -98,7 +98,7 @@ defmodule GladosWeb.Router do
     pipe_through [:browser, :member, :fetch_event]
 
     get("/forside", MemberController, :event_landing)
-    get("/søknad", MemberController, :crew_application)
+    get("/soknad", MemberController, :crew_application)
   end
 
   # Logger Scope
