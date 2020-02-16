@@ -19,7 +19,7 @@ defmodule GladosWeb.MemberController do
         render_event_landing(conn, :waiting)
 
       {:ok, _member} ->
-        render("crew_landing_page.html")
+        render(conn, "crew_landing_page.html")
 
       {:error, :does_not_exist} ->
         render_event_landing(conn, :no_application)
@@ -27,8 +27,9 @@ defmodule GladosWeb.MemberController do
   end
 
   defp render_event_landing(conn, page) do
-    event_id = conn.params["event_id"]
-    {:ok, event} = Events.get_event(event_id)
+    {:ok, event} =
+      conn.params["event_id"]
+      |> Events.get_event()
 
     render(conn, "event_landing_page.html",
       event: event,
@@ -37,8 +38,23 @@ defmodule GladosWeb.MemberController do
   end
 
   def crew_application(conn, %{"event_id" => event_id}) do
-    application = CrewApplications.create_answers_map(conn.assigns.user.id, event_id)
-    session = %{user_id: conn.assigns.user.id, event_id: event_id, application: application}
+    user_id = conn.assigns.user.id
+    session =
+      user_id
+      |> EventCrew.get_event_crew_member(event_id)
+      |> case do
+        {:ok, member} -> %{
+            application: CrewApplications.create_answers_map(member),
+            has_applied: true
+          }
+        {:error, _} ->  %{
+            application: CrewApplications.create_answers_map(),
+            has_applied: false
+          }
+      end
+      |> Map.put(:user_id, user_id)
+      |> Map.put(:event_id, event_id)
+    
     live_render(conn, Live.View.CrewApplication, session: session)
   end
 end

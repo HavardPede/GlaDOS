@@ -30,14 +30,10 @@ Tilstedeværelse:
     type: radio
     default: "yes"
     question: "Er du tilgjengelig ved opprigg?"
-    boxes:
-      - Opprigg
-      - Nedrigg
-      - Lan
   2:
     type: radio
     default: "yes"
-    question: "Er du tilgjengelig ved Nedrigg?"
+    question: "Er du tilgjengelig ved nedrigg?"
   3:
     type: radio
     default: "yes"
