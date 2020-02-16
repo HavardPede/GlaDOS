@@ -1,10 +1,13 @@
 {
+  "name": "glados",
+  "version": "1.0.0",
   "repository": {},
   "license": "MIT",
   "scripts": {
+    "start": "yarn install --ignore-engines",
     "deploy": "webpack --mode production",
     "watch": "webpack --mode development --watch"
-  },
+  }
   "dependencies": {
     "@types/node": "^13.7.1",
     "@types/phoenix": "^1.4.3",
