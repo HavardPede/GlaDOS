@@ -14,6 +14,7 @@ defmodule Glados.EventCrew do
   Returns the list of possible roles for a crew member.
   """
   def get_event_roles, do: @roles
+
   @doc """
   Returns the list of crew.
   """
@@ -88,12 +89,27 @@ defmodule Glados.EventCrew do
   end
 
   @doc """
+  Given a crew member and a crew assign the member to that crew.
+  Returns a result type.
+  """
+
+  def set_crew(%EventCrewMember{} = crew_member, crew) do
+    if crew in get_crew_list() do
+      crew_member
+      |> Changeset.change(crew: crew)
+      |> Repo.update()
+    else
+      OK.failure(:invalid_crew)
+    end
+  end
+
+  @doc """
   Updates a crew member with new information
   """
   def update(%EventCrewMember{} = crew_member, updates) do
-      crew_member
-      |> Changeset.change(updates)
-      |> Repo.update()
+    crew_member
+    |> Changeset.change(updates)
+    |> Repo.update()
   end
 
   @doc """
@@ -106,7 +122,7 @@ defmodule Glados.EventCrew do
     )
     |> Repo.insert()
   end
-  
+
   def update_application(user_id, event_id, application) do
     get_event_crew_member(user_id, event_id)
     ~>> update(%{application: application})

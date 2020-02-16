@@ -126,13 +126,13 @@ defmodule Glados.Accounts.User do
 
     case {length, content} do
       {false, _} ->
-        add_error(changeset, :password, "Passordet må være minst 8 karakterer langt.")
+        add_error(changeset, :password, "Minst 8 karakterer.")
 
       {_, false} ->
         add_error(
           changeset,
           :password,
-          "Passordet må inneholde minst 1 liten og stor bokstav, og ett tall."
+          "Minst en liten og stor bokstav, og ett tall."
         )
 
       {true, true} ->

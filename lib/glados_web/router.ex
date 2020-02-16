@@ -131,5 +131,6 @@ defmodule GladosWeb.Router do
     get("/eventer/:event_id/soknader", AdminController, :view_applications)
     post("/eventer/:event_id/soknader", AdminController, :toggle_applications)
     get("/eventer/:event_id/soknader/:applicant_id", AdminController, :review_application)
+    post("/eventer/:event_id/soknader/:applicant_id", AdminController, :handle_application)
   end
 end
