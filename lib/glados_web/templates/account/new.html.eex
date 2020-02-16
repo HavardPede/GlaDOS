@@ -10,48 +10,42 @@
 <div class="w-3/5 lg:w-4/5 mx-auto mb-16 lg:mb-6 lg:flex flex-row lg:flex flex-row">
   <div class="mb-4 lg:mx-2 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Brukernavn</h4>
-    <%= text_input f, :username, autofocus: true, class: "c-standard_input"%>
-    <%= error_tag f, :username %>
+    <%= text_input f, :username, autofocus: true, class: "c-standard_input #{if has_error(f, :username), do: "border-2 border-red-600"}"%>
   </div>
 
   <div class="mb-4 lg:mx-2 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Passord</h4>
-    <%= password_input f, :password, class: "c-standard_input" %>
-    <%= error_tag f, :password %>
+    <%= password_input f, :password, class: "c-standard_input #{if has_error(f, :password), do: "border-2 border-red-600"}" %>
+    <%= error_tag f, :password %> 
   </div>
 
-  <div class="mb-4 lg:mx-2 text-center lg:text-left">
+  <div class="mb-4 max-w-1/4 lg:mx-2 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Bekreft passord</h4>
-    <%= password_input f, :password_confirmation, class: "c-standard_input" %>
-    <%= error_tag f, :password_confirmation %>
+    <%= password_input f, :password_confirmation, class: "c-standard_input #{if has_error(f, :password_confirmation), do: "border-2 border-red-600"}" %>
+    <%= error_tag f, :password_confirmation %> 
   </div>
 </div>
 
 <div class="w-3/5 lg:w-4/5 mx-auto mb-16 lg:mb-6 lg:flex flex-row">
   <div class="mb-4 lg:mx-2 text-center lg:text-left">
     <h4 class="text-center lg:text-left mb-1">Navn</h4>
-    <%= text_input f, :name, class: "c-standard_input" %>
-    <%= error_tag f, :name %>
+    <%= text_input f, :name, class: "c-standard_input #{if has_error(f, :name), do: "border-2 border-red-600"}" %>
   </div>
 
   <div class="mb-4 lg:mx-2 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Email adresse</h4>
-    <%= text_input f, :email, class: "c-standard_input" %>
-    <%= error_tag f, :email %>
+    <%= text_input f, :email, class: "c-standard_input #{if has_error(f, :email), do: "border-2 border-red-600"}" %>
   </div>
 
   <div class="mb-4 lg:mx-2 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Fødselsdato</h4>
     <div class=" flex">
       <div class="m-auto flex flex-row">
-        <%= text_input f, :day, pattern: "[0-9]*", maxLength: 2, minLength: 2, placeholder: "DD", class: "c-standard_input text-center pr-2" %>
-        <%= text_input f, :month, pattern: "[0-9]*", maxLength: 2, minLength: 2, placeholder: "MM", class: "c-standard_input text-center pr-2" %>
-        <%= text_input f, :year, pattern: "[0-9]*", maxLength: 4, minLength: 4, placeholder: "YYYY", class: "c-standard_input text-center pr-2" %>
+        <%= text_input f, :day, pattern: "[0-9]*", maxLength: 2, minLength: 2, placeholder: "DD", class: "c-standard_input text-center pr-2 #{if has_error(f, :day), do: "border-2 border-red-600"}" %>
+        <%= text_input f, :month, pattern: "[0-9]*", maxLength: 2, minLength: 2, placeholder: "MM", class: "c-standard_input text-center pr-2 #{if has_error(f, :month), do: "border-2 border-red-600"}" %>
+        <%= text_input f, :year, pattern: "[0-9]*", maxLength: 4, minLength: 4, placeholder: "YYYY", class: "c-standard_input text-center pr-2 #{if has_error(f, :year), do: "border-2 border-red-600"}" %>
       </div>
     </div>
-    <%= [:day, :month, :year, :dob] |> Enum.any?(&(f.errors[&1])) |> if() do %>
-    <span class="help-block">Datoen er ikke godkjent.</span>
-    <% end %>
   </div>
 </div>
 
@@ -59,22 +53,19 @@
 
   <div class="mb-4 lg:mx-2 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Telefon nummer</h4>
-    <%= text_input f, :phone_number, class: "c-standard_input" %>
-    <%= error_tag f, :phone_number %>
+    <%= text_input f, :phone_number, class: "c-standard_input #{if has_error(f, :phone_number), do: "border-2 border-red-600"}" %>
   </div>
 
   <div class="mb-4 lg:mx-2 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Adresse</h4>
-    <%= text_input f, :address, class: "c-standard_input" %>
-    <%= error_tag f, :address %>
+    <%= text_input f, :address, class: "c-standard_input #{if has_error(f, :address), do: "border-2 border-red-600"}" %>
   </div>
 
   <div class="mb-4 lg:mx-2 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Post kode</h4>
     <div>
-      <%= text_input f, :postcode, pattern: "[0-9]*", maxLength: 4, class: "c-standard_input" %>
+      <%= text_input f, :postcode, pattern: "[0-9]*", maxLength: 4, class: "c-standard_input #{if has_error(f, :postcode), do: "border-2 border-red-600"}" %>
     </div>
-    <%= error_tag f, :postcode %>
   </div>
 </div>
 

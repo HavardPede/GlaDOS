@@ -98,7 +98,7 @@ defmodule GladosWeb.Router do
     pipe_through [:browser, :member, :fetch_event]
 
     get("/forside", MemberController, :event_landing)
-    get("/søknad", MemberController, :crew_application)
+    get("/soknad", MemberController, :crew_application)
   end
 
   # Logger Scope
@@ -129,5 +129,6 @@ defmodule GladosWeb.Router do
     get("/eventer/:event_id/soknader", AdminController, :view_applications)
     post("/eventer/:event_id/soknader", AdminController, :toggle_applications)
     get("/eventer/:event_id/soknader/:applicant_id", AdminController, :review_application)
+    post("/eventer/:event_id/soknader/:applicant_id", AdminController, :set_applicant)
   end
 end
