@@ -143,9 +143,9 @@ defmodule GladosWeb.AdminController do
   end
 
   ##
-  ## SET APPLICANT
+  ## HANDLE APPLICATION
   ##
-  def set_applicant(conn, %{
+  def handle_application(conn, %{
         "event_id" => event_id,
         "applicant_id" => user_id,
         "crew" => %{"crew" => value}

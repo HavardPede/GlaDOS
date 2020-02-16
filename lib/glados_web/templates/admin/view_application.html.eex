@@ -10,7 +10,7 @@
     <% end %>
     <% end %>
 </div>
-<%= form_for :crew, Routes.admin_path(GladosWeb.Endpoint, :set_applicant, @event.id, @applicant.user_id), fn f -> %>
+<%= form_for :crew, Routes.admin_path(GladosWeb.Endpoint, :handle_application, @event.id, @applicant.user_id), fn f -> %>
 
 Tildel plass:
 <%= select f, :crew, @crew_list, selected: @applicant.crew, value: @applicant.crew %>

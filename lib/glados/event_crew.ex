@@ -88,6 +88,10 @@ defmodule Glados.EventCrew do
     end
   end
 
+  @doc """
+  Given a crew member and a crew map %{crew => "Info"} assign the member to that crew.
+  """
+
   def set_crew(%EventCrewMember{} = crew_member, crew_map) do
     crew = Map.get(crew_map, :crew)
 
@@ -119,7 +123,7 @@ defmodule Glados.EventCrew do
     )
     |> Repo.insert()
   end
-  
+
   def update_application(user_id, event_id, application) do
     get_event_crew_member(user_id, event_id)
     ~>> update(%{application: application})
