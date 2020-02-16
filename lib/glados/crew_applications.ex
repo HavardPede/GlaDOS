@@ -3,7 +3,6 @@ defmodule Glados.CrewApplications do
   Defines higher order logic for crew applications.
   """
   alias Glados.Toolbox
-  alias Glados.EventCrew
   alias Glados.Events.EventCrewMember
 
   @questions_path "./priv/yaml/crew_application.yaml"

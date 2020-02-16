@@ -82,7 +82,7 @@ defmodule GladosWeb.Live.View.CrewApplication do
   def handle_event(
         "previous_page",
         _values,
-        %{assigns: %{page: page, page_order: page_order, pages: pages, has_applied: has_applied?}} = socket
+        %{assigns: %{page: page, page_order: page_order, pages: pages}} = socket
       ) do
     {:ok, next_page} = change_page(page, page_order, :previous)
 
