@@ -61,7 +61,6 @@ defmodule Glados.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 1.0"},
-      {:comeonin, "~> 5.2"},
       {:bcrypt_elixir, "~> 2.1"},
       {:bamboo, "~> 1.3"},
       {:bamboo_smtp, "~> 2.0.0"},
@@ -72,7 +71,8 @@ defmodule Glados.MixProject do
       {:floki, ">= 0.0.0", only: :test},
       {:yaml_elixir, "~> 2.4"},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:ok, git: "https://github.com/CrowdHailer/OK/"}
+      {:ok, git: "https://github.com/CrowdHailer/OK/"},
+      {:navigation_history, "~> 0.3"}
     ]
   end
 

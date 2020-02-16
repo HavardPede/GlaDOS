@@ -9,7 +9,7 @@
 <% :transactions -> %>
 <div class="flex flex-row bg-azure w-full">
   <%= render("logger_nav.html", page: @page) %>
-  <div class="w-2/3 flex flex-col m-8 pb-32">
+  <div class="flex flex-col w-full m-8 pb-32">
     <%= render("transactions.html", transactions: @transactions) %>
   </div>
 </div>
@@ -22,3 +22,4 @@
   <%= link "Logg ut", to: Routes.session_path(GladosWeb.Endpoint, :delete), class: "c-btn" %>
 </div>
 <% end %>
+<%= render(GladosWeb.CommonView, "footer.html") %>

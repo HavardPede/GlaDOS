@@ -2,7 +2,7 @@
 <html lang="en">
 <%= render "head.html", conn: @conn %>
 
-<body>
+<body class="h-screen relative">
   <main role="main">
     <div class="w-full flex content-around flex-col md:flex-row">
       <%= if :nav_data in Map.keys(@conn.assigns) do %>
@@ -23,6 +23,7 @@
     </div>
     </div>
   </main>
+  <%= render(GladosWeb.CommonView, "footer.html") %>
 </body>
 
 </html>

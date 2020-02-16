@@ -124,12 +124,18 @@ defmodule GladosWeb.AccountController do
       render(conn, "new_password.html",
         layout: {GladosWeb.LayoutView, "dark_bg.html"},
         changeset: changeset,
-        user_id: user.id
+        user_id: user.id,
+        token: token
       )
     else
       {:error, :invalid} ->
         conn
         |> put_flash(:error, "Lenken er ikke gyldig.")
+        |> redirect(to: Routes.session_path(conn, :new))
+        |> halt()
+      {:error, :expired} ->
+        conn
+        |> put_flash(:error, "Lenken har utgått.")
         |> redirect(to: Routes.session_path(conn, :new))
         |> halt()
     end
@@ -140,7 +146,6 @@ defmodule GladosWeb.AccountController do
   @doc """
   Post path for changing password
   """
-
   def set_new_password(conn, %{"user" => user_params, "token" => token}) do
     with {:ok, user_id} <- Glados.Token.set_new_password_token(token),
          %User{} = user <- Glados.Accounts.get_user!(user_id) do
@@ -158,7 +163,8 @@ defmodule GladosWeb.AccountController do
           |> render("new_password.html",
             layout: {GladosWeb.LayoutView, "dark_bg.html"},
             changeset: changeset,
-            user_id: changeset.data.id
+            user_id: changeset.data.id,
+            token:  token
           )
       end
     else
