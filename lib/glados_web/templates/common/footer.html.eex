@@ -1,4 +1,4 @@
-<div class="absolute bottom-0 w-full text-center mb-4 text-sm">
+<div class="absolute bottom-0 w-full text-center mb-4 text-sm px-4">
   <a href="<%= Routes.terms_path(GladosWeb.Endpoint, :terms_and_conditions) %>" class="cursor-pointer">Brukervilkår</a>
   | © <%= Timex.now.year %>
   <a href="https://www.eslg.no" class="cursor-pointer">ESLG.no</a> &

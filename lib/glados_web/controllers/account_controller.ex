@@ -133,6 +133,11 @@ defmodule GladosWeb.AccountController do
         |> put_flash(:error, "Lenken er ikke gyldig.")
         |> redirect(to: Routes.session_path(conn, :new))
         |> halt()
+      {:error, :expired} ->
+        conn
+        |> put_flash(:error, "Lenken har utgått.")
+        |> redirect(to: Routes.session_path(conn, :new))
+        |> halt()
     end
   end
 
