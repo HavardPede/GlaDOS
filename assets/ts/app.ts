@@ -1,4 +1,4 @@
-const _css = require("../css/app.css");
+require("../css/app.css");
 import { Socket } from "phoenix";
 import "phoenix_html";
 import LiveSocket from "phoenix_live_view";
