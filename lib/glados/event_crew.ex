@@ -2,9 +2,8 @@ defmodule Glados.EventCrew do
   @moduledoc """
   Defines logic for handling crew members per event.
   """
-
+  use OK.Pipe
   import Ecto.Query, only: [from: 2]
-  require OK
   alias Ecto.Changeset
   alias Glados.Events.EventCrewMember
   alias Glados.{Repo}
@@ -119,6 +118,11 @@ defmodule Glados.EventCrew do
       construct_application_params(user_id, event_id, application)
     )
     |> Repo.insert()
+  end
+  
+  def update_application(user_id, event_id, application) do
+    get_event_crew_member(user_id, event_id)
+    ~>> update(%{application: application})
   end
 
   defp construct_application_params(user_id, event_id, application) do

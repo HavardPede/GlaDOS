@@ -3,7 +3,7 @@ defmodule Glados.CrewApplications do
   Defines higher order logic for crew applications.
   """
   alias Glados.Toolbox
-  alias Glados.EventCrew
+  alias Glados.Events.EventCrewMember
 
   @questions_path "./priv/yaml/crew_application.yaml"
 
@@ -43,18 +43,16 @@ defmodule Glados.CrewApplications do
   @doc """
   Creates a map where each question maps to an empty value.
   """
-  def create_answers_map(user_id, event_id) do
-    EventCrew.get_event_crew_member(user_id, event_id)
+  def create_answers_map(member \\ nil) do
+    member
     |> case do
-      {:ok, member} ->
+      nil -> create_empty_answers_map()
+      %EventCrewMember{} = member ->
         member.application
         |> Enum.map(fn {key, value} ->
           {String.to_atom(key), Toolbox.Map.keys_to_integer(value)}
         end)
         |> Map.new()
-
-      {:error, _} ->
-        create_empty_answers_map()
     end
   end
 

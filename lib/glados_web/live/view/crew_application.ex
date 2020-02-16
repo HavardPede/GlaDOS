@@ -5,12 +5,13 @@ defmodule GladosWeb.Live.View.CrewApplication do
 
   use Phoenix.LiveView
   alias Glados.{CrewApplications, EventCrew}
+  alias GladosWeb.Router.Helpers, as: Routes
 
   def render(assigns) do
     Phoenix.View.render(GladosWeb.MemberView, "crew_application.html", assigns)
   end
 
-  def mount(%{user_id: user_id, event_id: event_id, application: application}, socket) do
+  def mount(%{user_id: user_id, event_id: event_id, application: application, has_applied: has_applied?}, socket) do
     page_order = CrewApplications.get_page_order()
     page = hd(page_order)
     pages = CrewApplications.get_pages()
@@ -28,6 +29,7 @@ defmodule GladosWeb.Live.View.CrewApplication do
       |> assign(:selected_crew, %{})
       |> assign(:event_id, event_id)
       |> assign(:user_id, user_id)
+      |> assign(:has_applied, has_applied?)
 
     {:ok, socket}
   end
@@ -99,12 +101,22 @@ defmodule GladosWeb.Live.View.CrewApplication do
           assigns: %{
             user_id: user_id,
             event_id: event_id,
-            answers: answers
+            answers: answers,
+            has_applied: has_applied?
           }
         } = socket
       ) do
-    EventCrew.send_application(user_id, event_id, answers)
-    {:noreply, socket}
+    socket = if has_applied? do
+      EventCrew.update_application(user_id, event_id, answers)
+    else
+      EventCrew.send_application(user_id, event_id, answers)
+    end
+    |> case do
+      {:ok, _} ->  put_flash(socket, :info, "Søknaden er sendt.")
+      {:error, _} -> put_flash(socket, :error, "En feil oppstod.")
+    end
+    |> redirect(to: Routes.member_path(GladosWeb.Endpoint, :event_landing, event_id))
+    {:stop, socket}
   end
 
   # ---------- Private functions ---------- #

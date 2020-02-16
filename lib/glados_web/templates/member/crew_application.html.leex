@@ -13,6 +13,12 @@
       </div>
       <% end %>
     </form>
-    <%= GladosWeb.MemberView.render("crew_application_nav.html", show_next: is_page_complete?(@page, @categorized_pages), show_back: not is_first_page?(@page, @page_order), last_page: is_last_page?(@page, @page_order)) %>
+    <%= GladosWeb.MemberView.render(
+      "crew_application_nav.html", 
+      show_next: is_page_complete?(@page, @categorized_pages), 
+      show_back: not is_first_page?(@page, @page_order), 
+      last_page: is_last_page?(@page, @page_order),
+      has_applied: @has_applied)
+    %>
   </div>
 </div>
