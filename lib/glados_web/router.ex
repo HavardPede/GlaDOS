@@ -1,5 +1,7 @@
 defmodule GladosWeb.Router do
   use GladosWeb, :router
+  use Plug.ErrorHandler
+  use Sentry.Plug
 
   import Phoenix.LiveView.Router
   alias GladosWeb.Plugs.{Admin, Auth, FetchEvent, Guest, LoggerAuth, Member, Verify}
