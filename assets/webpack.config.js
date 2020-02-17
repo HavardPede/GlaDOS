@@ -25,8 +25,8 @@ module.exports = (env, options) => ({
         paths: globAll.sync([
           "../lib/<APP_NAME>_web/templates/**/*.html.eex",
           "../lib/<APP_NAME>_web/views/**/*.ex",
-          "../assets/ts/**/*.ts",
-          "../assets/ts/**/*.js"
+          "../assets/js/**/*.ts",
+          "../assets/js/**/*.js"
         ]),
         extractors: [
           {
