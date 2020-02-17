@@ -25,7 +25,8 @@ module.exports = (env, options) => ({
         paths: globAll.sync([
           "../lib/<APP_NAME>_web/templates/**/*.html.eex",
           "../lib/<APP_NAME>_web/views/**/*.ex",
-          "../assets/ts/**/*.ts"
+          "../assets/ts/**/*.ts",
+          "../assets/ts/**/*.js"
         ]),
         extractors: [
           {
@@ -36,9 +37,8 @@ module.exports = (env, options) => ({
       })
     ]
   },
-  entry: {
-    "./js/app.js": glob.sync("./vendor/**/*.js").concat(["./ts/app.js"])
-  },
+  entry: "./ts/app.js"
+  ,
   output: {
     filename: "app.js",
     path: path.resolve(__dirname, "../priv/static/js")
