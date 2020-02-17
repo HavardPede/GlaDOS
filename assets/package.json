@@ -1,4 +1,6 @@
 {
+  "name": "glados",
+  "version": "1.0.0",
   "repository": {},
   "license": "MIT",
   "scripts": {
@@ -11,7 +13,6 @@
     "axios": "^0.19.2",
     "brunch": "^3.0.0",
     "js-yaml": "^3.13.1",
-    "node": "^13.8.0",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view",

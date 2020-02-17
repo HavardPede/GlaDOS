@@ -1,13 +1,14 @@
-const _css = require("../css/app.css");
+import css from "../css/app.css";
 import { Socket } from "phoenix";
 import "phoenix_html";
 import LiveSocket from "phoenix_live_view";
-import { adminInit } from "./admin"
+import { adminInit } from "./admin.ts"
 
 let liveSocket = new LiveSocket("/live", Socket);
 liveSocket.connect();
 
 window.onload = function () {
+  this.console.log("started")
   adminInit()
   const accountIcon = document.getElementById("accountIcon");
   if (accountIcon) {
@@ -16,7 +17,7 @@ window.onload = function () {
     accountIcon.addEventListener("click", function (_e) {
       toggleAccountTab();
     });
-    accountArrow?.addEventListener("click", function (_e) {
+    accountArrow.addEventListener("click", function (_e) {
       toggleAccountTab();
     });
   }
@@ -31,10 +32,10 @@ window.onload = function () {
     ) {
       accountTab.style.display = "block";
     } else {
-      accountArrow?.classList.add("rotatedImage");
+      accountArrow.classList.add("rotatedImage");
       setTimeout(function () {
         (accountTab.style.display = "none"),
-          accountArrow?.classList.remove("rotatedImage");
+          accountArrow.classList.remove("rotatedImage");
       }, 100);
     }
   }
