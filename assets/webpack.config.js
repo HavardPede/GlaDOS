@@ -37,8 +37,9 @@ module.exports = (env, options) => ({
       })
     ]
   },
-  entry: "./ts/app.js"
-  ,
+  entry: {
+    "./js/app.js": glob.sync("./vendor/**/*.js").concat(["./ts/app.js"])
+  },
   output: {
     filename: "app.js",
     path: path.resolve(__dirname, "../priv/static/js")
@@ -50,6 +51,13 @@ module.exports = (env, options) => ({
         exclude: /node_modules/,
         use: {
           loader: "ts-loader"
+        }
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader"
         }
       },
       {
