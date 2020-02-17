@@ -31,30 +31,30 @@ module.exports = (env, options) => ({
         extractors: [
           {
             extractor: TailwindExtractor,
-            extensions: ["leex", "eex", "ex", "js", "ts", "html"]
+            extensions: ["leex", "eex", "ex", "html"]
           }
         ]
       })
     ]
   },
   entry: {
-    "./js/app.js": glob.sync("./vendor/**/*.js").concat(["./ts/app.js"])
+    "./js/app.js": glob.sync("./vendor/**/*.js").concat(["./js/app.js"])
   },
   output: {
     filename: "app.js",
-    path: path.resolve(__dirname, "../priv/static/")
+    path: path.resolve(__dirname, "../priv/static/js")
   },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.ts?$/,
         exclude: /node_modules/,
         use: {
           loader: "ts-loader"
         }
       },
       {
-        test: /\.jsx?$/,
+        test: /\.js?$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader"
@@ -73,7 +73,7 @@ module.exports = (env, options) => ({
   plugins: [
     new MiniCssExtractPlugin({
       // create a generatated css file
-      filename: './css/app.css'
+      filename: '../css/app.css'
     }),
     new CopyWebpackPlugin([{ from: 'static/', to: '../' }])
   ]
