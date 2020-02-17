@@ -3,6 +3,9 @@
 <%= render "head.html", conn: @conn %>
 
 <body class="bg-payne w-full min-h-screen relative">
+  <div class="c-cookie_notice_bar">
+    <div class="c-wrap">This site uses cookies to offer you a better browsing experience.</div>
+  </div>
   <main role="main" class="pt-8 lg:pt-24 pb-20">
     <div class="max-w-2xl m-auto shadow-2xl">
       <%= render(GladosWeb.CommonView, "guest_bar.html", conn: @conn,
