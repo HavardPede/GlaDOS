@@ -3,10 +3,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Glados · ESLG crew portal</title>
-  <link rel=”stylesheet” href=”<%= static_url(@conn, “/css/app.css”) %>”>
+  <link rel=”stylesheet” href="<%= static_url(@conn, “/css/app.css”) %>">
   />
 </head>
-<link rel='icon' href="<%= Routes.static_path(@conn, "/images/favicon.png") %>" type='image/x-icon' />
+<link rel='icon' href=" <%= Routes.static_path(@conn, "/images/favicon.png") %>" type='image/x-icon' />
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
 <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
 <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
