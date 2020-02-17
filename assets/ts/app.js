@@ -8,6 +8,7 @@ let liveSocket = new LiveSocket("/live", Socket);
 liveSocket.connect();
 
 window.onload = function () {
+  this.console.log("started")
   adminInit()
   const accountIcon = document.getElementById("accountIcon");
   if (accountIcon) {
