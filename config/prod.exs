@@ -3,7 +3,7 @@ use Mix.Config
 config :glados, GladosWeb.Endpoint,
   url: [host: "eslgcrew.no", port: 443],
   cache_static_manifest: "priv/static/cache_manifest.json",
-  static_url: [scheme: "https", host: "d2haayejdu10d3.cloudfront.net", port: 443]
+  static_url: [scheme: "https", host: "d2haayejdu10d3.cloudfront.net", port: 443],
   http: [port: {:system, "PORT"}],
   force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
