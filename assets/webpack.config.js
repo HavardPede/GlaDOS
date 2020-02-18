@@ -23,21 +23,22 @@ module.exports = (env, options) => ({
       new OptimizeCSSAssetsPlugin({}),
       new PurgecssPlugin({
         paths: globAll.sync([
-          "../lib/<APP_NAME>_web/templates/**/*.html.eex",
-          "../lib/<APP_NAME>_web/views/**/*.ex",
-          "../assets/ts/**/*.ts"
+          "../lib/glados_web/templates/**/*.html.eex",
+          "../lib/glados_web/views/**/*.ex",
+          "../assets/js/**/*.ts",
+          "../assets/js/**/*.js"
         ]),
         extractors: [
           {
             extractor: TailwindExtractor,
-            extensions: ["html", "js", "eex", "ex"]
+            extensions: ["leex", "eex", "ex", "html", "js"]
           }
         ]
       })
     ]
   },
   entry: {
-    "./js/app.ts": glob.sync("./vendor/**/*.js").concat(["./ts/app.ts"])
+    "./js/app.js": glob.sync("./vendor/**/*.js").concat(["./js/app.js"])
   },
   output: {
     filename: "app.js",
@@ -46,10 +47,17 @@ module.exports = (env, options) => ({
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.ts?$/,
         exclude: /node_modules/,
         use: {
           loader: "ts-loader"
+        }
+      },
+      {
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader"
         }
       },
       {
@@ -62,16 +70,11 @@ module.exports = (env, options) => ({
   resolve: {
     extensions: [".tsx", ".ts", ".js"]
   },
-
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "../css/app.css"
+      // create a generatated css file
+      filename: '../css/app.css'
     }),
-    new CopyWebpackPlugin([
-      {
-        from: "static/",
-        to: "../"
-      }
-    ])
+    new CopyWebpackPlugin([{ from: 'static/', to: '../' }])
   ]
 });
