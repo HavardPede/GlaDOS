@@ -3,7 +3,7 @@
 <%= render "head.html", conn: @conn %>
 
 <body class="min-h-screen relative">
-  <main role="main" class="pb-20 md:mb-20">
+  <main role="main" class="pb-20">
     <%= render(GladosWeb.CommonView, "navigation.html", conn: @conn) %>
     <%= render(GladosWeb.CommonView, "breadcrumbs.html", conn: @conn) %>
     <div class="max-w-3xl m-auto mt-12 flex content-around flex-col md:flex-row">

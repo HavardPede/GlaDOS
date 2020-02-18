@@ -23,15 +23,15 @@ module.exports = (env, options) => ({
       new OptimizeCSSAssetsPlugin({}),
       new PurgecssPlugin({
         paths: globAll.sync([
-          "../lib/<APP_NAME>_web/templates/**/*.html.eex",
-          "../lib/<APP_NAME>_web/views/**/*.ex",
+          "../lib/glados_web/templates/**/*.html.eex",
+          "../lib/glados_web/views/**/*.ex",
           "../assets/js/**/*.ts",
           "../assets/js/**/*.js"
         ]),
         extractors: [
           {
             extractor: TailwindExtractor,
-            extensions: ["leex", "eex", "ex", "html"]
+            extensions: ["leex", "eex", "ex", "html", "js"]
           }
         ]
       })

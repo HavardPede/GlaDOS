@@ -5,6 +5,7 @@
 @import "./logger.css";
 @import "./edit.css";
 @import "./switch.css";
+
 @tailwind base;
 @tailwind components;
 
@@ -17,20 +18,20 @@
 /* .lg */
 @media only screen and (min-width: 1024px) {
   .c-nav_elem {
-    @apply .mr-4;
+    @apply mr-4;
   }
 }
 
 .c-nav_elem:hover {
-  @apply .text-white border-orange-500;
+  @apply text-white border-orange-500;
 }
 
 .c-nav_elem {
-  @apply .flex .justify-center .items-center .h-12 .border-2 .border-transparent .text-white .no-underline;
+  @apply flex justify-center items-center h-12 border-2 border-transparent text-white no-underline;
 }
 
 .c-user_dropdown_elem {
-  @apply .cursor-pointer .py-2 .px-4 my-1 .text-center .rounded-lg .shadow-md;
+  @apply cursor-pointer py-2 px-4 my-1 text-center rounded-lg shadow-md;
 }
 
 .c-guest_nav_elem {
@@ -46,11 +47,11 @@
 }
 
 .c-guest_nav_elem--selected {
-  @apply .border-none .h-10 .items-center text-orange-500;
+  @apply border-none h-10 items-center text-orange-500;
 }
 
 .c-standard_input {
-  @apply .w-full .pl-2 .h-8 .bg-gray-300 .shadow-md .rounded mb-2;
+  @apply w-full pl-2 h-8 bg-gray-300 shadow-md rounded mb-2;
 }
 
 .c-standard_table {
@@ -70,7 +71,7 @@
 }
 
 .c-field_container {
-  @apply .my-4 .w-full flex flex-col;
+  @apply my-4 w-full flex flex-col;
 }
 
 .c-field_container div {
@@ -109,15 +110,15 @@
 }
 
 .c-btn--hollow {
-  @apply .my-1 .text-payne .border .border-payne .bg-transparent;
+  @apply my-1 text-payne border border-payne bg-transparent;
 }
 
 .c-btn--hollow:hover {
-  @apply .text-moss border-moss bg-transparent;
+  @apply text-moss border-moss bg-transparent;
 }
 
 .c-btn--orange {
-  @apply .bg-orange-500
+  @apply bg-orange-500
 }
 
 .c-btn--orange:hover {
@@ -125,7 +126,7 @@
 }
 
 .c-btn--orange:focus {
-  @apply .bg-transparent .text-orange-500;
+  @apply bg-transparent text-orange-500;
 }
 
 /****** END OF TAILWIND COMPONENTS ******/
@@ -167,4 +168,9 @@ html {
 
 .c-application_question:last-of-type {
   margin-bottom: 0px;
+}
+
+.c-footer {
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
