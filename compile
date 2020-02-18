@@ -1,4 +1,13 @@
-# app_root/compile
+if [ -f "$assets_dir/yarn.lock" ]; then
+  yarn deploy
+else
+  npm run deploy
+fi
+
 cd $phoenix_dir
-npm --prefix ./assets run build
-mix "${phoenix_ex}.digest" #use the ${phoenix_ex} variable instead of hardcoding phx or phoenix
+
+mix "${phoenix_ex}.digest"
+
+if mix help "${phoenix_ex}.digest.clean" 1>/dev/null 2>&1; then
+  mix "${phoenix_ex}.digest.clean"
+fi
