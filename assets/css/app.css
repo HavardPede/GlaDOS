@@ -170,17 +170,7 @@ html {
   margin-bottom: 0px;
 }
 
-.c-cookie_notice_bar {
-  margin: 0 -9999rem;
-  padding: 0.25rem 9999rem;
-  background: #eba134;
-  height: 15px;
-}
-
-.c-wrap {
-  max-width: 60em;
-  width: 100%;
-  margin: 0 auto;
-  font-size: x-small;
-  text-align: center;
+.c-footer {
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

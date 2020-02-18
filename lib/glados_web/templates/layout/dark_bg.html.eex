@@ -3,9 +3,14 @@
 <%= render "head.html", conn: @conn %>
 
 <body class="bg-payne w-full min-h-screen relative">
-  <div class="c-cookie_notice_bar">
-    <div class="c-wrap">This site uses cookies to offer you a better browsing experience.</div>
+  <%= unless @dismiss_cookies do %>
+  <div
+    class="js-cookie_notice w-full bg-aqua text-xs text-center py-1 shadow-lg flex flex-row items-center justify-between">
+    <div></div>
+    <div>Glados bruker cookies så hun kan huske hvem du er mens du er logget inn.</div>
+    <div class="float-right text-base px-4 py-2 js-close_cookie_notice cursor-pointer">x</div>
   </div>
+  <% end %>
   <main role="main" class="pt-8 lg:pt-24 pb-20">
     <div class="max-w-2xl m-auto shadow-2xl">
       <%= render(GladosWeb.CommonView, "guest_bar.html", conn: @conn,

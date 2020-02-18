@@ -15179,6 +15179,11 @@ html {
   margin-bottom: 0px;
 }
 
+.c-footer {
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 @media (min-width: 640px){
   .sm\:sr-only{
     position: absolute;
@@ -71290,4 +71295,3 @@ html {
     transition-duration: 1000ms;
   }
 }
-
