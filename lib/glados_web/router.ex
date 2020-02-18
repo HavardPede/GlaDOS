@@ -133,4 +133,10 @@ defmodule GladosWeb.Router do
     get("/eventer/:event_id/soknader/:applicant_id", AdminController, :review_application)
     post("/eventer/:event_id/soknader/:applicant_id", AdminController, :handle_application)
   end
+
+  scope "/api", GladosWeb do
+    pipe_through [:api]
+
+    post("/dismiss_cookies", ApiController, :dismiss_cookies)
+  end
 end

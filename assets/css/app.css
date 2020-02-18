@@ -169,3 +169,8 @@ html {
 .c-application_question:last-of-type {
   margin-bottom: 0px;
 }
+
+.c-footer {
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
