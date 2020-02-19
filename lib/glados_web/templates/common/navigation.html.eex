@@ -25,7 +25,8 @@
         class="block py-5 border-2 border-transparent hover:border-orange-500 text-white hover:text-white no-underline md:hidden">
         Min Profil
       </a>
-      <a href="" class="block border-t-4 border-white text-orange-500 py-5 hover:text-white no-underline md:hidden">
+      <a href="<%= Routes.session_path(@conn, :delete) %>"
+        class="block border-t-4 border-white text-orange-500 py-5 hover:text-white no-underline md:hidden">
         Logg Av
       </a>
     </div>
