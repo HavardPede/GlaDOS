@@ -209,6 +209,9 @@ defmodule Glados.Accounts.User do
     end 
   end
 
+  # Only called if changeset dont have postcode
+  defp validate_postcode(changeset), do: changeset
+
   defp valid_integer(string) do
     string
     |> Integer.parse()
@@ -217,9 +220,6 @@ defmodule Glados.Accounts.User do
       _ -> false
     end
   end
-
-  # Only called if changeset dont have postcode
-  defp validate_postcode(changeset), do: changeset
 
   defp validate_account_type(%{changes: %{account_type: account_type}} = changeset) do
     if account_type in @valid_account_types do
