@@ -15,8 +15,8 @@ config :glados, Glados.Mailer,
   adapter: Bamboo.SMTPAdapter,
   server: "SMTP.sendgrid.net",
   port: 587,
-  username:  System.get_env("SENDGRID_USERNAME") || "eslgcrew1",
-  password:  System.get_env("SENDGRID_PASSWORD") || "ESLG1337pass",
+  username:  System.get_env("SENDGRID_USERNAME"),
+  password:  System.get_env("SENDGRID_PASSWORD"),
   # can be `:always` or `:never`
   tls: :if_available,
   # or {":system", ALLOWED_TLS_VERSIONS"} w/ comma seprated values (e.g. "tlsv1.1,tlsv1.2")
