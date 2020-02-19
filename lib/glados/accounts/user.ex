@@ -44,7 +44,6 @@ defmodule Glados.Accounts.User do
     |> validate_password()
     |> encrypt_password()
     |> validate_required(:encrypted_password)
-    |> unique_constraint(:email, :username)
   end
 
   @doc false
