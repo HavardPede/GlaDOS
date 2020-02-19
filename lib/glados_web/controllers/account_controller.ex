@@ -26,12 +26,14 @@ defmodule GladosWeb.AccountController do
   def create(conn, %{"user" => user_params}) do
     case Accounts.create_user(user_params) do
       {:ok, user} ->
+        Logger.info("User created. username: #{user.name}")
         conn
         |> put_session(:unverified_user, user.id)
         |> redirect(to: Routes.account_path(conn, :send_email_verification))
         |> halt()
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.warn("User creation failed.")
         render(conn, "new.html",
           changeset: changeset,
           layout: {GladosWeb.LayoutView, "dark_bg.html"}
@@ -44,9 +46,11 @@ defmodule GladosWeb.AccountController do
     |> get_session(:unverified_user)
     |> case do
       nil ->
+        Logger.warn("Tried sending email verification without having uverified user in session.")
         PlugHelper.throw_404(conn)
 
       user_id ->
+        Logger.info("Sent email verification.")
         user_id
         |> Accounts.get_user!()
         |> EmailSender.send_verification()
@@ -62,12 +66,13 @@ defmodule GladosWeb.AccountController do
     with {:ok, user_id} <- Glados.Token.verify_new_account_token(token),
          %User{verified: false} = user <- Glados.Accounts.get_user!(user_id) do
       Glados.Accounts.validate_user(user)
-
+      Logger.info("Account verification success!")
       conn
       |> put_flash(:info, "Din bruker er nå verifisert!")
       |> redirect(to: Routes.session_path(conn, :new))
       |> halt()
     else
+      Logger.warn("Account verification failed due to invalid token!")
       _ ->
         conn
         |> put_flash(:error, "Verifikasjons-lenken er ugyldig.")
@@ -80,6 +85,7 @@ defmodule GladosWeb.AccountController do
   Path to verify user when there is no token passed in
   """
   def verify_email(conn, _) do
+    Logger.warn("Account verification failed due to missing token!")  
     PlugHelper.throw_404(conn)
   end
 
@@ -93,6 +99,7 @@ defmodule GladosWeb.AccountController do
   def send_email_for_new_password(conn, %{"email" => email}) do
     case Glados.Accounts.get_user_by_email(email) do
       {:ok, user} ->
+        Logger.info("Sending email for password resetting.")
         EmailSender.send_password_reset(user)
 
         conn
@@ -101,12 +108,14 @@ defmodule GladosWeb.AccountController do
         |> halt()
 
       {:error, :missing_user} ->
+        Logger.warn("Invalid email address was used for sending email to reset password.")
         conn
         |> put_flash(:error, "Fant ingen bruker med denne epost addressen.")
         |> redirect(to: Routes.account_path(Endpoint, :forgotten_password))
         |> halt()
 
       _ ->
+        Logger.warn("Sending email to reset password fail. Unknown reason")
         conn
         |> put_flash(:error, "En feil oppstod. Prøv igjen senere.")
         |> render(to: Routes.account_path(Endpoint, :forgotten_password))
@@ -129,11 +138,13 @@ defmodule GladosWeb.AccountController do
       )
     else
       {:error, :invalid} ->
+        Logger.warn("Invalid url for changing password.")
         conn
         |> put_flash(:error, "Lenken er ikke gyldig.")
         |> redirect(to: Routes.session_path(conn, :new))
         |> halt()
       {:error, :expired} ->
+        Logger.warn("expired token on url for changing password.")
         conn
         |> put_flash(:error, "Lenken har utgått.")
         |> redirect(to: Routes.session_path(conn, :new))
@@ -153,6 +164,7 @@ defmodule GladosWeb.AccountController do
       |> Accounts.update_password(user_params)
       |> case do
         {:ok, _user} ->
+          Logger.info("Password changed.")
           conn
           |> put_flash(:info, "Passordet er endret!")
           |> redirect(to: Routes.session_path(Endpoint, :new))
@@ -169,6 +181,7 @@ defmodule GladosWeb.AccountController do
       end
     else
       _ ->
+        Logger.warn("Error when setting new password through email link.")
         conn
         |> put_flash(:error, "En feil oppstod.")
         |> redirect(to: Routes.session_path(conn, :new))
@@ -205,6 +218,7 @@ defmodule GladosWeb.AccountController do
     Accounts.update_user_info(user, user_params)
     |> case do
       {:ok, _user} ->
+        Logger.info("User info updated.")
         conn
         |> put_flash(:info_updated, "Bruker info ble oppdatert.")
         |> redirect(to: Routes.account_path(conn, :edit))
@@ -212,6 +226,7 @@ defmodule GladosWeb.AccountController do
 
       {:error, %Ecto.Changeset{} = info_changeset} ->
         password_changeset = Accounts.change_password(user)
+        Logger.info("User info failed to update.")
 
         conn
         |> put_flash(:info_not_updated, "Bruker info ble ikke oppdatert.")
@@ -239,6 +254,7 @@ defmodule GladosWeb.AccountController do
   defp update_password_and_render(conn, %User{} = user, params) do
     case Accounts.update_password(user, params) do
       {:ok, _user} ->
+        Logger.info("Password changed successfully.")
         conn
         |> put_flash(:password_updated, "Passordet ble oppdatert.")
         |> redirect(to: Routes.account_path(conn, :edit))
