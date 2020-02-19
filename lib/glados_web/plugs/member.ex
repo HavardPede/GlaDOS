@@ -12,6 +12,7 @@ defmodule GladosWeb.Plugs.Member do
 
     if is_a_member?(current_user) do
       conn
+      |> assign(:dismiss_cookies, get_session(conn, :dismiss_cookies))
     else
       conn
       |> PlugHelper.redirect()
