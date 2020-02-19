@@ -4,7 +4,7 @@ defmodule GladosWeb.SessionController do
   """
 
   use GladosWeb, :controller
-  require logger
+  require Logger
 
   import Phoenix.HTML.Link
   alias Glados.Accounts.Auth
@@ -49,7 +49,7 @@ defmodule GladosWeb.SessionController do
         end
 
       {:error, _reason} ->
-        Logger.warn("Login failed on username: #{Map.get(auth_params, "username", :not_found}")
+        Logger.warn("Login failed on username: #{Map.get(auth_params, 'username', :not_found)}")
         conn
         |> put_flash(:error, "Et problem oppstod med ditt brukernavn/passord")
         |> redirect(to: Routes.session_path(Endpoint, :new))

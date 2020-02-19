@@ -4,6 +4,7 @@ defmodule GladosWeb.Plugs.Verify do
   If there is no unverified user, throw 404.
   """
 
+  require Logger
   import Plug.Conn
   import Phoenix.Controller
   alias Glados.Accounts
@@ -28,6 +29,7 @@ defmodule GladosWeb.Plugs.Verify do
 
   # If no unverified session, redirect
   def call(conn, _opts) do
+    Logger.warn("No unverified account in session. throwing 404.")
     PlugHelper.throw_404(conn)
   end
 end

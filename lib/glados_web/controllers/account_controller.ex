@@ -3,7 +3,8 @@ defmodule GladosWeb.AccountController do
   Controller for handling actions related to a unique user.
   """
   use GladosWeb, :controller
-
+  
+  require Logger 
   alias Ecto.Changeset
   alias Glados.Accounts.User
   alias Glados.{Accounts, EmailSender}
@@ -72,8 +73,8 @@ defmodule GladosWeb.AccountController do
       |> redirect(to: Routes.session_path(conn, :new))
       |> halt()
     else
-      Logger.warn("Account verification failed due to invalid token!")
       _ ->
+        Logger.warn("Account verification failed due to invalid token!")
         conn
         |> put_flash(:error, "Verifikasjons-lenken er ugyldig.")
         |> redirect(to: Routes.session_path(conn, :new))
