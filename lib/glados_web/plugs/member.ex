@@ -3,7 +3,6 @@ defmodule GladosWeb.Plugs.Member do
   Plug that halts non-member accounts. Elevated member accounts (ie crew) still count as member.
   """
 
-  import Plug.Conn
   alias GladosWeb.Plugs.PlugHelper
 
   def init(opts), do: opts
@@ -13,7 +12,6 @@ defmodule GladosWeb.Plugs.Member do
 
     if is_a_member?(current_user) do
       conn
-      |> assign(:dismiss_cookies, get_session(conn, :dismiss_cookies))
     else
       conn
       |> PlugHelper.redirect()

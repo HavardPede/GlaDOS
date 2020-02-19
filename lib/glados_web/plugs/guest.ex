@@ -3,7 +3,6 @@ defmodule GladosWeb.Plugs.Guest do
   Plug that redirects the user to a authenticated page, if they are logged in (not guest).
   """
 
-  import Plug.Conn
   alias GladosWeb.Plugs.PlugHelper
 
   def init(opts), do: opts
@@ -13,7 +12,6 @@ defmodule GladosWeb.Plugs.Guest do
       PlugHelper.redirect(conn)
     else
       conn
-      |> assign(:dismiss_cookies, get_session(conn, :dismiss_cookies))
     end
   end
 end

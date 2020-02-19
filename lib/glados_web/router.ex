@@ -4,7 +4,7 @@ defmodule GladosWeb.Router do
   use Sentry.Plug
 
   import Phoenix.LiveView.Router
-  alias GladosWeb.Plugs.{Admin, Auth, FetchEvent, Guest, LoggerAuth, Member, Verify}
+  alias GladosWeb.Plugs.{Admin, Auth, DismissCookies, FetchEvent, Guest, LoggerAuth, Member, Verify}
   alias Live.View.LoggerLive
 
   pipeline :browser do
@@ -53,9 +53,13 @@ defmodule GladosWeb.Router do
     plug(FetchEvent)
   end
 
+  pipeline :dismiss_cookies do
+    plug(DismissCookies)
+  end
+
   # Scope for login page
   scope "/", GladosWeb do
-    pipe_through [:browser, :guest]
+    pipe_through [:browser, :guest, :dismiss_cookies]
 
     get("/", SessionController, :new)
     post("/", SessionController, :create)
@@ -68,13 +72,13 @@ defmodule GladosWeb.Router do
   end
 
   scope "/", GladosWeb do
-    pipe_through [:browser, :guest, :verify]
+    pipe_through [:browser, :guest, :verify, :dismiss_cookies]
     get("/verifiser", AccountController, :verify_email)
   end
 
   # Scope for verifying a new account
   scope "/", GladosWeb do
-    pipe_through [:browser]
+    pipe_through [:browser, :dismiss_cookies]
 
     get("/verifikasjonsendt", AccountController, :send_email_verification)
     get("/brukervilkar", TermsController, :terms_and_conditions)
