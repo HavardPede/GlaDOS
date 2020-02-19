@@ -4,7 +4,7 @@ defmodule GladosWeb.Router do
   use Sentry.Plug
 
   import Phoenix.LiveView.Router
-  alias GladosWeb.Plugs.{Admin, Auth, DismissCookies, FetchEvent, Guest, LoggerAuth, Member, Verify}
+  alias GladosWeb.Plugs.{Admin, Auth, DismissCookies, FetchEvent, Guest, LoggerAuth, Member}
   alias Live.View.LoggerLive
 
   pipeline :browser do
@@ -23,10 +23,6 @@ defmodule GladosWeb.Router do
 
   pipeline :auth do
     plug(Auth)
-  end
-
-  pipeline :verify do
-    plug(Verify)
   end
 
   pipeline :guest do
@@ -69,10 +65,6 @@ defmodule GladosWeb.Router do
     post("/glemtpassord", AccountController, :send_email_for_new_password)
     get("/endrepassord", AccountController, :change_password)
     put("/endrepassord", AccountController, :set_new_password)
-  end
-
-  scope "/", GladosWeb do
-    pipe_through [:browser, :guest, :verify, :dismiss_cookies]
     get("/verifiser", AccountController, :verify_email)
   end
 

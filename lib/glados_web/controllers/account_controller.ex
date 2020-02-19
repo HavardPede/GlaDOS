@@ -73,6 +73,12 @@ defmodule GladosWeb.AccountController do
       |> redirect(to: Routes.session_path(conn, :new))
       |> halt()
     else
+      %User{verified: true} ->
+      Logger.info("Account verification link used when account was verified.")
+         conn
+        |> put_flash(:error, "Din bruker er allerede verifisert.")
+        |> redirect(to: Routes.session_path(conn, :new))
+        |> halt()
       _ ->
         Logger.warn("Account verification failed due to invalid token!")
         conn

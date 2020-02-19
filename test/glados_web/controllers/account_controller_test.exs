@@ -219,15 +219,6 @@ defmodule GladosWeb.AccountControllerTest do
       assert html_response(conn, 200) =~ "Din bruker er allerede verifisert."
     end
 
-    test "Verification url with valid token but missing session data throws 404", %{
-      conn: conn,
-      user: user
-    } do
-      token = Token.generate_new_account_token(user)
-      conn = get(conn, Routes.account_path(conn, :verify_email, token: token))
-      assert html_response(conn, 404)
-    end
-
     test "Does not allow user to view /verifiser without valid token", %{conn: conn, user: user} do
       conn =
         conn
