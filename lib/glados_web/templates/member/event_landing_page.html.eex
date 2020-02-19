@@ -1,5 +1,5 @@
 <div class="flex flex-col px-4 mx-auto text-center">
-  <img src="<%= Routes.static_path(@conn, "/images/lanmine29.jpg" ) %>" class=" w-4/5 mx-auto rounded-lg">
+  <img src="<%= Routes.static_path(@conn, "/images/lanmine30.jpg" ) %>" class=" w-4/5 mx-auto rounded-lg">
   <div class="flex flex-row flex-wrap justify-center md:justify-around md:text-lg px-4">
     <div class="mt-4">
       Start dato:
