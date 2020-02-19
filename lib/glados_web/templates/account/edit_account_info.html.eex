@@ -11,33 +11,33 @@
   <div class="mb-4 text-center lg:text-left">
     <h4 class="text-center lg:text-left mb-1">Navn</h4>
     <%= text_input f, :name, class: "c-standard_input" %>
-    <%= error_tag f, :name %>
+    <div class="text-sm"><%= error_tag f, :name %></div>
   </div>
 
   <div class="mb-4 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Email adresse</h4>
     <%= text_input f, :email, class: "c-standard_input" %>
-    <%= error_tag f, :email %>
+    <div class="text-sm"><%= error_tag f, :email %></div>
   </div>
 
   <div class="mb-4 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Telefon nummer</h4>
-    <%= text_input f, :phone_number, class: "c-standard_input" %>
-    <%= error_tag f, :phone_number %>
+    <%= telephone_input f, :phone_number, class: "c-standard_input" %>
+    <div class="text-sm"><%= error_tag f, :phone_number %></div>
   </div>
 
   <div class="mb-4 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Adresse</h4>
     <%= text_input f, :address, class: "c-standard_input" %>
-    <%= error_tag f, :address %>
+    <div class="text-sm"><%= error_tag f, :address %></div>
   </div>
 
   <div class="mb-4 lg:text-left">
     <h4 class="mb-1 text-sm">Post kode</h4>
     <div>
-      <%= text_input f, :postcode, pattern: "[0-9]*", maxLength: 4, class: "c-standard_input" %>
+      <%= telephone_input f, :postcode, pattern: "[0-9]*", maxLength: 4, class: "c-standard_input" %>
     </div>
-    <%= error_tag f, :postcode %>
+    <div class="text-sm"><%= error_tag f, :postcode %></div>
   </div>
 
   <div class="mb-4 lg:text-left">
@@ -50,7 +50,7 @@
       </div>
     </div>
     <%= [:day, :month, :year, :dob] |> Enum.any?(&(f.errors[&1])) |> if() do %>
-    <span class="help-block">Datoen er ikke godkjent.</span>
+    <span class="help-block text-sm">Datoen er ikke godkjent.</span>
     <% end %>
   </div>
   <%= submit "Oppdater", class: "c-btn c-btn--orange new_user_btn shadow-md" %>

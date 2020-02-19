@@ -56,7 +56,7 @@
 
   <div class="mb-4 lg:mx-2 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Telefon nummer</h4>
-    <%= text_input f, :phone_number, class: "c-standard_input #{if has_error(f, :phone_number), do: "border-2 border-red-600"}" %>
+    <%= telephone_input f, :phone_number, class: "c-standard_input #{if has_error(f, :phone_number), do: "border-2 border-red-600"}" %>
     <div class="text-sm"><%= error_tag f, :phone_number %></div>
   </div>
 
