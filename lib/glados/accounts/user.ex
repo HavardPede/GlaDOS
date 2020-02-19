@@ -44,6 +44,7 @@ defmodule Glados.Accounts.User do
     |> validate_password()
     |> encrypt_password()
     |> validate_required(:encrypted_password)
+    |> unique_constraint(:email, :username)
   end
 
   @doc false
@@ -160,9 +161,9 @@ defmodule Glados.Accounts.User do
     username = String.downcase(username)
 
     length = String.length(username)
-    format = String.match?(username, ~r/^[a-zæøå[:alnum:]]+$/)
+    format = String.match?(username, ~r/^[a-å0-9]+(?:[ _.-][a-å0-9]+)*$/i)
 
-    case {length >= 5 && length <= 20, format} do
+    case {length >= 4 && length <= 30, format} do
       {false, _} ->
         add_error(changeset, :username, "Brukernavnet må være mellom 5 og 20 karakterer.")
 
@@ -182,8 +183,8 @@ defmodule Glados.Accounts.User do
     changeset
     |> validate_format(
       :name,
-      ~r/^([a-zæøåA-ZÆØÅ]+[[:space:]]{1}[a-zæøåA-ZÆØÅ]+)+$/,
-      message: "Du må oppgi både fornavn og etternavn, kun som bokstaver."
+      ~r/^[a-å0-9]+(?:[ _.-][a-å0-9]+)*$/i,
+    message: "Du må oppgi både fornavn og etternavn, kun som bokstaver."
     )
   end
 
