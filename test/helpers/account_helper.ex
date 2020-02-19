@@ -12,7 +12,7 @@ defmodule Helpers.AccountHelper do
     id: @user1_id,
     name: "Test Name",
     username: "TestUsername",
-    postcode: 1234,
+    postcode: "1234",
     phone_number: "123 45 678",
     day: "01",
     month: "01",

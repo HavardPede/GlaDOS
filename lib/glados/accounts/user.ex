@@ -18,7 +18,7 @@ defmodule Glados.Accounts.User do
     field(:email, :string, null: false)
     field(:username, :string, null: false)
     field(:address, :string)
-    field(:postcode, :integer)
+    field(:postcode, :string, null: false)
     field(:phone_number, :string)
     field(:account_type, :string, null: false)
     field(:verified, :boolean)
@@ -201,13 +201,21 @@ defmodule Glados.Accounts.User do
 
   defp validate_phone_number(changeset), do: changeset
 
-  defp validate_postcode(%{changes: %{postcode: _}} = changeset) do
-    changeset
-    |> validate_number(:postcode,
-      less_than: 10_000,
-      greater_than: 999,
-      message: "Postnummer må være en 4-sifret kode."
-    )
+  defp validate_postcode(%{changes: %{postcode: postcode}} = changeset) do
+    if String.length(postcode) >= 4 and valid_integer(postcode) do
+            changeset
+    else
+      add_error(changeset, :postcode, "Postnummer må være en 4-sifret kode.")
+    end 
+  end
+
+  defp valid_integer(string) do
+    string
+    |> Integer.parse()
+    |> case do
+      {_, ""} -> true
+      _ -> false
+    end
   end
 
   # Only called if changeset dont have postcode

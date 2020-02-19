@@ -69,7 +69,7 @@
   <div class="mb-4 lg:mx-2 text-center lg:text-left">
     <h4 class="mb-1 text-sm">Post kode</h4>
     <div>
-      <%= text_input f, :postcode, pattern: "[0-9]*", maxLength: 4, class: "c-standard_input #{if has_error(f, :postcode), do: "border-2 border-red-600"}" %>
+      <%= telephone_input f, :postcode, pattern: "[0-9]*", maxLength: 4, class: "c-standard_input #{if has_error(f, :postcode), do: "border-2 border-red-600"}" %>
       <div class="text-sm"><%= error_tag f, :postcode %></div>
     </div>
   </div>

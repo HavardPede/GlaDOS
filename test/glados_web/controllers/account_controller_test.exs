@@ -38,7 +38,7 @@ defmodule GladosWeb.AccountControllerTest do
 
     test "Does not add user to databaes when using invalid data", %{conn: conn} do
       post(conn, Routes.account_path(conn, :create),
-        user: %{AccountHelper.get_valid_user_attributes() | name: "invalid_name"}
+        user: %{AccountHelper.get_valid_user_attributes() | name: "i"}
       )
 
       post(conn, Routes.account_path(conn, :create),
