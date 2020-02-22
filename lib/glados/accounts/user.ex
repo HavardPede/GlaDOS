@@ -162,9 +162,9 @@ defmodule Glados.Accounts.User do
     length = String.length(username)
     format = String.match?(username, ~r/^[a-å0-9]+(?:[ _.-][a-å0-9]+)*$/i)
 
-    case {length >= 4 && length <= 30, format} do
+    case {length >= 4 && length <= 20, format} do
       {false, _} ->
-        add_error(changeset, :username, "Brukernavnet må være mellom 5 og 20 karakterer.")
+        add_error(changeset, :username, "Brukernavnet må være mellom 4 og 20 karakterer.")
 
       {_, false} ->
         add_error(changeset, :username, "Brukernavnet kan kun inneholde bokstaver og tall.")
@@ -178,13 +178,19 @@ defmodule Glados.Accounts.User do
   defp validate_username(changeset), do: changeset
 
   # Name validation
-  defp validate_name(%{changes: %{name: _}} = changeset) do
-    changeset
-    |> validate_format(
-      :name,
-      ~r/^[a-å0-9]+(?:[ _.-][a-å0-9]+)*$/i,
-    message: "Du må oppgi både fornavn og etternavn, kun som bokstaver."
-    )
+  defp validate_name(%{changes: %{name: name}} = changeset) do
+    name
+    |> String.trim()
+    |> String.split(" ")
+    |> Enum.filter(&(&1 != ""))
+    |> length()
+    |> Kernel.>=(2)
+    |> if do
+      changeset
+    else
+      changeset
+      |> add_error(:name, "Du må oppgi både fornavn og etternavn.")
+    end
   end
 
   defp validate_name(changeset), do: changeset
