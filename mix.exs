@@ -73,7 +73,9 @@ defmodule Glados.MixProject do
       {:ok, git: "https://github.com/CrowdHailer/OK/"},
       {:navigation_history, "~> 0.3"},
       {:sentry, "~> 7.0"},
-      {:jason, "~> 1.1"}
+      {:jason, "~> 1.1"}, 
+      {:ex_aws, "~> 2.1"},
+      {:ex_aws_s3, "~> 2.0"}
     ]
   end
 
