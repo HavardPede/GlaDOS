@@ -9,7 +9,8 @@ use Mix.Config
 
 config :glados,
   ecto_repos: [Glados.Repo],
-  password_encryption: Glados.Accounts.Encryption
+  password_encryption: Glados.Accounts.Encryption,
+  s3_bucket: "eslg-bucket"
 
 config :glados, Glados.Mailer,
   adapter: Bamboo.SMTPAdapter,
@@ -33,6 +34,16 @@ config :glados, GladosWeb.Endpoint,
   live_view: [signing_salt: "96HjcS0DmQvxYovwGSeT26MRhiXz9EoQ"],
   render_errors: [view: GladosWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Glados.PubSub, adapter: Phoenix.PubSub.PG2]
+
+config :ex_aws,
+  json_codec: Jason,
+  access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
+  secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
+  s3: [ 
+    scheme: "https://", 
+    host: "eslg-bucket.s3.amazonaws.com",
+    region: "eu-north-1"
+  ]
 
 # Configures Elixir's Logger
 config :logger, :console,

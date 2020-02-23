@@ -1,4 +1,5 @@
 run:
+	. .env
 	iex -S mix phx.server
 
 clean:
