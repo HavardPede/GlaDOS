@@ -5,12 +5,14 @@ import LiveSocket from "phoenix_live_view";
 import { adminInit } from "./admin.ts"
 import { initCookieNotice } from "./cookie_notice"
 
-let liveSocket = new LiveSocket("/live", Socket);
-liveSocket.connect();
-
 window.onload = function () {
+
+  let liveSocket = new LiveSocket("/live", Socket);
+  liveSocket.connect();
+
   adminInit()
   initCookieNotice()
+  flatpickr(".js-flatpickr", { enableTime: true, time_24hr: true })
 
   const accountIcon = document.getElementById("accountIcon");
   if (accountIcon) {
