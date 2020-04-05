@@ -1,6 +1,6 @@
 <div class="pt-8 lg:pl-8 text-center lg:text-left lg:w-2/5">
   <h2 class="black_h2">Velkommen til</h2>
-  <h2 class="orange_h2">Glados</h2>
+  <h1 class="orange_h2 m-0">Glados</h1>
 </div>
 <div class="w-2/5 lg:w-1/2 mx-auto lg:h-full lg:float-right h-full">
   <img src="<%= Routes.static_path(@conn, "/images/logo_alpha.png" ) %>" class="flex-0 loginLogo lg:pl-20">
