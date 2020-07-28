@@ -1,16 +1,16 @@
 <div class="flex flex-col px-4 mx-auto text-center">
-  <img src="<%= Routes.static_path(@conn, "/images/lanmine30.jpg" ) %>" class=" w-4/5 mx-auto rounded-lg">
+  <img src="<%= Routes.static_path(@conn, "/images/lanmine30.jpg" ) %>" class=" w-4/5 mx-auto rounded-sm">
   <div class="flex flex-row flex-wrap justify-center md:justify-around md:text-lg px-4">
     <div class="mt-4">
       Start dato:
       </br>
       <div class="mt-2 flex justify-center text-lg mr-4">
         <span
-          class="border-2 border-aqua bg-aqua text-white p-2 px-3 rounded-lg mr-1 leading-tight"><%= @event.start.day %></span>
+          class="border-2 border-aqua bg-aqua text-white p-2 px-3 rounded-sm mr-1 leading-tight"><%= @event.start.day %></span>
         <span
-          class="border-2 border-aqua bg-aqua text-white p-2 px-3 rounded-lg mr-1 leading-tight"><%= @event.start.month %></span>
+          class="border-2 border-aqua bg-aqua text-white p-2 px-3 rounded-sm mr-1 leading-tight"><%= @event.start.month %></span>
         <span
-          class="border-2 border-aqua bg-aqua text-white p-2 px-3 rounded-lg leading-tight"><%= @event.start.year %></span>
+          class="border-2 border-aqua bg-aqua text-white p-2 px-3 rounded-sm leading-tight"><%= @event.start.year %></span>
       </div>
     </div>
     <div class="mt-4">
@@ -18,10 +18,10 @@
       </br>
       <div class="mt-2 flex justify-center text-lg">
         <span
-          class="border-2 border-payne text-payne p-2 px-3 rounded-lg mr-1 leading-tight"><%= @event.end.day %></span>
+          class="border-2 border-payne text-payne p-2 px-3 rounded-sm mr-1 leading-tight"><%= @event.end.day %></span>
         <span
-          class=" border-2 border-payne text-payne p-2 px-3 rounded-lg mr-1 leading-tight"><%= @event.end.month %></span>
-        <span class=" border-2 border-payne text-payne p-2 px-3 rounded-lg leading-tight"><%= @event.end.year %></span>
+          class=" border-2 border-payne text-payne p-2 px-3 rounded-sm mr-1 leading-tight"><%= @event.end.month %></span>
+        <span class=" border-2 border-payne text-payne p-2 px-3 rounded-sm leading-tight"><%= @event.end.year %></span>
       </div>
     </div>
   </div>

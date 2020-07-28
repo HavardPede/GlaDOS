@@ -15,7 +15,7 @@
     <div class="max-w-2xl m-auto shadow-2xl">
       <%= render(GladosWeb.CommonView, "guest_bar.html", conn: @conn,
         current_path: :login) %>
-      <div class="rounded-b-lg pb-4 bg-white w-11/12 md:w-full mx-auto">
+      <div class="rounded-b-md pb-4 bg-white w-11/12 md:w-full mx-auto">
         <%= render @view_module, @view_template, assigns %>
       </div>
     </div>

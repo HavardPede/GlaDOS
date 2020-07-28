@@ -19,8 +19,7 @@ defmodule GladosWeb.AdminController do
   ##
   def index(conn, _params) do
     assigns = %{
-      events: Events.get_events(),
-      nav_data: construct_nav_data("Events", @empty_sub_pages, @sub_page_not_selected)
+      events: Events.get_events()
     }
 
     render(conn, "events.html", assigns)
@@ -31,8 +30,7 @@ defmodule GladosWeb.AdminController do
   ##
   def new_event(conn, _params) do
     assigns = %{
-      changeset: Events.change_event(),
-      nav_data: construct_nav_data("Events", @empty_sub_pages, @sub_page_not_selected)
+      changeset: Events.change_event()
     }
 
     render(conn, "new_event.html", assigns)
@@ -50,12 +48,7 @@ defmodule GladosWeb.AdminController do
         |> halt()
 
       {:error, changeset} ->
-        assigns = %{
-          changeset: changeset,
-          nav_data: construct_nav_data("Events", @empty_sub_pages, @sub_page_not_selected)
-        }
-
-        render(conn, "new_event.html", assigns)
+        render(conn, "new_event.html", changeset: changeset)
     end
   end
 
@@ -65,12 +58,7 @@ defmodule GladosWeb.AdminController do
   ## EDIT EVENT PAGE
   ##
   def edit_event(conn, %{"event_id" => event_id}) do
-    assigns = %{
-      changeset: Events.change_event(conn.assigns.event),
-      nav_data: construct_nav_data("Events", get_event_sub_pages(event_id), "Event info")
-    }
-
-    render(conn, "edit_event.html", assigns)
+    render(conn, "edit_event.html", changeset: Events.change_event(conn.assigns.event))
   end
 
   ##
@@ -88,8 +76,7 @@ defmodule GladosWeb.AdminController do
 
       {:error, changeset} ->
         assigns = %{
-          changeset: changeset,
-          nav_data: construct_nav_data("Events", get_event_sub_pages(event.id), "Event info")
+          changeset: changeset
         }
 
         render(conn, "edit_event.html", assigns)
@@ -106,7 +93,6 @@ defmodule GladosWeb.AdminController do
 
     assigns = %{
       applicants: applicants,
-      nav_data: construct_nav_data("Events", get_event_sub_pages(event_id), "Søknader"),
       event_id: event_id
     }
 
@@ -134,7 +120,6 @@ defmodule GladosWeb.AdminController do
 
     assigns = %{
       applicant: applicant,
-      nav_data: construct_nav_data("Events", get_event_sub_pages(event_id), "Søknader"),
       crew_list: EventCrew.get_crew_list(),
       questions: CrewApplications.get_pages()
     }
@@ -167,12 +152,7 @@ defmodule GladosWeb.AdminController do
   def view_crew(conn, %{"event_id" => event_id}) do
     {:ok, crew} = EventCrew.get_crew(event_id)
 
-    assigns = %{
-      crew: crew,
-      nav_data: construct_nav_data("Events", get_event_sub_pages(event_id), "Crew")
-    }
-
-    render(conn, "crew.html", assigns)
+    render(conn, "crew.html", crew: crew)
   end
 
   ##
@@ -184,12 +164,7 @@ defmodule GladosWeb.AdminController do
 
     {:ok, crew} = EventCrew.get_crew(event_id)
 
-    assigns = %{
-      crew: crew,
-      nav_data: construct_nav_data("Events", get_event_sub_pages(event_id), "Crew")
-    }
-
-    render(conn, "crew.html", assigns)
+    render(conn, "crew.html", crew: crew)
   end
 
   ##
@@ -198,8 +173,7 @@ defmodule GladosWeb.AdminController do
   def cafeteria(conn, %{"event_id" => event_id}) do
     assigns = %{
       products: Products.get_products(event_id),
-      changeset: Products.change_product(),
-      nav_data: construct_nav_data("Events", get_event_sub_pages(event_id), "Kantine")
+      changeset: Products.change_product()
     }
 
     render(conn, "cafeteria.html", assigns)
@@ -248,36 +222,4 @@ defmodule GladosWeb.AdminController do
     |> redirect(to: Routes.admin_path(GladosWeb.Endpoint, :cafeteria, event_id))
     |> halt()
   end
-
-  ## ------ Private Functions ------ ##
-
-  def construct_nav_data(current_page, sub_pages \\ %{}, current_sub_page \\ [])
-
-  def construct_nav_data(current_page, sub_pages, current_sub_page) do
-    if current_page in Map.keys(get_nav_elements()) and is_map(sub_pages) do
-      %{
-        pages: get_nav_elements(),
-        current_page: current_page,
-        sub_pages: sub_pages,
-        current_sub_page: current_sub_page
-      }
-    else
-      Logger.warn("construct_nav_data was given invalid parameters.")
-      %{pages: get_nav_elements(), current_page: nil, sub_pages: %{}, current_sub_page: nil}
-    end
-  end
-
-  def get_event_sub_pages(event_id),
-    do: %{
-      "Event info" => Routes.admin_path(Endpoint, :edit_event, event_id),
-      "Kantine" => Routes.admin_path(Endpoint, :cafeteria, event_id),
-      "Søknader" => Routes.admin_path(Endpoint, :view_applications, event_id),
-      "Crew" => Routes.admin_path(Endpoint, :view_crew, event_id)
-    }
-
-  def get_nav_elements,
-    do: %{
-      "Events" => Routes.admin_path(Endpoint, :index),
-      "ESLG" => "#"
-    }
 end

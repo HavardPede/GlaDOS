@@ -965,7 +965,7 @@ video {
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
   text-align: center;
-  border-radius: 0.5rem;
+  border-radius: 0.125rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
@@ -974,10 +974,10 @@ video {
   height: 2rem;
   padding: 0.5rem;
   background-color: #fff;
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 1rem;
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
 }
 
 .c-guest_nav_elem:hover {
@@ -1003,6 +1003,7 @@ video {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   border-radius: 0.25rem;
   margin-bottom: 0.5rem;
+  font-size: 1rem;
 }
 
 .c-standard_table {
@@ -1064,7 +1065,7 @@ video {
 
 .c-btn {
   text-align: center;
-  border-radius: 0.5rem;
+  border-radius: 0.125rem;
   color: #fff;
   background-color: #99907D;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -15156,6 +15157,10 @@ video {
   display: none;
 }
 
+html, body {
+  height: 100%;
+}
+
 :root {
   --main-orange: #eba134;
   --payne: #606c76;
@@ -15177,7 +15182,7 @@ h5 {
 }
 
 html {
-  font-family: "Courier Prime", monospace;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .phx-connected,

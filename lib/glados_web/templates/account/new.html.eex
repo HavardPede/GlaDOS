@@ -1,7 +1,7 @@
 <%= form_for @changeset, Routes.account_path(@conn, :create), fn f -> %>
 
 <div class=" mb-12 lg:text-left w-4/5 md:w-3/5 lg:w-4/5 mx-auto flex flex-row pt-8 items-center">
-  <img src="<%= Routes.static_path(@conn, "/images/logo_alpha.png" ) %>" class="new_user_logo mr-4">
+  <img src="<%= Routes.static_path(@conn, "/images/logo_alpha.png" ) %>" class="w-20 mr-4">
   <div class="order-2">
     <h1 class="m-0">Lag en ny bruker</h1>
     <h2 class="m-0">for å søke crew!</h2>

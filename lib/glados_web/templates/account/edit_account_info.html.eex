@@ -9,39 +9,39 @@
     role="alert">
     <%= get_flash(@conn, :info_not_updated) %></p>
   <div class="mb-4 text-center lg:text-left">
-    <h4 class="text-center lg:text-left mb-1">Navn</h4>
+    <h4 class="text-center lg:text-left mb-1 text-lg">Navn</h4>
     <%= text_input f, :name, class: "c-standard_input" %>
     <div class="text-sm"><%= error_tag f, :name %></div>
   </div>
 
   <div class="mb-4 text-center lg:text-left">
-    <h4 class="mb-1 text-sm">Email adresse</h4>
+    <h4 class="mb-1 text-lg">Epost adresse</h4>
     <%= text_input f, :email, class: "c-standard_input" %>
     <div class="text-sm"><%= error_tag f, :email %></div>
   </div>
 
   <div class="mb-4 text-center lg:text-left">
-    <h4 class="mb-1 text-sm">Telefon nummer</h4>
+    <h4 class="mb-1 text-lg">Telefon nummer</h4>
     <%= telephone_input f, :phone_number, class: "c-standard_input" %>
     <div class="text-sm"><%= error_tag f, :phone_number %></div>
   </div>
 
   <div class="mb-4 text-center lg:text-left">
-    <h4 class="mb-1 text-sm">Adresse</h4>
+    <h4 class="mb-1 text-lg">Adresse</h4>
     <%= text_input f, :address, class: "c-standard_input" %>
     <div class="text-sm"><%= error_tag f, :address %></div>
   </div>
 
   <div class="mb-4 lg:text-left">
-    <h4 class="mb-1 text-sm">Post kode</h4>
+    <h4 class="mb-1 text-lg">Post kode</h4>
     <div>
       <%= telephone_input f, :postcode, pattern: "[0-9]*", maxLength: 4, class: "c-standard_input" %>
     </div>
-    <div class="text-sm"><%= error_tag f, :postcode %></div>
+    <div class="text-lg"><%= error_tag f, :postcode %></div>
   </div>
 
   <div class="mb-4 lg:text-left">
-    <h4 class="mb-1 text-sm">Fødselsdato</h4>
+    <h4 class="mb-1 text-lg">Fødselsdato</h4>
     <div class=" flex">
       <div class="flex flex-row">
         <%= text_input f, :day, pattern: "[0-9]*", maxLength: 2, minLength: 2, placeholder: "DD", class: "c-standard_input text-center pr-2", value: @user.dob.day %>
@@ -50,7 +50,7 @@
       </div>
     </div>
     <%= [:day, :month, :year, :dob] |> Enum.any?(&(f.errors[&1])) |> if() do %>
-    <span class="help-block text-sm">Datoen er ikke godkjent.</span>
+    <span class="help-block text-md">Datoen er ikke godkjent.</span>
     <% end %>
   </div>
   <%= submit "Oppdater", class: "c-btn c-btn--orange new_user_btn shadow-md" %>

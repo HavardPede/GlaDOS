@@ -16,7 +16,7 @@
   </div>
   <%= if Enum.empty?(@applicants) do %>
   <div class="bg-cinderous p-4 mt-12 text-center text-white font-bold mt-4">
-    <h3>Det er ingen ubehandlede søknader for dette eventet enda.</h3>
+    <h4 class="text-sm">Det er ingen ubehandlede søknader for dette eventet enda.</h4>
   </div>
   <% else %>
   <table class="w-4/5 mx-auto c-standard_table mt-12 ">

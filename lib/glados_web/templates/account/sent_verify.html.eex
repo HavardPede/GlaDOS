@@ -1,6 +1,6 @@
 <div class="w-4/5 mx-auto pt-8 flex flex-col">
     <div class="flex flex-row items-center pb-4">
-        <img src="<%= Routes.static_path(@conn, "/images/logo_alpha.png" ) %>" class="new_user_logo mr-4">
+        <img src="<%= Routes.static_path(@conn, "/images/logo_alpha.png" ) %>" class="w-20 mr-4">
         <div class="order-2">
             <h2 class="orange_h2">Glados</h2>
         </div>

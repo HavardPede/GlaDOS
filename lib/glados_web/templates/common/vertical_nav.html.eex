@@ -17,6 +17,8 @@
     <% end %>
     <% end %>
   </div>
-  <a href="<%= session_path(Endpoint, :delete) %>" class="py-4 bg-cinderous uppercase hover:bg-moss text-center">
-    Logg ut</a>
+  <a href="<%= session_path(Endpoint, :delete) %>"
+    class="py-4 bg-cinderous uppercase hover:bg-moss text-center text-sm">
+    Logg ut
+  </a>
 </div>

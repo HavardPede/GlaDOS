@@ -39,22 +39,26 @@ defmodule GladosWeb.MemberController do
 
   def crew_application(conn, %{"event_id" => event_id}) do
     user_id = conn.assigns.user.id
+
     session =
       user_id
       |> EventCrew.get_event_crew_member(event_id)
       |> case do
-        {:ok, member} -> %{
+        {:ok, member} ->
+          %{
             application: CrewApplications.create_answers_map(member),
             has_applied: true
           }
-        {:error, _} ->  %{
+
+        {:error, _} ->
+          %{
             application: CrewApplications.create_answers_map(),
             has_applied: false
           }
       end
       |> Map.put(:user_id, user_id)
       |> Map.put(:event_id, event_id)
-    
+
     live_render(conn, Live.View.CrewApplication, session: session)
   end
 end
