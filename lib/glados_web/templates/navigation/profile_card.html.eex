@@ -1,0 +1,9 @@
+<a href="<%= Routes.account_path(@conn, :edit) %>"
+  class="flex items-center m-1 mb-2 p-2 hover:bg-light_payne cursor-pointer rounded-lg">
+  <div class="w-8 mr-2"><img src="<%= Routes.static_path(@conn, "/images/panda.png" ) %>" /></div>
+  <div class="flex flex-col text-left text-sm">
+    <span class="font-bold"><%= @user.name %></span>
+    <span>@<%= @user.username %></span>
+    </ /div>
+  </div>
+</a>

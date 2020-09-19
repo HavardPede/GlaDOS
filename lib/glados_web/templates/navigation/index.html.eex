@@ -3,30 +3,45 @@
   {selected_page, selected_sub_page} = get_page(@conn, @user.account_type)
   pages = get_pages(@user.account_type, options)
   sub_pages = get_sub_pages(@user.account_type, selected_page, options)
-
 %>
 
 <div class="h-full w-48"></div>
-<div class="hidden md:block z-10 bg-payne h-screen w-48 fixed text-white text-right flex flex-col justify-between">
-  <div>
-    <img src="<%= Routes.static_path(Endpoint, "/images/logo_alpha.png" ) %>" class="h-12 mx-auto mt-5 mb-8" />
-    <%= for {nav_text, nav_link} <- pages do %>
-    <div
-      class="w-2/3 float-right uppercase py-2 pr-4 hover:text-cinderous border-cinderous <%= if nav_text == selected_page, do: "border-b-2"%>">
-      <a href="<%= nav_link %>"><%= nav_text %></a>
+<div class="flex">
+  <input type="checkbox" class="hidden" id="mobile_nav_checkbox" />
+  <nav
+    class="c-navigation__transition flex bg-payne h-screen w-0 md:w-48 fixed text-white text-right flex-col justify-between z-10 overflow-hidden">
+    <div>
+      <a href="<%= Routes.member_path(@conn, :index) %>"><img
+          src="<%= Routes.static_path(Endpoint, "/images/logo_alpha.png" ) %>"
+          class="h-12 w-12 mx-auto mt-5 mb-8" /></a>
+      <%= for {nav_text, nav_link} <- pages do %>
+      <div
+        class="w-2/3 float-right uppercase py-2 pr-4 border-cinderous <%= if nav_text == selected_page, do: "border-b-2"%> <%= if is_nil(nav_link), do: "text-light_payne", else: "hover:text-cinderous" %>">
+        <a class="cursor-pointer" <%= unless is_nil(nav_link), do: "href=#{nav_link}" %>><%= nav_text %></a>
+      </div>
+      <%= if nav_text == selected_page do %>
+      <%= for {sub_page, sub_page_link} <- sub_pages do %>
+      <a href="<%=  sub_page_link %>"
+        class="w-2/3 float-right text-left capitalize text-xs py-2 px-4 <%= if selected_sub_page == String.downcase(sub_page), do: "font-bold text-cinderous" %> cursor-pointer hover:text-cinderous">
+        <%= sub_page %>
+      </a>
+      <% end %>
+      <% end %>
+      <% end %>
     </div>
-    <%= if nav_text == selected_page do %>
-    <%= for {sub_page, sub_page_link} <- sub_pages do %>
-    <a href="<%=  sub_page_link %>"
-      class="w-2/3 float-right text-left capitalize text-xs py-2 px-4 <%= if selected_sub_page == String.downcase(sub_page), do: "font-bold text-cinderous" %> cursor-pointer hover:text-cinderous">
-      <%= sub_page %>
-    </a>
-    <% end %>
-    <% end %>
-    <% end %>
-  </div>
-  <a href="<%= Routes.session_path(Endpoint, :delete) %>"
-    class="py-4 bg-cinderous uppercase hover:bg-moss text-center text-sm">
-    Logg ut
-  </a>
+    <div class="flex flex-col w-56">
+      <%= GladosWeb.NavigationView.render "profile_card.html", assigns %>
+      <a href="<%= Routes.session_path(Endpoint, :delete) %>"
+        class="py-4 bg-cinderous uppercase hover:bg-moss text-center text-sm">
+        Logg ut
+      </a>
+    </div>
+  </nav>
+
+  <label for="mobile_nav_checkbox"
+    class="c-navigation__transition md:hidden px-3 py-2 bg-payne rounded-r mt-2 fixed z-10" id="navigation_hamburger">
+    <div class="h-1 w-5 bg-azure rounded-sm my-1"></div>
+    <div class="h-1 w-5 bg-azure rounded-sm my-1"></div>
+    <div class="h-1 w-5 bg-azure rounded-sm my-1"></div>
+  </label>
 </div>

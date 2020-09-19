@@ -12,7 +12,9 @@ window.onload = function () {
 
   adminInit()
   initCookieNotice()
-  flatpickr(".js-flatpickr", { enableTime: true, time_24hr: true })
+
+  const flatPickr = document.querySelector(".js-flatpickr")
+  if (flatPickr) flatpickr(flatPickr, { enableTime: true, time_24hr: true })
 
   const accountIcon = document.getElementById("accountIcon");
   if (accountIcon) {
@@ -24,23 +26,5 @@ window.onload = function () {
     accountArrow.addEventListener("click", function (_e) {
       toggleAccountTab();
     });
-  }
-
-  function toggleAccountTab() {
-    const accountTab = document.getElementById("accountTab");
-    const accountArrow = document.getElementById("accountArrow");
-    if (!accountTab) return
-    if (
-      (accountTab.style.display === "none" ||
-        accountTab.style.display === "")
-    ) {
-      accountTab.style.display = "block";
-    } else {
-      accountArrow.classList.add("rotatedImage");
-      setTimeout(function () {
-        (accountTab.style.display = "none"),
-          accountArrow.classList.remove("rotatedImage");
-      }, 100);
-    }
   }
 };

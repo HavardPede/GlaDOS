@@ -4,8 +4,8 @@ module.exports = {
       colors: {
         // mains
         payne: "#606C76",
+        light_payne: "#7f8991",
         moss: "#B5BA72",
-        // Orange/500: "#ed8936"
 
         //sides
         cinderous: "#99907D",

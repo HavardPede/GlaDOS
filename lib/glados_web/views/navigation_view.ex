@@ -16,6 +16,7 @@ defmodule GladosWeb.NavigationView do
   ##
   defp get_page_for_controller(GladosWeb.MemberController, conn, "member") do
     case action_name(conn) do
+      :index -> {"eventer", nil}
       :event_landing -> {"forside", nil}
       :crew_application -> {"søknad", nil}
       _ -> {nil, nil}
@@ -54,14 +55,8 @@ defmodule GladosWeb.NavigationView do
   Returns a map where the keys are the labels for a page, and the value is the href to said page
   """
   # The user has not yet selected an activation
-  def get_pages("member", []), do: %{}
-
-  def get_pages("member", role: "applicant", event_id: event_id) do
-    %{
-      "forside" => Routes.member_path(Endpoint, :event_landing, event_id),
-      "søknad" => Routes.member_path(Endpoint, :crew_application, event_id)
-    }
-  end
+  def get_pages("member", _options),
+    do: %{"varsler" => nil, "eventer" => Routes.member_path(Endpoint, :index), "neste lan" => nil}
 
   def get_pages("admin", _options) do
     %{
