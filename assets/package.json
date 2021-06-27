@@ -33,7 +33,7 @@
     "copy-webpack-plugin": "^4.5.0",
     "css-loader": "^2.1.1",
     "glob-all": "^3.1.0",
-    "merge": "^1.2.1",
+    "merge": "^2.1.1",
     "mini-css-extract-plugin": "^0.4.0",
     "optimize-css-assets-webpack-plugin": "^4.0.0",
     "purgecss": "^1.4.2",
